@@ -13,6 +13,7 @@ DROP:'DROP' | 'drop';
 SHOW:'SHOW' | 'show';
 USE:'USE' | 'use';
 
+
 TABLE:'TABLE' | 'table';
 CONSTRAINT: 'CONSTRAINT' | 'constraint';
 PRIMARY:'PRIMARY' | 'primary';
