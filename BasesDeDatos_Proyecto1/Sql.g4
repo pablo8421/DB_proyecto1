@@ -28,7 +28,7 @@ FROM: 'FROM' | 'from';
 
 fragment LETTER: [a-z] | [A-Z];
 fragment NUMBER: [0-9];
-fragment ID : LETTER (LETTER|NUMBER)* ;   //EN algun momento abria que tomar en cuenta columnas de tablas
+fragment ID : LETTER (LETTER|NUMBER)* ;   //En algun momento abria que tomar en cuenta columnas de tablas
 fragment STRING: '\'' ID '\''; //Aca iria todo no solo ID
 
 crear_BD: CREATE DATABASE ID;
