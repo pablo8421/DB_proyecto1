@@ -82,8 +82,8 @@ exp_relacionales: '<'
 				| '=';
 
 accion: RENAME TO ID
-	  | ADD COLUMN ID tipo  multi_constraint
-	  | ADD CONSTRAINT constraint
+	  | ADD COLUMN ID tipo  (multi_constraint_completo)?
+	  | ADD constraint_completo
 	  | DROP COLUMN ID
 	  | DROP CONSTRAINT ID; //No se si es id aca
 
