@@ -77,7 +77,7 @@ difEq_expression : difEq_expression ('<>'|'=') mayMin_expression
 mayMin_expression : mayMin_expression ('>='|'<='|'>'|'<') sum_expression
 				| neg_expression;
 
-neg_expression : '!' neg_expression
+neg_expression : 'NOT' neg_expression
 				| paren_expression;
 
 paren_expression : '(' multi_exp ')';
