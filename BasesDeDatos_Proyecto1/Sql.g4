@@ -55,15 +55,14 @@ constraint: ID tipo? PRIMARY KEY '(' multi_id ')'
 		  | ID tipo? FOREIGN KEY '(' multi_id ')' REFERENCES ID '(' multi_id ')'
 		  | CHECK '(' multi_exp ')';
 
-multi_constraint: constraint ',' multi_constraint
-				| constraint;
+constraint_completo: CONSTRAINT constraint;
 
 columnas: ID tipo;
 
 multi_columnas: columnas ',' multi_columnas
 			  |  columnas;
 
-crear_tabla: CREATE TABLE ID '(' multi_columnas (CONSTRAINT multi_constraint)?')';
+crear_tabla: CREATE TABLE ID '(' multi_columnas (constraint_completo)?')';
 
 multi_exp: exp exp_logico multi_exp
 		 | exp; 
