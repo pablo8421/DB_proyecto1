@@ -65,21 +65,24 @@ multi_columnas: columnas ',' multi_columnas
 
 crear_tabla: CREATE TABLE ID '(' multi_columnas (multi_constraint_completo)?')';
 
-multi_exp: exp exp_logico multi_exp
-		 | exp; 
+multi_exp : multi_exp 'OR' and_expression
+				| and_expression;
+				
+and_expression : and_expression 'AND' difEq_expression
+				|  difEq_expression;
+
+difEq_expression : difEq_expression ('<>'|'=') mayMin_expression
+				| mayMin_expression;
+
+mayMin_expression : mayMin_expression ('>='|'<='|'>'|'<') sum_expression
+				| neg_expression;
+
+neg_expression : '!' neg_expression
+				| paren_expression;
+
+paren_expression : '(' multi_exp ')';
 
 exp: (ID | NUMBER+ | STRING) exp_relacionales (ID | NUMBER+ | STRING);
-
-exp_logico: 'AND'
-		  | 'OR'
-		  | 'NOT';
-
-exp_relacionales: '<'
-				| '>'
-				| '<='
-				| '>='
-				| '<>'
-				| '=';
 
 accion: RENAME TO ID
 	  | ADD COLUMN ID tipo  (multi_constraint_completo)?
