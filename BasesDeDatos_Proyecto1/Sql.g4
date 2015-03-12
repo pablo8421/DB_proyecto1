@@ -46,14 +46,12 @@ tipo: 'INT'
 	| 'DATE'
 	| 'CHAR' '(' NUMBER+ ')';
 
-// Aca me quede
-
 multi_id: ID ',' multi_id
 		| ID;
 
-constraint: ID tipo? PRIMARY KEY '(' multi_id ')'
-		  | ID tipo? FOREIGN KEY '(' multi_id ')' REFERENCES ID '(' multi_id ')'
-		  | CHECK '(' multi_exp ')';
+constraint: ID PRIMARY KEY '(' multi_id ')'
+		  | ID FOREIGN KEY '(' multi_id ')' REFERENCES ID '(' multi_id ')'
+		  | ID CHECK '(' multi_exp ')';
 
 multi_constraint_completo: constraint_completo ',' multi_constraint_completo
 						 | constraint_completo;
