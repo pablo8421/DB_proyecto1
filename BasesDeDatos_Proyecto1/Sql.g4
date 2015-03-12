@@ -4,27 +4,27 @@ options {
 language=Csharp;
 }
 
-CREATE : 'CREATE'  | 'create';
-DATABASE : 'DATABASE' | 'database';
-ALTER: 'ALTER' | 'alter';
-RENAME: 'RENAME' | 'rename';
-TO: 'TO' | 'to';
-DROP:'DROP' | 'drop';
-SHOW:'SHOW' | 'show';
-USE:'USE' | 'use';
+CREATE : 'CREATE';
+DATABASE : 'DATABASE';
+ALTER: 'ALTER';
+RENAME: 'RENAME';
+TO: 'TO';
+DROP:'DROP';
+SHOW:'SHOW';
+USE:'USE';
 
 
-TABLE:'TABLE' | 'table';
-CONSTRAINT: 'CONSTRAINT' | 'constraint';
-PRIMARY:'PRIMARY' | 'primary';
-FOREIGN:'FOREIGN' | 'foreign';
-KEY:'KEY' | 'key';
-REFERENCES: 'REFERENCES' | 'references';
+TABLE:'TABLE';
+CONSTRAINT: 'CONSTRAINT';
+PRIMARY:'PRIMARY';
+FOREIGN:'FOREIGN';
+KEY:'KEY';
+REFERENCES: 'REFERENCES';
 
-ADD: 'ADD' | 'add';
-COLUMN: 'COLUMN' | 'column';
-TABLES:'TABLES' | 'tables';
-FROM: 'FROM' | 'from';
+ADD: 'ADD';
+COLUMN: 'COLUMN';
+TABLES:'TABLES';
+FROM: 'FROM';
 
 fragment LETTER: [a-z] | [A-Z];
 fragment NUMBER: [0-9];
