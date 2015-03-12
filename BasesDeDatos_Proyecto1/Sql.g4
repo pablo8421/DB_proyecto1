@@ -41,11 +41,10 @@ mostrar_BD: SHOW DATABASE;
 
 usar_BD: USE DATABASE ID;
 
-tipo: 'int'
-	| 'float'
-	| 'date'
-	| 'char'
-	| 'char' '(' NUMBER+ ')';
+tipo: 'INT'
+	| 'FLOAT'
+	| 'DATE'
+	| 'CHAR' '(' NUMBER+ ')';
 
 // Aca me quede
 
