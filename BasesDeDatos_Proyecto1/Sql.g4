@@ -30,7 +30,7 @@ fragment LETTER: [a-z] | [A-Z];
 fragment NUMBER: [0-9];
 fragment IDENTIFICADOR: ID ('.' ID)?;
 fragment ID : LETTER (LETTER|NUMBER)*; 
-fragment STRING: '\'' ID '\''; //Aca iria todo no solo ID
+fragment STRING: '\'' .*? '\'';
 
 crear_BD: CREATE DATABASE ID;
 
