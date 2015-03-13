@@ -4,6 +4,7 @@ options {
 language=Csharp;
 }
 
+WS : [ \t\r\n]+ -> skip ;
 CREATE : 'CREATE';
 DATABASE : 'DATABASE';
 ALTER: 'ALTER';
@@ -12,25 +13,42 @@ TO: 'TO';
 DROP:'DROP';
 SHOW:'SHOW';
 USE:'USE';
-
-
 TABLE:'TABLE';
 CONSTRAINT: 'CONSTRAINT';
 PRIMARY:'PRIMARY';
 FOREIGN:'FOREIGN';
 KEY:'KEY';
 REFERENCES: 'REFERENCES';
-
 ADD: 'ADD';
 COLUMN: 'COLUMN';
 TABLES:'TABLES';
 FROM: 'FROM';
 
+//---------------------------------
+
+INSERT : 'INSERT';
+INTO : 'INTO';
+VALUES : 'VALUES';
+UPDATE : 'UPDATE';
+SET : 'SET';
+WHERE : 'WHERE';
+DELETE : 'DELETE';
+SELECT : 'SELECT';
+ORDER : 'ORDER';
+BY : 'BY';
+ASC : 'ASC';
+DESC : 'DESC';
+
+
 fragment LETTER: [a-z] | [A-Z];
 fragment NUMBER: [0-9];
+fragment FLOAT : '-'? NUMBER+ '.' NUMBER+;
+fragment INT : '-'? NUMBER+;
 fragment IDENTIFICADOR: ID ('.' ID)?;
 fragment ID : LETTER (LETTER|NUMBER)*; 
 fragment STRING: '\'' .*? '\'';
+fragment VALUE : (INT | FLOAT | STRING); 
+
 
 crear_BD: CREATE DATABASE ID;
 
@@ -54,14 +72,14 @@ constraint: ID PRIMARY KEY '(' multi_id ')'
 		  | ID FOREIGN KEY '(' multi_id ')' REFERENCES ID '(' multi_id ')'
 		  | ID CHECK '(' multi_exp ')';
 
-multi_constraint_completo: constraint_completo ',' multi_constraint_completo
+multi_constraint_completo: multi_constraint_completo ',' constraint_completo 
 						 | constraint_completo;
 
 constraint_completo: CONSTRAINT constraint;
 
 columnas: ID tipo;
 
-multi_columnas: columnas ',' multi_columnas
+multi_columnas: multi_columnas ',' columnas 
 			  |  columnas;
 
 crear_tabla: CREATE TABLE ID '(' multi_columnas (multi_constraint_completo)?')';
@@ -82,8 +100,9 @@ neg_expression : 'NOT' neg_expression
 				| paren_expression;
 
 paren_expression : '(' multi_exp ')';
+				| exp;
 
-exp: (ID | NUMBER+ | STRING) exp_relacionales (ID | NUMBER+ | STRING);
+exp: (ID | INT | FLOAT | STRING); //Cree Pablo que tambien pondriamos identificador
 
 accion: RENAME TO ID
 	  | ADD COLUMN ID tipo  (multi_constraint_completo)?
@@ -91,7 +110,7 @@ accion: RENAME TO ID
 	  | DROP COLUMN ID
 	  | DROP CONSTRAINT ID;
 
-multi_accion: accion ',' multi_accion
+multi_accion: multi_accion ',' accion 
 			| accion;
 
 alter_table: ALTER TABLE ID multi_accion;
@@ -102,8 +121,24 @@ show_tables: SHOW TABLES;
 
 show_columns: SHOW COLUMNS FROM ID;
 
-WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
+//-------------------------------------
 
+insert : INSERT INTO ID ('(' id_completo ')')? VALUES '(' valor_completo ')';
 
+id_completo : id_completo ',' ID
+				 | ID;
 
-//EL CAMBIO
+valor_completo : valor_completo ',' VALUE
+				 | VALUE;
+
+update : UPDATE ID SET asignacion (WHERE multi_exp)?;
+
+asignacion : asignacion ',' ID '=' VALUE
+			| ID '=' VALUE;
+
+delete : DELETE FROM ID (WHERE multi_exp)?;
+
+select :  SELECT ('*' | id_completo) FROM id_completo (WHERE multi_exp)? (ORDER BY id_completo_order)?
+
+id_completo_order : id_completo_order ',' ID  (ASC|DESC)?
+				 | ID  (ASC|DESC)?;
