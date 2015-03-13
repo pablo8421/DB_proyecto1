@@ -89,9 +89,12 @@ accion: RENAME TO ID
 	  | ADD COLUMN ID tipo  (multi_constraint_completo)?
 	  | ADD constraint_completo
 	  | DROP COLUMN ID
-	  | DROP CONSTRAINT ID; //No se si es id aca
+	  | DROP CONSTRAINT ID;
 
-alter_table: ALTER TABLE ID accion;
+multi_accion: accion ',' multi_accion
+			| accion;
+
+alter_table: ALTER TABLE ID multi_accion;
 
 votar_table: DROP TABLE ID;
 
