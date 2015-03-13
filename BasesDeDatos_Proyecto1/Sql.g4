@@ -93,13 +93,13 @@ and_expression : and_expression 'AND' difEq_expression
 difEq_expression : difEq_expression ('<>'|'=') mayMin_expression
 				| mayMin_expression;
 
-mayMin_expression : mayMin_expression ('>='|'<='|'>'|'<') sum_expression
+mayMin_expression : mayMin_expression ('>='|'<='|'>'|'<') neg_expression
 				| neg_expression;
 
 neg_expression : 'NOT' neg_expression
 				| paren_expression;
 
-paren_expression : '(' multi_exp ')';
+paren_expression : '(' multi_exp ')'
 				| exp;
 
 exp: (ID | INT | FLOAT | STRING); //Cree Pablo que tambien pondriamos identificador
@@ -138,7 +138,7 @@ asignacion : asignacion ',' ID '=' VALUE
 
 delete : DELETE FROM ID (WHERE multi_exp)?;
 
-select :  SELECT ('*' | id_completo) FROM id_completo (WHERE multi_exp)? (ORDER BY id_completo_order)?
+select :  SELECT ('*' | id_completo) FROM id_completo (WHERE multi_exp)? (ORDER BY id_completo_order)?;
 
 id_completo_order : id_completo_order ',' ID  (ASC|DESC)?
 				 | ID  (ASC|DESC)?;
