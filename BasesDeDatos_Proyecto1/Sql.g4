@@ -102,7 +102,7 @@ neg_expression : 'NOT' neg_expression
 paren_expression : '(' multi_exp ')'
 				| exp;
 
-exp: (ID | INT | FLOAT | STRING); //Cree Pablo que tambien pondriamos identificador
+exp: (IDENTIFICADOR | INT | FLOAT | STRING); //Cree Pablo que tambien pondriamos identificador
 
 accion: RENAME TO ID
 	  | ADD COLUMN ID tipo  (multi_constraint_completo)?
