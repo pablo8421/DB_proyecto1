@@ -138,7 +138,10 @@ asignacion : asignacion ',' ID '=' VALUE
 
 delete : DELETE FROM ID (WHERE multi_exp)?;
 
-select :  SELECT ('*' | id_completo) FROM id_completo (WHERE multi_exp)? (ORDER BY id_completo_order)?;
+identificador_completo : identificador_completo ',' IDENTIFICADOR
+				 | IDENTIFICADOR;
 
-id_completo_order : id_completo_order ',' ID  (ASC|DESC)?
-				 | ID  (ASC|DESC)?;
+select :  SELECT ('*' | identificador_completo) FROM id_completo (WHERE multi_exp)? (ORDER BY id_completo_order)?;
+
+id_completo_order : id_completo_order ',' IDENTIFICADOR  (ASC|DESC)?
+				 | IDENTIFICADOR (ASC|DESC)?;
