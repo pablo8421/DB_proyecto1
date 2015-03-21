@@ -68,10 +68,13 @@ namespace BasesDeDatos_Proyecto1
 
             parser.AddErrorListener(lectorErrores);
 
-            consolaText.Text = lectorErrores.erroresTotal+ "ALGO";
-
-            //ParseTree tree = parser.full_query();.
+            // tree = parser.full_query();
             parser.full_query();
+
+
+            consolaText.Text = lectorErrores.erroresTotal + "ALGO";
+
+
             //Aca sistema de tipos :)
         }
     }
