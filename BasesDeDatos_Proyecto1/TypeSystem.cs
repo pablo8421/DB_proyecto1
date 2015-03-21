@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace BasesDeDatos_Proyecto1
 {
     class TypeSystem : SqlBaseVisitor<String>
     {
+        private bool correcto;
+        private String errores;
+
+        public TypeSystem() {
+            correcto = true;
+            errores = "";
+        }
 
         public string VisitId_completo(SqlParser.Id_completoContext context)
         {
@@ -211,7 +221,32 @@ namespace BasesDeDatos_Proyecto1
 
         public string VisitCrear_BD(SqlParser.Crear_BDContext context)
         {
-            throw new NotImplementedException();
+            if (correcto)
+            {
+                String nombre;
+                nombre = context.GetChild(2).GetText();
+
+                XElement master = XElement.Load("masterBDs.xml");
+                IEnumerable<XElement> basesdatos =
+                    from el in master.Elements(nombre)
+                    select el;
+
+                if (basesdatos.ToList<XElement>().Count != 0)
+                {
+                    BaseDatos nBaseDatos = new BaseDatos(nombre);
+                    XmlSerializer mySerializer = new XmlSerializer(typeof(BaseDatos));
+                    StreamWriter myWriter = new StreamWriter("masterBDs.xml");
+                    mySerializer.Serialize(myWriter, nBaseDatos);
+                    myWriter.Close();
+                }
+                else
+                {
+                    correcto = true;
+                    errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' ya existe en el DBMS.";
+                }
+                return "void";
+            }
+            return "";
         }
 
         public string VisitConstrain_pk(SqlParser.Constrain_pkContext context)
