@@ -50,6 +50,23 @@ fragment STRING: '\'' .*? '\'';
 fragment VALUE : (INT | FLOAT | STRING); 
 
 
+full_query: query*;
+
+query: crear_BD
+	 | renombrar_BD
+	 | votar_BD
+	 | mostrar_BD
+	 | usar_BD
+	 | crear_tabla
+	 | alter_table
+	 | votar_table
+	 | show_tables
+	 | show_columns
+	 | insert
+	 | update
+	 | delete
+	 | select;
+
 crear_BD: CREATE DATABASE ID;
 
 renombrar_BD: ALTER DATABASE ID RENAME TO ID;
