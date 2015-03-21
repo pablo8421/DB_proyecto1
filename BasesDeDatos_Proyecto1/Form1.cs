@@ -66,14 +66,10 @@ namespace BasesDeDatos_Proyecto1
             for (int i = 0; i < palabrasReservadas.Length; i++)
             {
                 String palabra = palabrasReservadas[i];
-                String regex = ("\b(?i)" + palabra + "(?i-)");
-
                 Regex expRegular = new Regex(@"\b" + palabra + @"\b", RegexOptions.IgnoreCase);
-
                 input = expRegular.Replace(input, palabra);
             }
 
-            Console.WriteLine(input);
             return input;
         }
 
