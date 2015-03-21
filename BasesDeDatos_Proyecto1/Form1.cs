@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using System.Text.RegularExpressions;
 
 namespace BasesDeDatos_Proyecto1
 {
@@ -54,9 +55,19 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        private String arreglarCaseSensitive(String input)
+        {
+            String palabra = "CREATE";
+
+            String regex = "\b(?i)" + palabra + "(?-i)\b";
+            input = Regex.Replace(input, regex, palabra);
+            Console.WriteLine(input);
+            return input;
+        }
+
         private void boton_ejecutar_Click(object sender, EventArgs e)
         {
-            AntlrInputStream inputStream = new AntlrInputStream(queryText.Text);
+            AntlrInputStream inputStream = new AntlrInputStream(arreglarCaseSensitive(queryText.Text));
 
             SqlLexer lexer = new SqlLexer(inputStream);
             CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
