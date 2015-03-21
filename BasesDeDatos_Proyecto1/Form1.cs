@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Antlr4.Runtime;
+
 
 namespace BasesDeDatos_Proyecto1
 {
@@ -17,49 +20,50 @@ namespace BasesDeDatos_Proyecto1
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void boton_cargar_Click(object sender, EventArgs e)
         {
+            OpenFileDialog choofdlog = new OpenFileDialog();
+            choofdlog.Filter = "All Files (*.sql)|*.sql";
+            choofdlog.FilterIndex = 1;
+            choofdlog.Multiselect = false;
+
+            if (choofdlog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = choofdlog.FileName;
+                StreamReader streamReader = new StreamReader(filePath);
+                string text = streamReader.ReadToEnd();
+                streamReader.Close();
+
+                text.Replace("\n",Environment.NewLine);
+
+                queryText.Text = text;
+            }
+
 
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void boton_guardar_Click(object sender, EventArgs e)
         {
-
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "All Files (*.sql)|*.sql";
+            saveFileDialog1.Title = "Guardar como";
+            saveFileDialog1.ShowDialog();
+            if (saveFileDialog1.FileName != "")
+            {
+                File.WriteAllText(saveFileDialog1.FileName, queryText.Text);
+            }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void boton_ejecutar_Click(object sender, EventArgs e)
         {
+            AntlrInputStream stream = new AntlrInputStream(queryText.Text);
+            SqlLexer lexer = new SqlLexer(stream);
+            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+            SqlParser parser = new SqlParser(tokenStream);
 
-        }
 
-        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-
-        }
-
-        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-
+            //Aca sistema de tipos :)
         }
     }
 }
