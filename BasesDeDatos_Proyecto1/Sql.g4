@@ -163,7 +163,7 @@ select :  SELECT ('*' | identificador_completo)
 
 select_where: (WHERE multi_exp)?;
 
-select_orderBy: (ORDER BY id_completo_order)?
+select_orderBy: (ORDER BY id_completo_order)?;
 
 id_completo_order : id_completo_order ',' IDENTIFICADOR  (ASC|DESC)?
 				 | IDENTIFICADOR (ASC|DESC)?;
