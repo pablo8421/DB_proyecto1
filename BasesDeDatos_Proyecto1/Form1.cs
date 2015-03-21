@@ -56,21 +56,18 @@ namespace BasesDeDatos_Proyecto1
 
         private void boton_ejecutar_Click(object sender, EventArgs e)
         {
-            AntlrInputStream stream = new AntlrInputStream(queryText.Text);
-            SqlLexer lexer = new SqlLexer(stream);
-            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-            SqlParser parser = new SqlParser(tokenStream);
-            
-            ErrorListener lectorErrores = new ErrorListener();
+            AntlrInputStream inputStream = new AntlrInputStream(queryText.Text);
 
-            lexer.RemoveErrorListeners();
+            SqlLexer lexer = new SqlLexer(inputStream);
+            CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
+            SqlParser parser = new SqlParser(commonTokenStream);
+
             parser.RemoveErrorListeners();
+            ErrorListener lectorErrores = new ErrorListener();
+            parser.AddErrorListener(lectorErrores); // add ours
 
-            parser.AddErrorListener(lectorErrores);
-
-            // tree = parser.full_query();
+           //parser.root();
             parser.full_query();
-
 
             consolaText.Text = lectorErrores.erroresTotal + "ALGO";
 

@@ -151,7 +151,7 @@ namespace BasesDeDatos_Proyecto1
         {
             BaseDatos[] basesdatos;
             XmlSerializer serializer = new XmlSerializer(typeof(BaseDatos[]));
-            StreamReader reader = new StreamReader("Databases\masterBDs.xml");
+            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
             reader.ReadToEnd();
             basesdatos = (BaseDatos[])serializer.Deserialize(reader);
             reader.Close();
@@ -276,7 +276,7 @@ namespace BasesDeDatos_Proyecto1
                 String nombre;
                 nombre = context.GetChild(2).GetText();
 
-                XElement master = XElement.Load("Databases\masterBDs.xml");
+                XElement master = XElement.Load("Databases\\masterBDs.xml");
                 IEnumerable<XElement> basesdatos =
                     from el in master.Elements(nombre)
                     select el;
