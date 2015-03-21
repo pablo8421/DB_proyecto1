@@ -85,9 +85,9 @@ tipo: 'INT'
 multi_id: ID ',' multi_id
 		| ID;
 
-constraint: ID PRIMARY KEY '(' multi_id ')'
-		  | ID FOREIGN KEY '(' multi_id ')' REFERENCES ID '(' multi_id ')'
-		  | ID CHECK '(' multi_exp ')';
+constraint: ID PRIMARY KEY '(' multi_id ')' #constrain_pk
+		  | ID FOREIGN KEY '(' multi_id ')' REFERENCES ID '(' multi_id ')' #constrain_fk
+		  | ID CHECK '(' multi_exp ')' #constrain_check;
 
 multi_constraint_completo: multi_constraint_completo ',' constraint_completo 
 						 | constraint_completo;
@@ -119,13 +119,13 @@ neg_expression : 'NOT' neg_expression
 paren_expression : '(' multi_exp ')'
 				| exp;
 
-exp: (IDENTIFICADOR | INT | FLOAT | STRING); //Cree Pablo que tambien pondriamos identificador
+exp: (IDENTIFICADOR | INT | FLOAT | STRING);
 
-accion: RENAME TO ID
-	  | ADD COLUMN ID tipo  (multi_constraint_completo)?
-	  | ADD constraint_completo
-	  | DROP COLUMN ID
-	  | DROP CONSTRAINT ID;
+accion: RENAME TO ID #accion_rename
+	  | ADD COLUMN ID tipo  (multi_constraint_completo)? #accion_addColumn
+	  | ADD constraint_completo #accion_addConstraint
+	  | DROP COLUMN ID #accion_DropColumn
+	  | DROP CONSTRAINT ID #accion_DropConstraint;
 
 multi_accion: multi_accion ',' accion 
 			| accion;
@@ -158,7 +158,12 @@ delete : DELETE FROM ID (WHERE multi_exp)?;
 identificador_completo : identificador_completo ',' IDENTIFICADOR
 				 | IDENTIFICADOR;
 
-select :  SELECT ('*' | identificador_completo) FROM id_completo (WHERE multi_exp)? (ORDER BY id_completo_order)?;
+select :  SELECT ('*' | identificador_completo) 
+		  FROM id_completo select_where select_orderBy;
+
+select_where: (WHERE multi_exp)?;
+
+select_orderBy: (ORDER BY id_completo_order)?
 
 id_completo_order : id_completo_order ',' IDENTIFICADOR  (ASC|DESC)?
 				 | IDENTIFICADOR (ASC|DESC)?;
