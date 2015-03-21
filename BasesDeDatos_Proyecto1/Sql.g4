@@ -45,13 +45,14 @@ fragment LETTER: [a-z] | [A-Z];
 fragment NUMBER: [0-9];
 fragment FLOAT : '-'? NUMBER+ '.' NUMBER+;
 fragment INT : '-'? NUMBER+;
-fragment IDENTIFICADOR: ID ('.' ID)?;
-fragment ID : LETTER (LETTER|NUMBER)*; 
 fragment STRING: '\'' .*? '\'';
-fragment VALUE : (INT | FLOAT | STRING); 
+
+ID : LETTER (LETTER|NUMBER)*; 
+IDENTIFICADOR: ID ('.' ID)?;
+VALUE : (INT | FLOAT | STRING); 
 
 
-full_query: query+;
+full_query: (query ';')*;
 
 query: crear_BD
 	 | renombrar_BD
