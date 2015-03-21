@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -19,206 +20,255 @@ namespace BasesDeDatos_Proyecto1
             errores = "";
         }
 
+        override
         public string VisitId_completo(SqlParser.Id_completoContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitAsignacion(SqlParser.AsignacionContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitTipo(SqlParser.TipoContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitMulti_exp(SqlParser.Multi_expContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitSelect(SqlParser.SelectContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitValor_completo(SqlParser.Valor_completoContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitAccion_rename(SqlParser.Accion_renameContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitVotar_BD(SqlParser.Votar_BDContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitInsert(SqlParser.InsertContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitUpdate(SqlParser.UpdateContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitAlter_table(SqlParser.Alter_tableContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitAccion_DropColumn(SqlParser.Accion_DropColumnContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitDelete(SqlParser.DeleteContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitRenombrar_BD(SqlParser.Renombrar_BDContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitVotar_table(SqlParser.Votar_tableContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitShow_columns(SqlParser.Show_columnsContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitAnd_expression(SqlParser.And_expressionContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitMulti_id(SqlParser.Multi_idContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitMayMin_expression(SqlParser.MayMin_expressionContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitAccion_addColumn(SqlParser.Accion_addColumnContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitExp(SqlParser.ExpContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitMostrar_BD(SqlParser.Mostrar_BDContext context)
         {
-            throw new NotImplementedException();
+            BaseDatos[] basesdatos;
+            XmlSerializer serializer = new XmlSerializer(typeof(BaseDatos[]));
+            StreamReader reader = new StreamReader("Databases\masterBDs.xml");
+            reader.ReadToEnd();
+            basesdatos = (BaseDatos[])serializer.Deserialize(reader);
+            reader.Close();
+            foreach (BaseDatos bd in basesdatos)
+                Console.WriteLine(bd);  //Pasarlo al textarea del form
+            return "void";
         }
 
+        override
         public string VisitColumnas(SqlParser.ColumnasContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitDifEq_expression(SqlParser.DifEq_expressionContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitQuery(SqlParser.QueryContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitId_completo_order(SqlParser.Id_completo_orderContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitConstrain_check(SqlParser.Constrain_checkContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitFull_query(SqlParser.Full_queryContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitUsar_BD(SqlParser.Usar_BDContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitMulti_columnas(SqlParser.Multi_columnasContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitAccion_DropConstraint(SqlParser.Accion_DropConstraintContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitConstraint_completo(SqlParser.Constraint_completoContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitConstrain_fk(SqlParser.Constrain_fkContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitParen_expression(SqlParser.Paren_expressionContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitMulti_constraint_completo(SqlParser.Multi_constraint_completoContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitNeg_expression(SqlParser.Neg_expressionContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitShow_tables(SqlParser.Show_tablesContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitIdentificador_completo(SqlParser.Identificador_completoContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitMulti_accion(SqlParser.Multi_accionContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitCrear_tabla(SqlParser.Crear_tablaContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitCrear_BD(SqlParser.Crear_BDContext context)
         {
             if (correcto)
@@ -226,7 +276,7 @@ namespace BasesDeDatos_Proyecto1
                 String nombre;
                 nombre = context.GetChild(2).GetText();
 
-                XElement master = XElement.Load("masterBDs.xml");
+                XElement master = XElement.Load("Databases\masterBDs.xml");
                 IEnumerable<XElement> basesdatos =
                     from el in master.Elements(nombre)
                     select el;
@@ -235,9 +285,12 @@ namespace BasesDeDatos_Proyecto1
                 {
                     BaseDatos nBaseDatos = new BaseDatos(nombre);
                     XmlSerializer mySerializer = new XmlSerializer(typeof(BaseDatos));
-                    StreamWriter myWriter = new StreamWriter("masterBDs.xml");
+                    StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
                     mySerializer.Serialize(myWriter, nBaseDatos);
                     myWriter.Close();
+                    string path = Path.GetFullPath("Databases")+"\\"+nombre;
+                    System.IO.Directory.CreateDirectory(path);
+
                 }
                 else
                 {
@@ -249,11 +302,13 @@ namespace BasesDeDatos_Proyecto1
             return "";
         }
 
+        override
         public string VisitConstrain_pk(SqlParser.Constrain_pkContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
         public string VisitAccion_addConstraint(SqlParser.Accion_addConstraintContext context)
         {
             throw new NotImplementedException();
