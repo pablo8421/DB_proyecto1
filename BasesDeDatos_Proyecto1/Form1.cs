@@ -57,11 +57,22 @@ namespace BasesDeDatos_Proyecto1
 
         private String arreglarCaseSensitive(String input)
         {
-            String palabra = "CREATE";
+            String[] palabrasReservadas = { "CREATE", "DATABASE", "DATABASES", "ALTER", "RENAME", "TO", "DROP",
+                                            "SHOW", "USE", "TABLE", "CONSTRAINT", "PRIMARY", "FOREIGN", "KEY",
+                                            "REFERENCES", "ADD", "COLUMN", "TABLES", "FROM", "INSERT", "INTO", 
+                                            "VALUES", "UPDATE", "SET", "WHERE", "DELETE", "SELECT", "ORDER", 
+                                            "BY", "ASC", "DESC" };
 
-            String regex = ("\b(?i)" + palabra + "(?i-)");
-            Regex expRegular = new Regex(@"\b" + palabra + @"\b", RegexOptions.IgnoreCase);
-            input = expRegular.Replace(input, palabra);
+            for (int i = 0; i < palabrasReservadas.Length; i++)
+            {
+                String palabra = palabrasReservadas[i];
+                String regex = ("\b(?i)" + palabra + "(?i-)");
+
+                Regex expRegular = new Regex(@"\b" + palabra + @"\b", RegexOptions.IgnoreCase);
+
+                input = expRegular.Replace(input, palabra);
+            }
+
             Console.WriteLine(input);
             return input;
         }
