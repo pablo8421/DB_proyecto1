@@ -68,7 +68,7 @@ namespace BasesDeDatos_Proyecto1
 
             parser.full_query();
 
-            consolaText.Text = lectorErrores.erroresTotal + "ALGO";
+            consolaText.Text = lectorErrores.erroresTotal;
 
 
             //Aca sistema de tipos :)
