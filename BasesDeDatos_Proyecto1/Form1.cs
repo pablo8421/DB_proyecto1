@@ -62,7 +62,7 @@ namespace BasesDeDatos_Proyecto1
             CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
             SqlParser parser = new SqlParser(commonTokenStream);
 
-            //parser.RemoveErrorListeners();
+            parser.RemoveErrorListeners();
             ErrorListener lectorErrores = new ErrorListener();
             parser.AddErrorListener(lectorErrores); // add ours
 
