@@ -9,11 +9,6 @@ namespace BasesDeDatos_Proyecto1
     class TypeSystem : SqlBaseVisitor<String>
     {
 
-        public string VisitAccion(SqlParser.AccionContext context)
-        {
-            throw new NotImplementedException();
-        }
-
         public string VisitId_completo(SqlParser.Id_completoContext context)
         {
             throw new NotImplementedException();
@@ -44,6 +39,11 @@ namespace BasesDeDatos_Proyecto1
             throw new NotImplementedException();
         }
 
+        public string VisitAccion_rename(SqlParser.Accion_renameContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitVotar_BD(SqlParser.Votar_BDContext context)
         {
             throw new NotImplementedException();
@@ -60,6 +60,11 @@ namespace BasesDeDatos_Proyecto1
         }
 
         public string VisitAlter_table(SqlParser.Alter_tableContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VisitAccion_DropColumn(SqlParser.Accion_DropColumnContext context)
         {
             throw new NotImplementedException();
         }
@@ -99,6 +104,11 @@ namespace BasesDeDatos_Proyecto1
             throw new NotImplementedException();
         }
 
+        public string VisitAccion_addColumn(SqlParser.Accion_addColumnContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitExp(SqlParser.ExpContext context)
         {
             throw new NotImplementedException();
@@ -119,7 +129,22 @@ namespace BasesDeDatos_Proyecto1
             throw new NotImplementedException();
         }
 
+        public string VisitQuery(SqlParser.QueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitId_completo_order(SqlParser.Id_completo_orderContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VisitConstrain_check(SqlParser.Constrain_checkContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VisitFull_query(SqlParser.Full_queryContext context)
         {
             throw new NotImplementedException();
         }
@@ -134,7 +159,17 @@ namespace BasesDeDatos_Proyecto1
             throw new NotImplementedException();
         }
 
+        public string VisitAccion_DropConstraint(SqlParser.Accion_DropConstraintContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitConstraint_completo(SqlParser.Constraint_completoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VisitConstrain_fk(SqlParser.Constrain_fkContext context)
         {
             throw new NotImplementedException();
         }
@@ -179,11 +214,15 @@ namespace BasesDeDatos_Proyecto1
             throw new NotImplementedException();
         }
 
-        public string VisitConstraint(SqlParser.ConstraintContext context)
+        public string VisitConstrain_pk(SqlParser.Constrain_pkContext context)
         {
             throw new NotImplementedException();
         }
 
+        public string VisitAccion_addConstraint(SqlParser.Accion_addConstraintContext context)
+        {
+            throw new NotImplementedException();
+        }
         /*
         public string Visit(Antlr4.Runtime.Tree.IParseTree tree)
         {
