@@ -59,8 +59,8 @@ namespace BasesDeDatos_Proyecto1
         {
             String palabra = "CREATE";
 
-            String regex = ("\b(?i)" + palabra + "(?i-)"); 
-            Regex expRegular = new Regex(@"\b" + palabra, RegexOptions.IgnoreCase);
+            String regex = ("\b(?i)" + palabra + "(?i-)");
+            Regex expRegular = new Regex(@"\b" + palabra + @"\b", RegexOptions.IgnoreCase);
             input = expRegular.Replace(input, palabra);
             Console.WriteLine(input);
             return input;
