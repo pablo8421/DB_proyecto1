@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDatos.cs" />
+    <Compile Include="ErrorListener.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

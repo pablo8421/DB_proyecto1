@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Antlr4.Runtime;
-
+using Antlr4.Runtime.Tree;
 
 namespace BasesDeDatos_Proyecto1
 {
@@ -34,7 +34,7 @@ namespace BasesDeDatos_Proyecto1
                 string text = streamReader.ReadToEnd();
                 streamReader.Close();
 
-                text.Replace("\n",Environment.NewLine);
+                text.Replace("\n", Environment.NewLine);
 
                 queryText.Text = text;
             }
@@ -60,9 +60,18 @@ namespace BasesDeDatos_Proyecto1
             SqlLexer lexer = new SqlLexer(stream);
             CommonTokenStream tokenStream = new CommonTokenStream(lexer);
             SqlParser parser = new SqlParser(tokenStream);
+            
+            ErrorListener lectorErrores = new ErrorListener();
 
+            lexer.RemoveErrorListeners();
+            parser.RemoveErrorListeners();
 
+            parser.AddErrorListener(lectorErrores);
 
+            consolaText.Text = lectorErrores.erroresTotal+ "ALGO";
+
+            //ParseTree tree = parser.full_query();.
+            parser.full_query();
             //Aca sistema de tipos :)
         }
     }
