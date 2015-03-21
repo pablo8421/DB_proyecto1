@@ -51,7 +51,7 @@ fragment STRING: '\'' .*? '\'';
 fragment VALUE : (INT | FLOAT | STRING); 
 
 
-full_query: query*;
+full_query: query+;
 
 query: crear_BD
 	 | renombrar_BD
