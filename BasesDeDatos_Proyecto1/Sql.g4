@@ -7,6 +7,7 @@ language=Csharp;
 WS : [ \t\r\n]+ -> skip ;
 CREATE : 'CREATE';
 DATABASE : 'DATABASE';
+DATABASES : 'DATABASES';
 ALTER: 'ALTER';
 RENAME: 'RENAME';
 TO: 'TO';
@@ -73,7 +74,7 @@ renombrar_BD: ALTER DATABASE ID RENAME TO ID;
 
 votar_BD: DROP DATABASE ID;
 
-mostrar_BD: SHOW DATABASE;
+mostrar_BD: SHOW DATABASES;
 
 usar_BD: USE DATABASE ID;
 
