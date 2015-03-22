@@ -297,14 +297,23 @@ namespace BasesDeDatos_Proyecto1
                     StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
                     mySerializer.Serialize(myWriter, nBaseDatos);
                     myWriter.Close();
-                    string path = Path.GetFullPath("Databases")+"\\"+nombre;
+                    string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), nombre);
                     System.IO.Directory.CreateDirectory(path);
+                    string fileName = nombre+".xml";
+                    path = System.IO.Path.Combine(Path.GetFullPath("Databases"), fileName);
+                    if (!System.IO.File.Exists(path))
+                    {
+                        System.IO.FileStream fs = System.IO.File.Create(path);
 
+                        /*using (System.IO.FileStream fs = System.IO.File.Create(path))
+                        {
 
+                        }*/
+                    }
                 }
                 else
                 {
-                    correcto = true;
+                    correcto = false;
                     errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' ya existe en el DBMS.";
                 }
                 return "void";
