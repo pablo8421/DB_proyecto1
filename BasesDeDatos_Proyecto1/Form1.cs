@@ -92,11 +92,10 @@ namespace BasesDeDatos_Proyecto1
 
             if(lectorErrores.noHayError){
                 String valorFinal = sistemaTipos.Visit(tree);
+                //En vez de esto habria que ver de mostrar el mensaje final, que tal vez sea hacer lo mismo
                 consolaText.Text = consolaText.Text + Environment.NewLine + valorFinal;
             }
 
-
-            //Aca sistema de tipos :)
         }
     }
 }

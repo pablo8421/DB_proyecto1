@@ -285,6 +285,13 @@ namespace BasesDeDatos_Proyecto1
                 String nombre;
                 nombre = context.GetChild(2).GetText();
 
+                //MasterBD maestro = new MasterBD();
+                //maestro.agregarBD(new BaseDatos("Nombre"));
+                //XmlSerializer serializador = new XmlSerializer(typeof(MasterBD));
+                //StreamWriter miEscritor = new StreamWriter("Databases\\masterBDs.xml");
+                //serializador.Serialize(miEscritor, maestro);
+
+
                 XElement master = XElement.Load("Databases\\masterBDs.xml");
                 IEnumerable<XElement> basesdatos =
                     from el in master.Elements(nombre)
@@ -295,7 +302,6 @@ namespace BasesDeDatos_Proyecto1
                     MasterBD bdatos;
                     XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
                     StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
-                    reader.ReadToEnd();
                     bdatos = (MasterBD)serializer.Deserialize(reader);
                     reader.Close();
                     
