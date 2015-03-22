@@ -63,7 +63,7 @@ namespace BasesDeDatos_Proyecto1
         }
 
         override
-        public string VisitVotar_BD(SqlParser.Votar_BDContext context)
+        public string VisitBotar_BD(SqlParser.Botar_BDContext context)
         {
             String nombre = context.GetChild(2).GetText();
 
@@ -132,7 +132,7 @@ namespace BasesDeDatos_Proyecto1
         }
 
         override
-        public string VisitVotar_table(SqlParser.Votar_tableContext context)
+        public string VisitBotar_table(SqlParser.Botar_tableContext context)
         {
             throw new NotImplementedException();
         }

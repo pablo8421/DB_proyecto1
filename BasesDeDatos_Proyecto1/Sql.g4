@@ -56,12 +56,12 @@ full_query: (queries+= query ';')*;
 
 query: crear_BD
 	 | renombrar_BD
-	 | votar_BD
+	 | botar_BD
 	 | mostrar_BD
 	 | usar_BD
 	 | crear_tabla
 	 | alter_table
-	 | votar_table
+	 | botar_table
 	 | show_tables
 	 | show_columns
 	 | insert
@@ -73,7 +73,7 @@ crear_BD: CREATE DATABASE ID;
 
 renombrar_BD: ALTER DATABASE ID RENAME TO ID;
 
-votar_BD: DROP DATABASE ID;
+botar_BD: DROP DATABASE ID;
 
 mostrar_BD: SHOW DATABASES;
 
@@ -134,7 +134,7 @@ multi_accion: multi_accion ',' accion
 
 alter_table: ALTER TABLE ID multi_accion;
 
-votar_table: DROP TABLE ID;
+botar_table: DROP TABLE ID;
 
 show_tables: SHOW TABLES;
 
