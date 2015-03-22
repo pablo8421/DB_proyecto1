@@ -95,7 +95,6 @@ namespace BasesDeDatos_Proyecto1
                 String valorFinal = sistemaTipos.Visit(tree);
                 //En vez de esto habria que ver de mostrar el mensaje final, que tal vez sea hacer lo mismo
                 consolaText.Text = consolaText.Text + Environment.NewLine + valorFinal;
-                sistemaTipos.resultados.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
             }
 
         }

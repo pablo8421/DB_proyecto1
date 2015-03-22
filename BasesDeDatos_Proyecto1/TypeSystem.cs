@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -201,6 +202,7 @@ namespace BasesDeDatos_Proyecto1
                 resultados.Rows[i].Cells[0].Value = basesdatos.basesDeDatos.ElementAt(i-1).nombre;
                 resultados.Rows[i].Cells[1].Value = basesdatos.basesDeDatos.ElementAt(i-1).cantidad_tablas+"";
             }
+            resultados.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
             return "void";
         }
 
