@@ -31,5 +31,17 @@ namespace BasesDeDatos_Proyecto1
             return false;
         }
 
+        public void borrarBD(String nombre)
+        {
+            foreach (BaseDatos bd in basesDeDatos)
+            {
+                if (bd.nombre.Equals(nombre))
+                {
+                    basesDeDatos.Remove(bd);
+                    break;
+                }
+            }
+        }
+
     }
 }

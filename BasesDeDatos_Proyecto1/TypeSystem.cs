@@ -65,6 +65,25 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitVotar_BD(SqlParser.Votar_BDContext context)
         {
+            String nombre = context.GetChild(2).GetText();
+
+            MasterBD bdatos;
+            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
+            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
+            bdatos = (MasterBD)serializer.Deserialize(reader);
+            reader.Close();
+
+            if (bdatos.containsBD(nombre)) 
+            {
+                bdatos.borrarBD(nombre);
+            }
+            else
+            {
+                correcto = false;
+                errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' no existe en el DBMS.";
+                return "Error";
+            }
+
             throw new NotImplementedException();
         }
 
