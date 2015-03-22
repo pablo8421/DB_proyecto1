@@ -13,14 +13,14 @@ namespace BasesDeDatos_Proyecto1
 {
     class TypeSystem : SqlBaseVisitor<String>
     {
-        private bool correcto { get; set; }
-        private String errores { get; set; }
-        private DataGrid resultados;
+        public bool correcto;
+        public String errores;
+        public DataGridView resultados;
 
         public TypeSystem() {
             correcto = true;
             errores = "";
-            resultados = new DataGrid();
+            resultados = new DataGridView();
         }
 
         override
@@ -131,40 +131,7 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitRenombrar_BD(SqlParser.Renombrar_BDContext context)
         {
-            String nombre = context.GetChild(2).GetText();
-            String nuevoNombre = context.GetChild(5).GetText();
-
-            MasterBD bdatos;
-            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
-            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
-            bdatos = (MasterBD)serializer.Deserialize(reader);
-            reader.Close();
-
-            if(bdatos.containsBD(nombre))
-            {
-                foreach (BaseDatos bd in bdatos.basesDeDatos)
-                {
-                    if (bd.nombre.Equals(nombre))
-                    {
-                        bd.nombre = nuevoNombre;
-
-                        String pathViejo = "Databases\\"+nombre+"\\"+nombre+".xml";
-                        String pathNuevo = "Databases\\" + nombre + "\\" + nuevoNombre + ".xml";
-                        System.IO.File.Move(pathViejo, pathNuevo);
-
-                        pathViejo = "Databases\\" + nombre;
-                        pathNuevo = "Databases\\" + nuevoNombre;
-                        Directory.Move(pathViejo, pathNuevo);
-                        break;
-                    }
-                }
-                return "void";
-            }
-            else
-            {
-                return "Error";
-            }
-
+            throw new NotImplementedException();
         }
 
         override
@@ -224,9 +191,16 @@ namespace BasesDeDatos_Proyecto1
                 basesdatos = new MasterBD();
             }
             reader.Close();
-            
-            foreach (BaseDatos bd in basesdatos.basesDeDatos)
-                Console.WriteLine(bd);  //Pasarlo al textarea del form
+            resultados.ColumnCount = 2;
+            resultados.RowCount = basesdatos.basesDeDatos.Count+1;
+
+            resultados.Rows[0].Cells[0].Value = "Nombre";
+            resultados.Rows[0].Cells[0].Value = "Cantidad de tablas";
+            for (int i = 1; i < resultados.RowCount; i++)
+            {
+                resultados.Rows[i].Cells[0].Value = basesdatos.basesDeDatos.ElementAt(i-1).nombre;
+                resultados.Rows[i].Cells[1].Value = basesdatos.basesDeDatos.ElementAt(i-1).cantidad_tablas+"";
+            }
             return "void";
         }
 
