@@ -290,7 +290,7 @@ namespace BasesDeDatos_Proyecto1
                     from el in master.Elements(nombre)
                     select el;
 
-                if (basesdatos.ToList<XElement>().Count != 0)
+                if (basesdatos.ToList<XElement>().Count == 0)
                 {
                     BaseDatos nBaseDatos = new BaseDatos(nombre);
                     XmlSerializer mySerializer = new XmlSerializer(typeof(BaseDatos));
@@ -300,25 +300,22 @@ namespace BasesDeDatos_Proyecto1
                     string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), nombre);
                     System.IO.Directory.CreateDirectory(path);
                     string fileName = nombre+".xml";
-                    path = System.IO.Path.Combine(Path.GetFullPath("Databases"), fileName);
+                    path = System.IO.Path.Combine(path, fileName);
                     if (!System.IO.File.Exists(path))
                     {
                         System.IO.FileStream fs = System.IO.File.Create(path);
-
-                        /*using (System.IO.FileStream fs = System.IO.File.Create(path))
-                        {
-
-                        }*/
+                        fs.Close();
                     }
                 }
                 else
                 {
                     correcto = false;
                     errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' ya existe en el DBMS.";
+                    return "Error";
                 }
                 return "void";
             }
-            return "";
+            return "Error";
         }
 
         override
