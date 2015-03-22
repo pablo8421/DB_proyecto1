@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -12,12 +13,14 @@ namespace BasesDeDatos_Proyecto1
 {
     class TypeSystem : SqlBaseVisitor<String>
     {
-        private bool correcto;
-        private String errores;
+        private bool correcto { get; set; }
+        private String errores { get; set; }
+        private DataGrid resultados;
 
         public TypeSystem() {
             correcto = true;
             errores = "";
+            resultados = new DataGrid();
         }
 
         override
@@ -176,13 +179,20 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitMostrar_BD(SqlParser.Mostrar_BDContext context)
         {
-            BaseDatos[] basesdatos;
-            XmlSerializer serializer = new XmlSerializer(typeof(BaseDatos[]));
+            MasterBD basesdatos;
+            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
             StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
-            reader.ReadToEnd();
-            basesdatos = (BaseDatos[])serializer.Deserialize(reader);
+            try
+            {
+                basesdatos = (MasterBD)serializer.Deserialize(reader);
+            }
+            catch (Exception e)
+            {
+                basesdatos = new MasterBD();
+            }
             reader.Close();
-            foreach (BaseDatos bd in basesdatos)
+            
+            foreach (BaseDatos bd in basesdatos.basesDeDatos)
                 Console.WriteLine(bd);  //Pasarlo al textarea del form
             return "void";
         }
