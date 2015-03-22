@@ -175,7 +175,7 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitQuery(SqlParser.QueryContext context)
         {
-            throw new NotImplementedException();
+            return Visit(context.GetChild(0));
         }
 
         override
@@ -193,7 +193,16 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitFull_query(SqlParser.Full_queryContext context)
         {
-            throw new NotImplementedException();
+            foreach(SqlParser.QueryContext query in context._queries){
+                if(Visit(query).Equals("void")){
+                    //Seguir iterando?
+                }
+                else
+                {
+                    return "Error";
+                }
+            }
+            return "void";
         }
 
         override

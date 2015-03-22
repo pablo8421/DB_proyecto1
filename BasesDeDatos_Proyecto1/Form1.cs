@@ -91,7 +91,8 @@ namespace BasesDeDatos_Proyecto1
             TypeSystem sistemaTipos = new TypeSystem();
 
             if(lectorErrores.noHayError){
-                sistemaTipos.Visit(tree);
+                String valorFinal = sistemaTipos.Visit(tree);
+                consolaText.Text = consolaText.Text + Environment.NewLine + valorFinal;
             }
 
 
