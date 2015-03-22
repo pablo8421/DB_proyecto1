@@ -18,5 +18,18 @@ namespace BasesDeDatos_Proyecto1
         public void agregarBD(BaseDatos bd){
             basesDeDatos.Add(bd);
         }
+
+        public bool containsBD(String nombre)
+        {
+            foreach (BaseDatos bd in basesDeDatos)
+            {
+                if (bd.nombre.Equals(nombre))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }
