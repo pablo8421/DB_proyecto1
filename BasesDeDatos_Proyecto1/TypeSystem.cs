@@ -292,8 +292,16 @@ namespace BasesDeDatos_Proyecto1
 
                 if (basesdatos.ToList<XElement>().Count == 0)
                 {
+                    MasterBD bdatos;
+                    XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
+                    StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
+                    reader.ReadToEnd();
+                    bdatos = (MasterBD)serializer.Deserialize(reader);
+                    reader.Close();
+                    
                     BaseDatos nBaseDatos = new BaseDatos(nombre);
-                    XmlSerializer mySerializer = new XmlSerializer(typeof(BaseDatos));
+                    bdatos.agregarBD(nBaseDatos);
+                    XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));                   
                     StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
                     mySerializer.Serialize(myWriter, nBaseDatos);
                     myWriter.Close();
