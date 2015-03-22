@@ -96,7 +96,6 @@ namespace BasesDeDatos_Proyecto1
                 String valorFinal = sistemaTipos.Visit(tree);
                 //En vez de esto habria que ver de mostrar el mensaje final, que tal vez sea hacer lo mismo
                 consolaText.Text = consolaText.Text + Environment.NewLine + valorFinal;
-                dataGridView1 = sistemaTipos.resultados;
             }
 
         }
