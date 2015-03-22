@@ -76,6 +76,16 @@ namespace BasesDeDatos_Proyecto1
             if (bdatos.containsBD(nombre)) 
             {
                 bdatos.borrarBD(nombre);
+
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
+                StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                mySerializer.Serialize(myWriter, bdatos);
+                myWriter.Close();
+
+                String path = "Databases\\"+nombre;
+                System.IO.Directory.Delete(path, true);
+
+                return "void";
             }
             else
             {
@@ -83,8 +93,6 @@ namespace BasesDeDatos_Proyecto1
                 errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' no existe en el DBMS.";
                 return "Error";
             }
-
-            throw new NotImplementedException();
         }
 
         override
