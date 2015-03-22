@@ -131,7 +131,40 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitRenombrar_BD(SqlParser.Renombrar_BDContext context)
         {
-            throw new NotImplementedException();
+            String nombre = context.GetChild(2).GetText();
+            String nuevoNombre = context.GetChild(5).GetText();
+
+            MasterBD bdatos;
+            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
+            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
+            bdatos = (MasterBD)serializer.Deserialize(reader);
+            reader.Close();
+
+            if(bdatos.containsBD(nombre))
+            {
+                foreach (BaseDatos bd in bdatos.basesDeDatos)
+                {
+                    if (bd.nombre.Equals(nombre))
+                    {
+                        bd.nombre = nuevoNombre;
+
+                        String pathViejo = "Databases\\"+nombre+"\\"+nombre+".xml";
+                        String pathNuevo = "Databases\\" + nombre + "\\" + nuevoNombre + ".xml";
+                        System.IO.File.Move(pathViejo, pathNuevo);
+
+                        pathViejo = "Databases\\" + nombre;
+                        pathNuevo = "Databases\\" + nuevoNombre;
+                        Directory.Move(pathViejo, pathNuevo);
+                        break;
+                    }
+                }
+                return "void";
+            }
+            else
+            {
+                return "Error";
+            }
+
         }
 
         override
