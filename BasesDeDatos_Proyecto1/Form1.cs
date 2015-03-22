@@ -89,6 +89,8 @@ namespace BasesDeDatos_Proyecto1
             consolaText.Text = lectorErrores.erroresTotal;
 
             TypeSystem sistemaTipos = new TypeSystem();
+            sistemaTipos.resultados = dataGridView1;
+
 
             if(lectorErrores.noHayError){
                 String valorFinal = sistemaTipos.Visit(tree);
