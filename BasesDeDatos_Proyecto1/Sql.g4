@@ -52,7 +52,7 @@ IDENTIFICADOR: ID ('.' ID)?;
 VALUE : (INT | FLOAT | STRING); 
 
 
-full_query: (query ';')*;
+full_query: (queries+= query ';')*;
 
 query: crear_BD
 	 | renombrar_BD
