@@ -156,6 +156,12 @@ namespace BasesDeDatos_Proyecto1
                         pathViejo = "Databases\\" + nombre;
                         pathNuevo = "Databases\\" + nuevoNombre;
                         Directory.Move(pathViejo, pathNuevo);
+
+                        XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
+                        StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                        mySerializer.Serialize(myWriter, bdatos);
+                        myWriter.Close();
+
                         break;
                     }
                 }
