@@ -284,29 +284,30 @@ namespace BasesDeDatos_Proyecto1
             {
                 String nombre;
                 nombre = context.GetChild(2).GetText();
-
-                XElement master = XElement.Load("Databases\\masterBDs.xml");
-                IEnumerable<XElement> basesdatos =
-                    from el in master.Elements(nombre)
-                    select el;
-
-                if (basesdatos.ToList<XElement>().Count == 0)
+                
+                MasterBD bdatos;
+                XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
+                StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
+                try
                 {
-                    MasterBD bdatos;
-                    XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
-                    StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
                     bdatos = (MasterBD)serializer.Deserialize(reader);
-                    reader.Close();
-                    
+                }
+                catch (Exception e) {
+                    bdatos = new MasterBD();
+                }
+                reader.Close();
+
+                if (!bdatos.containsBD(nombre))
+                {
                     BaseDatos nBaseDatos = new BaseDatos(nombre);
                     bdatos.agregarBD(nBaseDatos);
-                    XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));                   
+                    XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
                     StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
                     mySerializer.Serialize(myWriter, bdatos);
                     myWriter.Close();
                     string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), nombre);
                     System.IO.Directory.CreateDirectory(path);
-                    string fileName = nombre+".xml";
+                    string fileName = nombre + ".xml";
                     path = System.IO.Path.Combine(path, fileName);
                     if (!System.IO.File.Exists(path))
                     {
