@@ -14,12 +14,10 @@ namespace BasesDeDatos_Proyecto1
 {
     class TypeSystem : SqlBaseVisitor<String>
     {
-        public bool correcto;
         public String errores;
         public DataGridView resultados;
 
         public TypeSystem() {
-            correcto = true;
             errores = "";
             resultados = new DataGridView();
         }
@@ -93,7 +91,6 @@ namespace BasesDeDatos_Proyecto1
             }
             else
             {
-                correcto = false;
                 errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' no existe en el DBMS.";
                 return "Error";
             }
@@ -364,50 +361,45 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitCrear_BD(SqlParser.Crear_BDContext context)
         {
-            if (correcto)
-            {
-                String nombre;
-                nombre = context.GetChild(2).GetText();
+            String nombre;
+            nombre = context.GetChild(2).GetText();
                 
-                MasterBD bdatos;
-                XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
-                StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
-                try
-                {
-                    bdatos = (MasterBD)serializer.Deserialize(reader);
-                }
-                catch (Exception e) {
-                    bdatos = new MasterBD();
-                }
-                reader.Close();
-
-                if (!bdatos.containsBD(nombre))
-                {
-                    BaseDatos nBaseDatos = new BaseDatos(nombre);
-                    bdatos.agregarBD(nBaseDatos);
-                    XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
-                    StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                    mySerializer.Serialize(myWriter, bdatos);
-                    myWriter.Close();
-                    string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), nombre);
-                    System.IO.Directory.CreateDirectory(path);
-                    string fileName = nombre + ".xml";
-                    path = System.IO.Path.Combine(path, fileName);
-                    if (!System.IO.File.Exists(path))
-                    {
-                        System.IO.FileStream fs = System.IO.File.Create(path);
-                        fs.Close();
-                    }
-                }
-                else
-                {
-                    correcto = false;
-                    errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' ya existe en el DBMS.";
-                    return "Error";
-                }
-                return "void";
+            MasterBD bdatos;
+            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
+            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
+            try
+            {
+                bdatos = (MasterBD)serializer.Deserialize(reader);
             }
-            return "Error";
+            catch (Exception e) {
+                bdatos = new MasterBD();
+            }
+            reader.Close();
+
+            if (!bdatos.containsBD(nombre))
+            {
+                BaseDatos nBaseDatos = new BaseDatos(nombre);
+                bdatos.agregarBD(nBaseDatos);
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
+                StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                mySerializer.Serialize(myWriter, bdatos);
+                myWriter.Close();
+                string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), nombre);
+                System.IO.Directory.CreateDirectory(path);
+                string fileName = nombre + ".xml";
+                path = System.IO.Path.Combine(path, fileName);
+                if (!System.IO.File.Exists(path))
+                {
+                    System.IO.FileStream fs = System.IO.File.Create(path);
+                    fs.Close();
+                }
+            }
+            else
+            {
+                errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' ya existe en el DBMS.";
+                return "Error";
+            }
+            return "void";
         }
 
         override
