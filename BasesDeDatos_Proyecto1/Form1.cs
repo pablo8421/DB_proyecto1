@@ -83,11 +83,16 @@ namespace BasesDeDatos_Proyecto1
 
             parser.RemoveErrorListeners();
             ErrorListener lectorErrores = new ErrorListener();
-            parser.AddErrorListener(lectorErrores); // add ours
-
-            parser.full_query();
+            parser.AddErrorListener(lectorErrores); 
+            Antlr4.Runtime.Tree.IParseTree tree = parser.full_query();
 
             consolaText.Text = lectorErrores.erroresTotal;
+
+            TypeSystem sistemaTipos = new TypeSystem();
+
+            if(lectorErrores.noHayError){
+                sistemaTipos.Visit(tree);
+            }
 
 
             //Aca sistema de tipos :)

@@ -13,15 +13,17 @@ namespace BasesDeDatos_Proyecto1
     class ErrorListener : BaseErrorListener 
     {
         public String erroresTotal { get; set; }
-
+        public bool noHayError { get; set; }
         public ErrorListener() : base()
         {
             erroresTotal = "";
+            noHayError = true;
         }
 
         override
         public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
         {
+            noHayError = false;
             String error = msg + " on line " + line + " character " + charPositionInLine + Environment.NewLine;
             erroresTotal += error;
             System.Console.Error.WriteLine("line " + line + ":" + charPositionInLine + " " + msg);
