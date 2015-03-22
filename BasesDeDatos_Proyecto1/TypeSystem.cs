@@ -195,7 +195,7 @@ namespace BasesDeDatos_Proyecto1
             resultados.RowCount = basesdatos.basesDeDatos.Count+1;
 
             resultados.Rows[0].Cells[0].Value = "Nombre";
-            resultados.Rows[0].Cells[0].Value = "Cantidad de tablas";
+            resultados.Rows[0].Cells[1].Value = "Cantidad de tablas";
             for (int i = 1; i < resultados.RowCount; i++)
             {
                 resultados.Rows[i].Cells[0].Value = basesdatos.basesDeDatos.ElementAt(i-1).nombre;
