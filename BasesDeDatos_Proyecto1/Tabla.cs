@@ -10,9 +10,9 @@ namespace BasesDeDatos_Proyecto1
     {
         public String nombre;
         public int cantidad_registros;
-        public String[] columnas;
-        public String[] tipos_columnas;
-        public String[] restricciones;
+        public List<String> columnas;
+        public List<String> tipos_columnas;
+        public List<String> restricciones;
 
         public Tabla()
         {
@@ -23,7 +23,8 @@ namespace BasesDeDatos_Proyecto1
             restricciones = null;
         }
 
-        public Tabla(String nombre, int cantidad_registros, String[] columnas, String[] tipos_columnas, String[] restricciones) {
+        public Tabla(String nombre, int cantidad_registros, List<String> columnas, List<String> tipos_columnas, List<String> restricciones)
+        {
             this.nombre = nombre;
             this.cantidad_registros = cantidad_registros;
             this.columnas = columnas;
