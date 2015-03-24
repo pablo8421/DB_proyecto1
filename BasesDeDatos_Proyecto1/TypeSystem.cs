@@ -18,12 +18,16 @@ namespace BasesDeDatos_Proyecto1
         public String mensajes;
         public DataGridView resultados;
         public String BDenUso;
+        private MasterTabla masterTabla;
+        private List<Tabla> ListaTablas;
 
         public TypeSystem() {
             errores = "";
             mensajes = "";
             BDenUso = "";
             resultados = new DataGridView();
+            masterTabla = new MasterTabla();
+            ListaTablas = new List<Tabla>();
         }
 
         override
@@ -65,7 +69,38 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitAccion_rename(SqlParser.Accion_renameContext context)
         {
-            throw new NotImplementedException();
+            String nombre = ListaTablas.ElementAt(0).nombre;
+            String nuevoNombre = context.GetChild(2).GetText();
+
+            if (masterTabla.containsTable(nuevoNombre)) {
+                errores += "Error en linea " + context.start.Line + ": Ya existe una tabla con el nombre '" + nuevoNombre + "' por lo que no se le puede cambiar de nombre a la tabla '" + nombre + "'.\r\n";
+                return "Error";
+            }
+
+            foreach (Tabla t in masterTabla.tablas)
+            {
+                if (t.nombre.Equals(nombre))
+                {
+                    t.nombre = nuevoNombre;
+
+                    //Comentario
+                    String pathViejo = "Databases\\" + BDenUso + "\\" + nombre + ".xml";
+                    String pathNuevo = "Databases\\" + BDenUso + "\\" + nuevoNombre + ".xml";
+                    System.IO.File.Move(pathViejo, pathNuevo);
+
+                    
+                    XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                    StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                    mySerializer.Serialize(myWriter, masterTabla);
+                    myWriter.Close();
+
+                    mensajes += "Se ha renombrado la tabla '" + nombre + "' a '" + nuevoNombre + "' con éxito.\r\n";
+
+                    break;
+                }
+            }
+            
+            return "void";
         }
 
         override
@@ -148,15 +183,17 @@ namespace BasesDeDatos_Proyecto1
             reader.Close();
 
             //Verificar si la tabla existe
-            if (mTabla.containsTable(nTabla))
+            if (!mTabla.containsTable(nTabla))
             {
                 errores += "Error en linea " + context.start.Line + ": La base de datos " + BDenUso + " no contiene una tabla " + nTabla + "." + Environment.NewLine;
                 return "Error";
             }
-            
 
+            //Mandar datos
+            masterTabla = mTabla;
+            ListaTablas.Add(new Tabla(nTabla,0,null,null,null));
 
-            throw new NotImplementedException();
+            return Visit(context.GetChild(3));
         }
 
         override
@@ -434,15 +471,23 @@ namespace BasesDeDatos_Proyecto1
         {
             if (context.ChildCount == 1)
             {
-
+                return Visit(context.GetChild(0));
             }
             else {
                 if (context.GetText().Contains("RENAMETO")) {
                     errores += "";
                     return "Error";
                 }
+                else{
+                    if (Visit(context.GetChild(0)).Equals("Error"))
+                        return "Error";
+                    else
+                        if (Visit(context.GetChild(2)).Equals("Error"))
+                            return "Error";
+                        else
+                            return "void";
+                }
             }
-            return "void";
         }
 
         override
