@@ -392,7 +392,7 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitCrear_tabla(SqlParser.Crear_tablaContext context)
         {
-            String[] columnas = Visit(context.GetChild(4)).Split(',');
+            List<String> columnas = Visit(context.GetChild(4)).Split(',').ToList();
 
             throw new NotImplementedException();
         }
