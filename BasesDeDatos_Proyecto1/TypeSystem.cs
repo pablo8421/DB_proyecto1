@@ -87,6 +87,9 @@ namespace BasesDeDatos_Proyecto1
                 {
                     bdatos.borrarBD(nombre);
 
+                    if (nombre.Equals(BDenUso))
+                        BDenUso = "";
+
                     XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
                     StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
                     mySerializer.Serialize(myWriter, bdatos);
@@ -124,6 +127,35 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitAlter_table(SqlParser.Alter_tableContext context)
         {
+            String nTabla = context.GetChild(2).GetText();
+            if (BDenUso.Equals("")) { 
+                errores += "Error en línea "+context.start.Line+": No hay base de datos en uso por lo que no se puede alterar la tabla.";
+                return "Error";
+            }
+
+            //Deserealizar el archivo maestro de tablas
+            MasterTabla mTabla;
+            XmlSerializer serializer = new XmlSerializer(typeof(MasterTabla));
+            StreamReader reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+            try
+            {
+                mTabla = (MasterTabla)serializer.Deserialize(reader);
+            }
+            catch (Exception e)
+            {
+                mTabla = new MasterTabla();
+            }
+            reader.Close();
+
+            //Verificar si la tabla existe
+            if (mTabla.containsTable(nTabla))
+            {
+                errores += "Error en linea " + context.start.Line + ": La base de datos " + BDenUso + " no contiene una tabla " + nTabla + "." + Environment.NewLine;
+                return "Error";
+            }
+            
+
+
             throw new NotImplementedException();
         }
 
@@ -400,7 +432,17 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitMulti_accion(SqlParser.Multi_accionContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 1)
+            {
+
+            }
+            else {
+                if (context.GetText().Contains("RENAMETO")) {
+                    errores += "";
+                    return "Error";
+                }
+            }
+            return "void";
         }
 
         override
@@ -551,6 +593,16 @@ namespace BasesDeDatos_Proyecto1
         {
             throw new NotImplementedException();
         }
+
+        private MasterBD deserializarMasterBD() {
+            MasterBD bdatos;
+            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
+            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
+            bdatos = (MasterBD)serializer.Deserialize(reader);
+            reader.Close();
+            return bdatos;
+        }
+
         /*
         public string Visit(Antlr4.Runtime.Tree.IParseTree tree)
         {
