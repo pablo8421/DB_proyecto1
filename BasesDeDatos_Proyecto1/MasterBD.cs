@@ -43,5 +43,16 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        public void actualizarCantidadEnBD(string nombre, int cantidad)
+        {
+            foreach (BaseDatos bd in basesDeDatos)
+            {
+                if (bd.nombre.Equals(nombre))
+                {
+                    bd.cantidad_tablas = cantidad;
+                }
+            }
+        }
+
     }
 }

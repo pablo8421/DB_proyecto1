@@ -16,9 +16,12 @@ namespace BasesDeDatos_Proyecto1
 {
     public partial class Form1 : Form
     {
+        String databaseActual;
+
         public Form1()
         {
             InitializeComponent();
+            databaseActual = "";
         }
 
         private void boton_cargar_Click(object sender, EventArgs e)
@@ -89,6 +92,7 @@ namespace BasesDeDatos_Proyecto1
             consolaText.Text = lectorErrores.erroresTotal;
 
             TypeSystem sistemaTipos = new TypeSystem();
+            sistemaTipos.BDenUso = databaseActual;
             sistemaTipos.resultados = dataGridView1;
                 
             if(lectorErrores.noHayError){
@@ -98,7 +102,7 @@ namespace BasesDeDatos_Proyecto1
                 else
                     consolaText.Text = sistemaTipos.mensajes + sistemaTipos.errores;
             }
-
+            databaseActual = sistemaTipos.BDenUso;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace BasesDeDatos_Proyecto1
 {
     public class MasterTabla
     {
-        List<Tabla> tablas;
+        public List<Tabla> tablas;
 
         public MasterTabla() {
             tablas = new List<Tabla>();

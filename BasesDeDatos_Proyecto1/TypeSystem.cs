@@ -403,11 +403,13 @@ namespace BasesDeDatos_Proyecto1
                 return "Error";
             }
 
+            //Generar la nueva tabla
             List<String> columnas = Visit(context.GetChild(4)).Split(',').ToList();
             Tabla nueva = new Tabla();
             nueva.nombre = context.GetChild(2).GetText();
             nueva.generarColumnas(columnas);
 
+            //Deserealizar el archivo maestro de tablas
             MasterTabla mTabla;
             XmlSerializer serializer = new XmlSerializer(typeof(MasterTabla));
             StreamReader reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
@@ -421,9 +423,10 @@ namespace BasesDeDatos_Proyecto1
             }
             reader.Close();
 
+            //Verificar si la tabla ya exite
             if (mTabla.containsTable(nueva.nombre))
             {
-                errores += "Error en linea " + context.start.Line + ": La base de datos "+BDenUso+" ya contiene una tabla" + nueva.nombre + "." + Environment.NewLine;
+                errores += "Error en linea " + context.start.Line + ": La base de datos "+BDenUso+" ya contiene una tabla " + nueva.nombre + "." + Environment.NewLine;
                 return "Error";
             }
             else
@@ -431,20 +434,52 @@ namespace BasesDeDatos_Proyecto1
                 mTabla.agregarTabla(nueva);
             }
 
+            //En caso que no haya constraints
             if (context.ChildCount == 6)
             {
-                XmlSerializer mySerializer = new XmlSerializer(typeof(Tabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + nueva.nombre + ".xml");
-                mySerializer.Serialize(myWriter, nueva);
-                myWriter.Close();
+                //Crear el archivo vacio de la tabla
+                string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), BDenUso);
+                //No se si deberia de ser un xml
+                string fileName = nueva.nombre + ".xml";
+                path = System.IO.Path.Combine(path, fileName);
+                System.IO.FileStream fs = System.IO.File.Create(path);
+                fs.Close();
 
-                mySerializer = new XmlSerializer(typeof(MasterTabla));
-                myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                //Serializar el objeto de la base de datos
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
                 mySerializer.Serialize(myWriter, mTabla);
                 myWriter.Close();
 
+                //Actualizar masterBDs
+                MasterBD masterBD;
+                serializer = new XmlSerializer(typeof(MasterBD));
+                reader = new StreamReader("Databases\\masterBDs.xml");
+                try
+                {
+                    //Deserealizar y actualizar datos
+                    masterBD = (MasterBD)serializer.Deserialize(reader);
+                    reader.Close();
+
+                    masterBD.actualizarCantidadEnBD(BDenUso, mTabla.tablas.Count);
+                    
+
+                    //Serealizar el archivo maestros
+                    mySerializer = new XmlSerializer(typeof(MasterBD));
+                    myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                    mySerializer.Serialize(myWriter, masterBD);
+                    myWriter.Close();                    
+                }
+                catch (Exception e)
+                {
+                    //Nada? No deberia pasar
+                    reader.Close();
+                }
+                
+
                 return "void";
             }
+            //Caso en que si hay constraints
             else
             {
                 //Aca va cuando hay constraints
