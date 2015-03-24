@@ -90,12 +90,12 @@ namespace BasesDeDatos_Proyecto1
 
                 String path = "Databases\\"+nombre;
                 System.IO.Directory.Delete(path, true);
-                mensajes += "Se ha borrado la base de datos '" + nombre + "' con éxito.\n";
+                mensajes += "Se ha borrado la base de datos '" + nombre + "' con éxito.\r\n";
                 return "void";
             }
             else
             {
-                errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' no existe en el DBMS.\n";
+                errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' no existe en el DBMS.\r\n";
                 return "Error";
             }
         }
@@ -166,12 +166,12 @@ namespace BasesDeDatos_Proyecto1
                         break;
                     }
                 }
-                mensajes += "Se ha cambiado el nombre de la base de datos de '" + nombre + "' a '" + nuevoNombre + "' con éxito.\n";
+                mensajes += "Se ha cambiado el nombre de la base de datos de '" + nombre + "' a '" + nuevoNombre + "' con éxito.\r\n";
                 return "void";
             }
             else
             {
-                errores += "Error en linea"+context.start.Line+"No existe la base de datos '" + nombre + "' por lo que no se le puede cambiar el nombre.\n";
+                errores += "Error en linea" + context.start.Line + "No existe la base de datos '" + nombre + "' por lo que no se le puede cambiar el nombre.\r\n";
                 return "Error";
             }
         }
@@ -312,12 +312,12 @@ namespace BasesDeDatos_Proyecto1
             if (bdatos.containsBD(nombre))
             {
                 BDenUso = nombre;
-                mensajes += "La base de datos que usará a partir de este momento será '" + nombre + "'.\n";
+                mensajes += "La base de datos que usará a partir de este momento será '" + nombre + "'.\r\n";
                 return "void";
             }
             else
             {
-                errores += "Error en línea "+context.start.Line+": La base de datos '"+nombre+"' no existe.\n";
+                errores += "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' no existe.\r\n";
                 return "Error";
             }
         }
@@ -420,12 +420,12 @@ namespace BasesDeDatos_Proyecto1
                 path = System.IO.Path.Combine(path, fileName);
                 System.IO.FileStream fs = System.IO.File.Create(path);
                 fs.Close();
-                mensajes += "La base de datos '" + nombre + "' ha sido creada exitosamente";
+                mensajes += "La base de datos '" + nombre + "' ha sido creada exitosamente.\r\n";
                 return "void";
             }
             else
             {
-                errores += "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' ya existe en el DBMS.";
+                errores += "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' ya existe en el DBMS.\r\n";
                 return "Error";
             }
         }
