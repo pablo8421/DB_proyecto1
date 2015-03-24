@@ -15,10 +15,14 @@ namespace BasesDeDatos_Proyecto1
     class TypeSystem : SqlBaseVisitor<String>
     {
         public String errores;
+        public String mensajes;
         public DataGridView resultados;
+        public String BDenUso;
 
         public TypeSystem() {
             errores = "";
+            mensajes = "";
+            BDenUso = "";
             resultados = new DataGridView();
         }
 
@@ -86,12 +90,12 @@ namespace BasesDeDatos_Proyecto1
 
                 String path = "Databases\\"+nombre;
                 System.IO.Directory.Delete(path, true);
-
+                mensajes += "Se ha borrado la base de datos '" + nombre + "' con éxito.\n";
                 return "void";
             }
             else
             {
-                errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' no existe en el DBMS.";
+                errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' no existe en el DBMS.\n";
                 return "Error";
             }
         }
@@ -162,10 +166,12 @@ namespace BasesDeDatos_Proyecto1
                         break;
                     }
                 }
+                mensajes += "Se ha cambiado el nombre de la base de datos de '" + nombre + "' a '" + nuevoNombre + "' con éxito.\n";
                 return "void";
             }
             else
             {
+                errores += "Error en linea"+context.start.Line+"No existe la base de datos '" + nombre + "' por lo que no se le puede cambiar el nombre.\n";
                 return "Error";
             }
         }
@@ -289,7 +295,31 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitUsar_BD(SqlParser.Usar_BDContext context)
         {
-            throw new NotImplementedException();
+            String nombre;
+            nombre = context.GetChild(2).GetText();
+            MasterBD bdatos;
+            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
+            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
+            try
+            {
+                bdatos = (MasterBD)serializer.Deserialize(reader);
+            }
+            catch (Exception e) {
+                bdatos = new MasterBD();
+            }
+            reader.Close();
+
+            if (bdatos.containsBD(nombre))
+            {
+                BDenUso = nombre;
+                mensajes += "La base de datos que usará a partir de este momento será '" + nombre + "'.\n";
+                return "void";
+            }
+            else
+            {
+                errores += "Error en línea "+context.start.Line+": La base de datos '"+nombre+"' no existe.\n";
+                return "Error";
+            }
         }
 
         override
@@ -388,18 +418,16 @@ namespace BasesDeDatos_Proyecto1
                 System.IO.Directory.CreateDirectory(path);
                 string fileName = nombre + ".xml";
                 path = System.IO.Path.Combine(path, fileName);
-                if (!System.IO.File.Exists(path))
-                {
-                    System.IO.FileStream fs = System.IO.File.Create(path);
-                    fs.Close();
-                }
+                System.IO.FileStream fs = System.IO.File.Create(path);
+                fs.Close();
+                mensajes += "La base de datos '" + nombre + "' ha sido creada exitosamente";
+                return "void";
             }
             else
             {
-                errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' ya existe en el DBMS.";
+                errores += "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' ya existe en el DBMS.";
                 return "Error";
             }
-            return "void";
         }
 
         override
