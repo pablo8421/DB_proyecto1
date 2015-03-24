@@ -454,6 +454,7 @@ namespace BasesDeDatos_Proyecto1
                 path = System.IO.Path.Combine(path, fileName);
                 System.IO.FileStream fs = System.IO.File.Create(path);
                 fs.Close();
+
                 mensajes += "La base de datos '" + nombre + "' ha sido creada exitosamente.\r\n";
                 return "void";
             }
