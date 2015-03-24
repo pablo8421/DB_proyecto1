@@ -14,7 +14,7 @@ namespace BasesDeDatos_Proyecto1
             tablas = new List<Tabla>();
         }
 
-        public void agregarBD(Tabla t)
+        public void agregarTabla(Tabla t)
         {
             tablas.Add(t);
         }

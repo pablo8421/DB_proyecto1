@@ -408,16 +408,44 @@ namespace BasesDeDatos_Proyecto1
             nueva.nombre = context.GetChild(2).GetText();
             nueva.generarColumnas(columnas);
 
+            MasterTabla mTabla;
+            XmlSerializer serializer = new XmlSerializer(typeof(MasterTabla));
+            StreamReader reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+            try
+            {
+                mTabla = (MasterTabla)serializer.Deserialize(reader);
+            }
+            catch (Exception e)
+            {
+                mTabla = new MasterTabla();
+            }
+            reader.Close();
+
+            if (mTabla.containsTable(nueva.nombre))
+            {
+                errores += "Error en linea " + context.start.Line + ": La base de datos "+BDenUso+" ya contiene una tabla" + nueva.nombre + "." + Environment.NewLine;
+                return "Error";
+            }
+            else
+            {
+                mTabla.agregarTabla(nueva);
+            }
+
             if (context.ChildCount == 6)
             {
                 XmlSerializer mySerializer = new XmlSerializer(typeof(Tabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + nueva.nombre + ".xml");
                 mySerializer.Serialize(myWriter, nueva);
+                myWriter.Close();
+
+                mySerializer = new XmlSerializer(typeof(MasterTabla));
+                myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, mTabla);
                 myWriter.Close();
             }
             else
             {
-
+                //Aca va cuando hay constraints
             }
             throw new NotImplementedException();
         }
