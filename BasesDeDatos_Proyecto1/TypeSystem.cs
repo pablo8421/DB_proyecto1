@@ -81,16 +81,25 @@ namespace BasesDeDatos_Proyecto1
 
             if (bdatos.containsBD(nombre)) 
             {
-                bdatos.borrarBD(nombre);
+                DialogResult resultado = MessageBox.Show("Seguro que desea botar "+nombre+ " con "+bdatos.getRegistros(nombre)+ " registros","Confirmación", MessageBoxButtons.YesNo);
 
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
-                StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                mySerializer.Serialize(myWriter, bdatos);
-                myWriter.Close();
+                if (resultado == DialogResult.Yes)
+                {
+                    bdatos.borrarBD(nombre);
 
-                String path = "Databases\\"+nombre;
-                System.IO.Directory.Delete(path, true);
-                mensajes += "Se ha borrado la base de datos '" + nombre + "' con éxito.\r\n";
+                    XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
+                    StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                    mySerializer.Serialize(myWriter, bdatos);
+                    myWriter.Close();
+
+                    String path = "Databases\\" + nombre;
+                    System.IO.Directory.Delete(path, true);
+                    mensajes += "Se ha borrado la base de datos '" + nombre + "' con éxito.\r\n";
+                }
+                else
+                {
+                    mensajes += "No se ha borrado la base de datos '" + nombre + "' con éxito."+Environment.NewLine;
+                }
                 return "void";
             }
             else

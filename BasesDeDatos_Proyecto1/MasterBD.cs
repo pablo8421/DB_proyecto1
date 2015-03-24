@@ -43,6 +43,17 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        public int getRegistros(String nombre){
+            foreach (BaseDatos bd in basesDeDatos)
+            {
+                if (bd.nombre.Equals(nombre))
+                {
+                    return bd.registros;
+                }
+            }
+            return 0;
+        }
+
         public void actualizarCantidadEnBD(string nombre, int cantidad)
         {
             foreach (BaseDatos bd in basesDeDatos)
