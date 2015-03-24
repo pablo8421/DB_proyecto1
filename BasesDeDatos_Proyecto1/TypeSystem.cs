@@ -468,7 +468,8 @@ namespace BasesDeDatos_Proyecto1
                     mySerializer = new XmlSerializer(typeof(MasterBD));
                     myWriter = new StreamWriter("Databases\\masterBDs.xml");
                     mySerializer.Serialize(myWriter, masterBD);
-                    myWriter.Close();                    
+                    myWriter.Close();
+                    mensajes += "Se ha creado la tabla '"+nueva.nombre+"' en '"+BDenUso+"' con éxito.\r\n";
                 }
                 catch (Exception e)
                 {
