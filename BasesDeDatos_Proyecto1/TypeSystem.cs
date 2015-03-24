@@ -397,6 +397,12 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitCrear_tabla(SqlParser.Crear_tablaContext context)
         {
+            if (BDenUso.Equals(""))
+            {
+                errores += "Error en linea " + context.start.Line + ": No hay base de datos en uso para agregar la tabla " + context.GetChild(2).GetText() + "." + Environment.NewLine;
+                return "Error";
+            }
+
             List<String> columnas = Visit(context.GetChild(4)).Split(',').ToList();
             Tabla nueva = new Tabla();
             nueva.nombre = context.GetChild(2).GetText();
