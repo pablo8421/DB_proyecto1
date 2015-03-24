@@ -442,12 +442,14 @@ namespace BasesDeDatos_Proyecto1
                 myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
                 mySerializer.Serialize(myWriter, mTabla);
                 myWriter.Close();
+
+                return "void";
             }
             else
             {
                 //Aca va cuando hay constraints
+                return "Error";
             }
-            throw new NotImplementedException();
         }
 
         override
