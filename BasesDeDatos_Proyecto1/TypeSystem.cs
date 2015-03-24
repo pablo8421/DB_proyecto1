@@ -250,7 +250,7 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitColumnas(SqlParser.ColumnasContext context)
         {
-            throw new NotImplementedException();
+            return context.GetChild(0).GetText() + " " + context.GetChild(1).GetText();
         }
 
         override
@@ -325,7 +325,14 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitMulti_columnas(SqlParser.Multi_columnasContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 1)
+            {
+                return Visit(context.GetChild(0));
+            }
+            else
+            {
+                return Visit(context.GetChild(0)) + "," + Visit(context.GetChild(2));
+            }
         }
 
         override
@@ -385,6 +392,8 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitCrear_tabla(SqlParser.Crear_tablaContext context)
         {
+            String[] columnas = Visit(context.GetChild(4)).Split(',');
+
             throw new NotImplementedException();
         }
 
