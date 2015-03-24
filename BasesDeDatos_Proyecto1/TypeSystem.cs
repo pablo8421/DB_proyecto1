@@ -136,6 +136,11 @@ namespace BasesDeDatos_Proyecto1
             String nombre = context.GetChild(2).GetText();
             String nuevoNombre = context.GetChild(5).GetText();
 
+            if (nombre.Equals(BDenUso))
+            {
+                BDenUso = nuevoNombre;
+            }
+
             MasterBD bdatos;
             XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
             StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
@@ -393,7 +398,21 @@ namespace BasesDeDatos_Proyecto1
         public string VisitCrear_tabla(SqlParser.Crear_tablaContext context)
         {
             List<String> columnas = Visit(context.GetChild(4)).Split(',').ToList();
+            Tabla nueva = new Tabla();
+            nueva.nombre = context.GetChild(2).GetText();
+            nueva.generarColumnas(columnas);
 
+            if (context.ChildCount == 6)
+            {
+                XmlSerializer mySerializer = new XmlSerializer(typeof(Tabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, nueva);
+                myWriter.Close();
+            }
+            else
+            {
+
+            }
             throw new NotImplementedException();
         }
 
