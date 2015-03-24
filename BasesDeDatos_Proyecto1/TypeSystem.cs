@@ -399,7 +399,7 @@ namespace BasesDeDatos_Proyecto1
         {
             if (BDenUso.Equals(""))
             {
-                errores += "Error en linea " + context.start.Line + ": No hay base de datos en uso para agregar la tabla " + context.GetChild(2).GetText() + "." + Environment.NewLine;
+                errores += "Error en linea " + context.start.Line + ": No hay base de datos en uso para agregar la tabla " + context.GetChild(2).GetText() + "." + BDenUso+ Environment.NewLine;
                 return "Error";
             }
 
