@@ -85,8 +85,8 @@ namespace BasesDeDatos_Proyecto1
                     t.nombre = nuevoNombre;
 
                     //Comentario
-                    String pathViejo = "Databases\\" + BDenUso + "\\" + nombre + ".xml";
-                    String pathNuevo = "Databases\\" + BDenUso + "\\" + nuevoNombre + ".xml";
+                    String pathViejo = "Databases\\" + BDenUso + "\\" + nombre + ".dat";
+                    String pathNuevo = "Databases\\" + BDenUso + "\\" + nuevoNombre + ".dat";
                     System.IO.File.Move(pathViejo, pathNuevo);
 
                     
@@ -554,7 +554,7 @@ namespace BasesDeDatos_Proyecto1
                 //Crear el archivo vacio de la tabla
                 string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), BDenUso);
                 //No se si deberia de ser un xml
-                string fileName = nueva.nombre + ".xml";
+                string fileName = nueva.nombre + ".dat";
                 path = System.IO.Path.Combine(path, fileName);
                 System.IO.FileStream fs = System.IO.File.Create(path);
                 fs.Close();

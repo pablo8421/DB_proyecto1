@@ -9,7 +9,7 @@ namespace BasesDeDatos_Proyecto1
     class FilaTabla
     {
         MsgPack msgPack;
-        Tabla tabla;
+        public Tabla tabla;
         String BDenUso;
 
         public FilaTabla(Tabla tabla, String BDenUso)
@@ -22,12 +22,12 @@ namespace BasesDeDatos_Proyecto1
         public bool guardar()
         {
             msgPack.SetAsBytes(msgPack.Encode2Bytes());
-            return msgPack.SaveBytesToFile(BDenUso + "\\" + tabla.nombre + ".data");
+            return msgPack.SaveBytesToFile(BDenUso + "\\" + tabla.nombre + ".dat");
         }
 
         public bool cargar()
         {
-            bool retorno = msgPack.LoadFileAsBytes(BDenUso + "\\" + tabla.nombre + ".data");
+            bool retorno = msgPack.LoadFileAsBytes(BDenUso + "\\" + tabla.nombre + ".dat");
             msgPack.DecodeFromBytes(msgPack.GetAsBytes());
             return retorno;
         }
@@ -89,6 +89,64 @@ namespace BasesDeDatos_Proyecto1
             else
             {
                 return null;
+            }
+        }
+
+        public void agregarFila(List<String> fila)
+        {
+            if (fila.Count == tabla.columnas.Count)
+            {
+                int i = 0;
+                foreach (String elemento in fila)
+                {
+                    if (tabla.tipos_columnas[i].Equals("INT"))
+                    {
+                        msgPack.ForcePathObject("row_" + tabla.cantidad_registros).AsArray.Add(Convert.ToInt32(elemento));
+                    }
+                    if (tabla.tipos_columnas[i].Equals("FLOAT"))
+                    {
+                        msgPack.ForcePathObject("row_" + tabla.cantidad_registros).AsArray.Add(Convert.ToSingle(elemento));
+                    }
+                    if (tabla.tipos_columnas[i].Equals("DATE"))
+                    {
+                        msgPack.ForcePathObject("row_" + tabla.cantidad_registros).AsArray.Add(elemento);
+                    }
+                    if (tabla.tipos_columnas[i].StartsWith("CHAR"))
+                    {
+                        msgPack.ForcePathObject("row_" + tabla.cantidad_registros).AsArray.Add(elemento);
+                    }
+                    i++;
+                }
+                tabla.cantidad_registros = tabla.cantidad_registros + 1;
+            }
+        }
+
+        public void mostrarTablaEnConsola()
+        {
+            for (int i = 0; i < tabla.cantidad_registros; i++)
+            {
+                int j = 0;
+                foreach (MsgPack item in getRowMsqPack(i))
+                {
+                    if (tabla.tipos_columnas[j].Equals("INT"))
+                    {
+                        Console.Write(item.AsInteger+"  ");
+                    }
+                    if (tabla.tipos_columnas[j].Equals("FLOAT"))
+                    {
+                        Console.Write(item.AsFloat + "  ");
+                    }
+                    if (tabla.tipos_columnas[j].Equals("DATE"))
+                    {
+                        Console.Write(item.AsString + "  ");
+                    }
+                    if (tabla.tipos_columnas[j].StartsWith("CHAR"))
+                    {
+                        Console.Write(item.AsString + "  ");
+                    }
+                    Console.WriteLine();
+                    i++;
+                }
             }
         }
 
