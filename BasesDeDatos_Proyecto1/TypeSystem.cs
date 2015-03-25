@@ -464,18 +464,17 @@ namespace BasesDeDatos_Proyecto1
                 return "Error";
             }
             mTabla = deserializarMasterTabla();
-            mensajes += "\r\n---------------------------------------\r\n";
-            for (int i = 0; i < mTabla.tablas.Count; i++ )
+            resultados.RowCount = mTabla.tablas.Count + 1;
+            resultados.ColumnCount = 2;
+            resultados.Rows[0].Cells[0].Value = "Nombre";
+            resultados.Rows[0].Cells[1].Value = "Cant. de registros";
+
+            for (int i = 1; i < resultados.RowCount; i++ )
             {
-                mensajes += "\r\nTabla " + (i+1) + "\r\n\r\n";
-                mensajes += "Nombre: "+mTabla.tablas.ElementAt(i).nombre+"\r\n";
-                mensajes += "Cantidad de registro: " + mTabla.tablas.ElementAt(i).cantidad_registros+"\r\n";
-                //mensajes += "Columnas: (" + string.Join(", ", mTabla.tablas.ElementAt(i).columnas) + ")\r\n";
-                //mensajes += "Tipos de las columnas: (" + string.Join(", ", mTabla.tablas.ElementAt(i).tipos_columnas) + ")\r\n";
-                //mensajes += "Restricciones: (" + string.Join(", ", mTabla.tablas.ElementAt(i).restricciones) + ")\r\n";
+                resultados.Rows[i].Cells[0].Value = mTabla.tablas.ElementAt(i - 1).nombre;
+                resultados.Rows[i].Cells[1].Value = mTabla.tablas.ElementAt(i - 1).cantidad_registros;
             }
-            mensajes += "\r\n---------------------------------------\r\n";
-            mensajes += "\r\n Se han mostrado todas las tablas ("+mTabla.tablas.Count+") que contiene '" + BDenUso + "' con éxito.\r\n";
+            mensajes += "Se han mostrado todas las tablas ("+mTabla.tablas.Count+") que contiene '" + BDenUso + "' con éxito.\r\n";
             return "void";
         }
 
