@@ -39,8 +39,8 @@ namespace BasesDeDatos_Proyecto1
             foreach (String columna in columnas)
             {
                 String[] tupla = columna.Split(' ');
-                tipos_columnas.Add(tupla[0]);
-                this.columnas.Add(tupla[1]);
+                tipos_columnas.Add(tupla[1]);
+                this.columnas.Add(tupla[0]);
             }
         }
     }
