@@ -12,7 +12,7 @@ namespace BasesDeDatos_Proyecto1
     {
         public Tabla tabla;
         String BDenUso;
-        Filas datos;
+        public Filas datos;
 
         public FilaTabla(Tabla tabla, String BDenUso)
         {
@@ -55,7 +55,26 @@ namespace BasesDeDatos_Proyecto1
 
         public Object getRowElement(int row, int columna)
         {
-            return datos.elementos[row][columna]; 
+            if (tabla.tipos_columnas[columna].Equals("INT"))
+            {
+                return (Int32) datos.elementos[row][columna];
+            }
+            else if (tabla.tipos_columnas[columna].Equals("FLOAT"))
+            {
+                return (Single) datos.elementos[row][columna];
+            }
+            else if (tabla.tipos_columnas[columna].Equals("DATE"))
+            {
+                return (String)datos.elementos[row][columna];
+            }
+            else if (tabla.tipos_columnas[columna].StartsWith("CHAR"))
+            {
+                return (String) datos.elementos[row][columna];
+            }
+            else
+            {
+                return null;
+            } 
         }
 
         public void agregarFila(List<String> fila)
@@ -92,23 +111,23 @@ namespace BasesDeDatos_Proyecto1
             for (int i = 0; i < tabla.cantidad_registros; i++)
             {
                 int j = 0;
-                foreach (Object item in datos.elementos[i])
+                foreach (MsgPack.MessagePackObject item in datos.elementos[i])
                 {
                     if (tabla.tipos_columnas[j].Equals("INT"))
                     {
-                        Console.Write(item + "  ");
+                        Console.Write(item.AsInt32() + "  ");
                     }
                     else if (tabla.tipos_columnas[j].Equals("FLOAT"))
                     {
-                        Console.Write(item + "  ");
+                        Console.Write(item.AsSingle() + "  ");
                     }
                     else if (tabla.tipos_columnas[j].Equals("DATE"))
                     {
-                        Console.Write(item + "  ");
+                        Console.Write(item.AsString() + "  ");
                     }
                     else if (tabla.tipos_columnas[j].StartsWith("CHAR"))
                     {
-                        Console.Write(item + "  ");
+                        Console.Write(item.AsString() + "  ");
                     }
                     else
                     {
