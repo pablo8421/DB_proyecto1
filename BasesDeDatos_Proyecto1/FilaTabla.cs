@@ -3,33 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SimpleMsgPack;
+using MsgPack.Serialization;
+using System.IO;
+
 namespace BasesDeDatos_Proyecto1
 {
     class FilaTabla
     {
-        MsgPack msgPack;
         public Tabla tabla;
         String BDenUso;
+        Filas datos;
 
         public FilaTabla(Tabla tabla, String BDenUso)
         {
             this.tabla= tabla;
             this.BDenUso = BDenUso;
-            msgPack = new MsgPack();
+            datos = new Filas();
         }
 
-        public bool guardar()
+        public void guardar()
         {
-            msgPack.SetAsBytes(msgPack.Encode2Bytes());
-            return msgPack.SaveBytesToFile(BDenUso + "\\" + tabla.nombre + ".dat");
+            // Creates serializer.
+            var serializer = SerializationContext.Default.GetSerializer<Filas>();
+            // Pack obj to stream.
+            using (Stream stream = File.Open("Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat", FileMode.Open))
+            {
+                serializer.Pack(stream, datos);
+            }
         }
 
-        public bool cargar()
+        public void cargar()
         {
-            bool retorno = msgPack.LoadFileAsBytes(BDenUso + "\\" + tabla.nombre + ".dat");
-            msgPack.DecodeFromBytes(msgPack.GetAsBytes());
-            return retorno;
+            var serializer = MessagePackSerializer.Create<Filas>();
+
+            using (Stream stream = File.Open("Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat", FileMode.Open))
+            {
+                datos = serializer.Unpack(stream);
+            }
         }
 
         public int getTamanio()
@@ -37,88 +47,44 @@ namespace BasesDeDatos_Proyecto1
             return tabla.cantidad_registros;
         }
 
-        private MsgPack getRowMsqPack(int num)
-        {
-            return msgPack.ForcePathObject("row_"+num);
-        }
 
         public List<Object> getRow(int num)
         {
-            List<Object> lista = new List<Object>();
-            int i = 0;
-            foreach (MsgPack item in getRowMsqPack(num))
-            {
-                if(tabla.tipos_columnas[i].Equals("INT")){
-                    lista.Add(item.AsInteger);
-                }
-                if (tabla.tipos_columnas[i].Equals("FLOAT"))
-                {
-                    lista.Add(item.AsFloat);
-                }
-                if (tabla.tipos_columnas[i].Equals("DATE"))
-                {
-                    lista.Add(item.AsString);
-                }
-                if (tabla.tipos_columnas[i].StartsWith("CHAR"))
-                {
-                    lista.Add(item.AsString);
-                }
-                i++;
-            }
-            return lista;
+            return datos.elementos[num];
         }
 
         public Object getRowElement(int row, int columna)
         {
-            if (tabla.tipos_columnas[columna].Equals("INT"))
-            {
-                return msgPack.ForcePathObject("row_" + row).AsArray[columna].AsInteger;
-            }
-            else if (tabla.tipos_columnas[columna].Equals("FLOAT"))
-            {
-                return msgPack.ForcePathObject("row_" + row).AsArray[columna].AsFloat;
-            }
-            else if (tabla.tipos_columnas[columna].Equals("DATE"))
-            {
-                return msgPack.ForcePathObject("row_" + row).AsArray[columna].AsString;
-            }
-            else if (tabla.tipos_columnas[columna].StartsWith("CHAR"))
-            {
-                return msgPack.ForcePathObject("row_" + row).AsArray[columna].AsString;
-            }
-            else
-            {
-                return null;
-            }
+            return datos.elementos[row][columna]; 
         }
 
         public void agregarFila(List<String> fila)
         {
-            if (fila.Count == tabla.columnas.Count)
+            List<Object> row = new List<Object>();
+            int i = 0;
+            foreach (String elemento in fila)
             {
-                int i = 0;
-                foreach (String elemento in fila)
+                if (tabla.tipos_columnas[i].Equals("INT"))
                 {
-                    if (tabla.tipos_columnas[i].Equals("INT"))
-                    {
-                        msgPack.ForcePathObject("row_" + tabla.cantidad_registros).AsArray.Add(Convert.ToInt32(elemento));
-                    }
-                    if (tabla.tipos_columnas[i].Equals("FLOAT"))
-                    {
-                        msgPack.ForcePathObject("row_" + tabla.cantidad_registros).AsArray.Add(Convert.ToSingle(elemento));
-                    }
-                    if (tabla.tipos_columnas[i].Equals("DATE"))
-                    {
-                        msgPack.ForcePathObject("row_" + tabla.cantidad_registros).AsArray.Add(elemento);
-                    }
-                    if (tabla.tipos_columnas[i].StartsWith("CHAR"))
-                    {
-                        msgPack.ForcePathObject("row_" + tabla.cantidad_registros).AsArray.Add(elemento);
-                    }
-                    i++;
+                    row.Add(Convert.ToInt32(elemento));
                 }
-                tabla.cantidad_registros = tabla.cantidad_registros + 1;
+                if (tabla.tipos_columnas[i].Equals("FLOAT"))
+                {
+                    row.Add(Convert.ToSingle(elemento));
+                }
+                if (tabla.tipos_columnas[i].Equals("DATE"))
+                {
+                    row.Add(elemento);
+                }
+                if (tabla.tipos_columnas[i].StartsWith("CHAR"))
+                {
+                    row.Add(elemento);
+                }
+                i++;
             }
+            tabla.cantidad_registros++;
+
+            datos.elementos.Add(row);
         }
 
         public void mostrarTablaEnConsola()
@@ -126,29 +92,43 @@ namespace BasesDeDatos_Proyecto1
             for (int i = 0; i < tabla.cantidad_registros; i++)
             {
                 int j = 0;
-                foreach (MsgPack item in getRowMsqPack(i))
+                foreach (Object item in datos.elementos[i])
                 {
                     if (tabla.tipos_columnas[j].Equals("INT"))
                     {
-                        Console.Write(item.AsInteger+"  ");
+                        Console.Write(item + "  ");
                     }
-                    if (tabla.tipos_columnas[j].Equals("FLOAT"))
+                    else if (tabla.tipos_columnas[j].Equals("FLOAT"))
                     {
-                        Console.Write(item.AsFloat + "  ");
+                        Console.Write(item + "  ");
                     }
-                    if (tabla.tipos_columnas[j].Equals("DATE"))
+                    else if (tabla.tipos_columnas[j].Equals("DATE"))
                     {
-                        Console.Write(item.AsString + "  ");
+                        Console.Write(item + "  ");
                     }
-                    if (tabla.tipos_columnas[j].StartsWith("CHAR"))
+                    else if (tabla.tipos_columnas[j].StartsWith("CHAR"))
                     {
-                        Console.Write(item.AsString + "  ");
+                        Console.Write(item + "  ");
                     }
-                    Console.WriteLine();
-                    i++;
+                    else
+                    {
+                        Console.Write("NOPE");
+                    }
+                    j++;
                 }
+                Console.WriteLine();
             }
         }
 
+    }
+
+    public class Filas
+    {
+        public List<List<Object>> elementos { get; set; }
+
+        public Filas()
+        {
+            elementos = new List<List<Object>>();
+        }
     }
 }

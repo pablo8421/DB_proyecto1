@@ -31,6 +31,18 @@ namespace BasesDeDatos_Proyecto1
             return false;
         }
 
+        public Tabla getTable(String nombre)
+        {
+            foreach (Tabla t in tablas)
+            {
+                if (t.nombre.Equals(nombre))
+                {
+                    return t;
+                }
+            }
+            return null;
+        }
+
         public void borrarTabla(String nombre)
         {
             foreach (Tabla t in tablas)
