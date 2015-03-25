@@ -62,7 +62,7 @@ namespace BasesDeDatos_Proyecto1
         {
             String[] palabrasReservadas = { "CREATE", "DATABASE", "DATABASES", "ALTER", "RENAME", "TO", "DROP",
                                             "SHOW", "USE", "TABLE", "CONSTRAINT", "PRIMARY", "FOREIGN", "KEY",
-                                            "REFERENCES", "ADD", "COLUMN", "TABLES", "FROM", "INSERT", "INTO", 
+                                            "REFERENCES", "ADD", "COLUMN", "COLUMNS", "TABLES", "FROM", "INSERT", "INTO", 
                                             "VALUES", "UPDATE", "SET", "WHERE", "DELETE", "SELECT", "ORDER", 
                                             "BY", "ASC", "DESC", "INT", "FLOAT", "DATE", "CHAR", "AND", "OR", "NOT" };
 

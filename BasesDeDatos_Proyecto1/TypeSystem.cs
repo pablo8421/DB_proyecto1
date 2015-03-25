@@ -269,7 +269,32 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitShow_columns(SqlParser.Show_columnsContext context)
         {
-            throw new NotImplementedException();
+            String nTabla = context.GetChild(3).GetText();
+            if (BDenUso.Equals("")) { 
+                errores += "Error en línea "+context.start.Line+": No hay ninguna base de datos en uso.\r\n";
+                return "Error";
+            }
+            MasterTabla mTabla;
+            mTabla = deserializarMasterTabla();
+            if (mTabla.containsTable(nTabla))
+            {
+                Tabla t = mTabla.getTable(nTabla);
+                resultados.RowCount = t.columnas.Count+1;
+                resultados.ColumnCount = 3;
+                resultados.Rows[0].Cells[0].Value = "Columna";
+                resultados.Rows[0].Cells[1].Value = "Tipo";
+                resultados.Rows[0].Cells[2].Value = "Restricciones";
+                for (int i = 1; i < resultados.RowCount; i++) {
+                    resultados.Rows[i].Cells[0].Value = t.columnas.ElementAt(i - 1);
+                    resultados.Rows[i].Cells[1].Value = t.tipos_columnas.ElementAt(i - 1);
+                    resultados.Rows[i].Cells[2].Value = string.Join(", ",t.restricciones);
+                }
+                return "void";
+            }
+            else {
+                errores += "Error en línea " + context.start.Line + ": No existe una tabla '"+nTabla+"' en la base de datos '"+BDenUso+"'.\r\n";
+                return "Error";
+            }
         }
 
         override
