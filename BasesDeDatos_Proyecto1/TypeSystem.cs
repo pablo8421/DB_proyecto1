@@ -192,7 +192,7 @@ namespace BasesDeDatos_Proyecto1
             //Mandar datos
             masterTabla = mTabla;
             //REVISAR no deberia mandar la tabla que encontro?
-            ListaTablas.Add(new Tabla(nTabla,0,null,null,null));
+            ListaTablas.Add(masterTabla.getTable(nTabla));
 
             return Visit(context.GetChild(3));
         }
