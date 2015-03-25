@@ -18,9 +18,9 @@ namespace BasesDeDatos_Proyecto1
         {
             nombre = "";
             cantidad_registros = 0;
-            columnas = null;
-            tipos_columnas = null;
-            restricciones = null;
+            columnas = new List<String>();
+            tipos_columnas = new List<String>();
+            restricciones = new List<Restriccion>();
         }
 
         public Tabla(String nombre, int cantidad_registros, List<String> columnas, List<String> tipos_columnas, List<Restriccion> restricciones)

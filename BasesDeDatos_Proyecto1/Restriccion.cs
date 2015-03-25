@@ -8,20 +8,50 @@ namespace BasesDeDatos_Proyecto1
 {
     public class Restriccion
     {
+        //ID
         public String nombre;
+        //PK, FK, CH
         public String tipo;
-        public List<int> columnas;
+        //Sirve para PK y FK
+        public List<int> columnasPropias;
+        //Sirve para FK
         public String tabla;
-        public List<int> columnasTabla;
+        //Sirve para FK 
+        public List<int> columnasForaneas;
+
+        //Expresion del Check
+        public String restriccionCheck;
 
         public Restriccion() {
             nombre = "";
             tipo = "";
-            columnas = new List<int>();
+            columnasPropias = new List<int>();
             tabla = "";
-            columnasTabla = new List<int>();
+            columnasForaneas = new List<int>();
         }
 
+        public Restriccion(String tipo)
+        {
+            nombre = "";
+            this.tipo = tipo;
+            if (tipo.Equals("PK"))
+            {
+                columnasPropias = new List<int>();
+            }
+            else if (tipo.Equals("FK"))
+            {
+                columnasPropias = new List<int>();
+                tabla = "";
+                columnasForaneas = new List<int>();
+
+            }
+            else if (tipo.Equals("CH"))
+            {
+                restriccionCheck = "";
+            }
+
+        }
+        /*
         //FALTA
         override
         public string ToString(){
@@ -52,5 +82,6 @@ namespace BasesDeDatos_Proyecto1
             }
             return descripcion;
         }
+         */
     }
 }

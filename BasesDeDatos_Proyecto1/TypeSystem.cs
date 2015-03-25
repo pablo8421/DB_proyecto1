@@ -191,7 +191,7 @@ namespace BasesDeDatos_Proyecto1
 
             //Mandar datos
             masterTabla = mTabla;
-            //REVISAR no deberia mandar la tabla que encontro?
+            ListaTablas = new List<Tabla>();
             ListaTablas.Add(masterTabla.getTable(nTabla));
 
             return Visit(context.GetChild(3));
@@ -306,7 +306,27 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitMulti_id(SqlParser.Multi_idContext context)
         {
-            throw new NotImplementedException();
+            Tabla tabla = ListaTablas[0];
+            if (context.ChildCount == 1)
+            {
+                int num = tabla.columnas.IndexOf(context.GetText());
+                if (num == -1)
+                {
+                    errores += "Error en línea " + context.start.Line + ": No se encontro la columna '" + context.GetText() + "' en la tabla '"+tabla.nombre+"'." + Environment.NewLine;
+                }
+                
+                return Convert.ToString(num);
+            }
+            else
+            {
+                int num = tabla.columnas.IndexOf(context.GetChild(0).GetText());
+                if (num == -1)
+                {
+                    errores += "Error en línea " + context.start.Line + ": No se encontro la columna '" + context.GetChild(0).GetText() + "' en la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                }
+
+                return Convert.ToString(num) + "," + Visit(context.GetChild(2));
+            }
         }
 
         override
@@ -453,7 +473,7 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitConstraint_completo(SqlParser.Constraint_completoContext context)
         {
-            throw new NotImplementedException();
+            return Visit(context.GetChild(1));
         }
 
         override
@@ -471,7 +491,22 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitMulti_constraint_completo(SqlParser.Multi_constraint_completoContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 1)
+            {
+               return Visit(context.GetChild(0));
+            }
+            else
+            {
+                String multi = Visit(context.GetChild(0));
+                String solo = Visit(context.GetChild(2));
+                if(multi.Equals("void") && solo.Equals("void")){
+                    return "void";
+                }
+                else
+                {
+                    return "Error";
+                }
+            }
         }
 
         override
@@ -622,8 +657,54 @@ namespace BasesDeDatos_Proyecto1
             //Caso en que si hay constraints
             else
             {
-                //Aca va cuando hay constraints
-                return "Error";
+                //Manejar las constraint
+                ListaTablas.Add(nueva);
+                if(Visit(context.GetChild(5)).Equals("Error")){
+                    return "Error";
+                }
+
+                //Crear el archivo vacio de la tabla
+                string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), BDenUso);
+
+                string fileName = nueva.nombre + ".dat";
+                path = System.IO.Path.Combine(path, fileName);
+                System.IO.FileStream fs = System.IO.File.Create(path);
+                fs.Close();
+                
+                //Serializar el objeto de la base de datos
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, mTabla);
+                myWriter.Close();
+
+                //Actualizar masterBDs
+                MasterBD masterBD;
+                serializer = new XmlSerializer(typeof(MasterBD));
+                reader = new StreamReader("Databases\\masterBDs.xml");
+                try
+                {
+                    //Deserealizar y actualizar datos
+                    masterBD = (MasterBD)serializer.Deserialize(reader);
+                    reader.Close();
+
+                    masterBD.actualizarCantidadEnBD(BDenUso, mTabla.tablas.Count);
+
+
+                    //Serealizar el archivo maestros
+                    mySerializer = new XmlSerializer(typeof(MasterBD));
+                    myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                    mySerializer.Serialize(myWriter, masterBD);
+                    myWriter.Close();
+                    mensajes += "Se ha creado la tabla '" + nueva.nombre + "' en '" + BDenUso + "' con éxito.\r\n";
+                }
+                catch (Exception e)
+                {
+                    //Nada? No deberia pasar
+                    reader.Close();
+                }
+
+
+                return "void";
             }
         }
 
@@ -673,13 +754,32 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitConstrain_pk(SqlParser.Constrain_pkContext context)
         {
-            throw new NotImplementedException();
+            Restriccion restriccion = new Restriccion("PK");
+            String listaS = Visit(context.GetChild(4));
+            Console.WriteLine(listaS);
+            String[] lista = listaS.Split(',');
+
+            foreach (String item in lista){
+                int num = Convert.ToInt32(item);
+                if (num >= 0 && num < ListaTablas[0].columnas.Count)
+                {
+                    restriccion.columnasPropias.Add(num);
+                }
+                else
+                {
+                    return "Error";
+                }
+            }
+            restriccion.nombre = context.GetChild(0).GetText();
+
+            ListaTablas[0].restricciones.Add(restriccion);
+            return "void";
         }
 
         override
         public string VisitAccion_addConstraint(SqlParser.Accion_addConstraintContext context)
         {
-            throw new NotImplementedException();
+            return Visit(context.GetChild(1));
         }
 
         private MasterBD deserializarMasterBD() {

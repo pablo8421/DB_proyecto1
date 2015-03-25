@@ -55,20 +55,20 @@ VALUE : (INT | FLOAT | STRING);
 
 full_query: (queries+= query ';')*;
 
-query: crear_BD
-	 | renombrar_BD
-	 | botar_BD
-	 | mostrar_BD
-	 | usar_BD
-	 | crear_tabla
-	 | alter_table
-	 | botar_table
-	 | show_tables
-	 | show_columns
-	 | insert
-	 | update
-	 | delete
-	 | select;
+query: crear_BD			//CHECK
+	 | renombrar_BD		//CHECK
+	 | botar_BD			//CHECK
+	 | mostrar_BD		//CHECK
+	 | usar_BD			//CHECK
+	 | crear_tabla		//CHECK (La Mitad)
+	 | alter_table		
+	 | botar_table		
+	 | show_tables		//CHECK
+	 | show_columns		//CHECK
+	 | insert			
+	 | update			
+	 | delete			
+	 | select;			
 
 crear_BD: CREATE DATABASE ID;
 
