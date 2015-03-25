@@ -470,9 +470,9 @@ namespace BasesDeDatos_Proyecto1
                 mensajes += "\r\nTabla " + (i+1) + "\r\n\r\n";
                 mensajes += "Nombre: "+mTabla.tablas.ElementAt(i).nombre+"\r\n";
                 mensajes += "Cantidad de registro: " + mTabla.tablas.ElementAt(i).cantidad_registros+"\r\n";
-                mensajes += "Columnas: " + mTabla.tablas.ElementAt(i).columnas.ToString()+"\r\n";
-                mensajes += "Tipos de las columnas: " + mTabla.tablas.ElementAt(i).tipos_columnas.ToString()+"\r\n";
-                mensajes += "Restricciones: " + mTabla.tablas.ElementAt(i).restricciones.ToString()+"\r\n";
+                mensajes += "Columnas: (" + string.Join(", ", mTabla.tablas.ElementAt(i).columnas) + ")\r\n";
+                mensajes += "Tipos de las columnas: (" + string.Join(", ", mTabla.tablas.ElementAt(i).tipos_columnas) + ")\r\n";
+                mensajes += "Restricciones: (" + string.Join(", ", mTabla.tablas.ElementAt(i).restricciones) + ")\r\n";
             }
             mensajes += "\r\n---------------------------------------\r\n";
             mensajes += "\r\n Se han mostrado todas las tablas ("+mTabla.tablas.Count+") que contiene '" + BDenUso + "' con éxito.\r\n";
