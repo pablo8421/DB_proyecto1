@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace BasesDeDatos_Proyecto1
 {
@@ -52,7 +54,6 @@ namespace BasesDeDatos_Proyecto1
 
         }
         
-        //FALTA
         override
         public string ToString(){
             string descripcion = "";
@@ -65,15 +66,11 @@ namespace BasesDeDatos_Proyecto1
                     if (!tabla.Equals(""))
                     {
                         descripcion += ", REFERENCES " + tabla;
-                        if (columnasForaneas.Count != 0)
-                        {
-                            descripcion += columnasForaneas.ToString();
-                        }
                     }
                 }
             }
             return descripcion;
         }
-        //COMENTARIO
+        
     }
 }
