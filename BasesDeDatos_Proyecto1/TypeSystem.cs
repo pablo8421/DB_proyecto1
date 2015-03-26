@@ -299,7 +299,7 @@ namespace BasesDeDatos_Proyecto1
                                     if (k == 0)
                                         resultados.Rows[i].Cells[2].Value += mTabla.getTable(t.restricciones.ElementAt(j).tabla).columnas.ElementAt(t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k));
                                     else
-                                        resultados.Rows[i].Cells[2].Value += ", " + mTabla.getTable(t.restricciones.ElementAt(j).tabla).columnas.ElementAt(t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k));
+                                        resultados.Rows[i].Cells[2].Value += ", "+mTabla.getTable(t.restricciones.ElementAt(j).tabla).columnas.ElementAt(t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k));
                                 resultados.Rows[i].Cells[2].Value += ")";
                             }
                         }
@@ -563,6 +563,7 @@ namespace BasesDeDatos_Proyecto1
 
             restriccion.nombre = context.GetChild(0).GetText();
             propia.restricciones.Add(restriccion);
+            restriccion.tabla = foranea.nombre;
             return "void";
 
             throw new NotImplementedException();
