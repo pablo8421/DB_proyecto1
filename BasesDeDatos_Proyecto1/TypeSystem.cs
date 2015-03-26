@@ -479,6 +479,59 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitConstrain_fk(SqlParser.Constrain_fkContext context)
         {
+            Restriccion restriccion = new Restriccion("FK");
+
+            Tabla propia = ListaTablas[0];
+            Tabla foranea = masterTabla.getTable(context.GetChild(7).GetText());
+            Console.WriteLine(context.GetChild(7).GetText());
+            if (foranea == null)
+            {
+                errores += "Error en línea " + context.start.Line + ": La tabla '" + context.GetChild(7).GetText()  + "' no existe."+ Environment.NewLine;
+                return "Error";
+            }
+
+            String listaPropiaS = Visit(context.GetChild(4));
+            String[] listaPropia = listaPropiaS.Split(',');
+
+            ListaTablas.Remove(propia);
+
+            ListaTablas.Add(foranea);
+            String listaForaneaS = Visit(context.GetChild(9));
+            String[] listaForanea = listaForaneaS.Split(',');
+
+            ListaTablas.Remove(foranea);
+            ListaTablas.Add(propia);
+
+            foreach (String item in listaPropia)
+            {
+                int num = Convert.ToInt32(item);
+                if (num >= 0 && num < propia.columnas.Count)
+                {
+                    restriccion.columnasPropias.Add(num);
+                }
+                else
+                {
+                    return "Error";
+                }
+            }
+
+            foreach (String item in listaForanea)
+            {
+                int num = Convert.ToInt32(item);
+                if (num >= 0 && num <foranea.columnas.Count)
+                {
+                    restriccion.columnasForaneas.Add(num);
+                }
+                else
+                {
+                    return "Error";
+                }
+            }
+
+            restriccion.nombre = context.GetChild(0).GetText();
+            propia.restricciones.Add(restriccion);
+            return "void";
+
             throw new NotImplementedException();
         }
 
@@ -596,6 +649,8 @@ namespace BasesDeDatos_Proyecto1
                 mTabla = new MasterTabla();
             }
             reader.Close();
+
+            masterTabla = mTabla;
 
             //Verificar si la tabla ya exite
             if (mTabla.containsTable(nueva.nombre))
@@ -756,7 +811,6 @@ namespace BasesDeDatos_Proyecto1
         {
             Restriccion restriccion = new Restriccion("PK");
             String listaS = Visit(context.GetChild(4));
-            Console.WriteLine(listaS);
             String[] lista = listaS.Split(',');
 
             foreach (String item in lista){
