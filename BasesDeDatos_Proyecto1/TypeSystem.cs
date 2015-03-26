@@ -289,7 +289,20 @@ namespace BasesDeDatos_Proyecto1
                     resultados.Rows[i].Cells[1].Value = t.tipos_columnas.ElementAt(i - 1);
                     for (int j = 0; j < t.restricciones.Count; j++)
                         if (t.restricciones.ElementAt(j).columnasPropias.Contains(i - 1))
-                            resultados.Rows[i].Cells[2].Value = t.restricciones.ElementAt(j).ToString();
+                        {
+                            resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).ToString();
+
+                            if (t.restricciones.ElementAt(j).columnasForaneas.Count != 0)
+                            {
+                                resultados.Rows[i].Cells[2].Value += "(";
+                                for (int k = 0; k < t.restricciones.ElementAt(j).columnasForaneas.Count; k++)
+                                    if (k == 0)
+                                        resultados.Rows[i].Cells[2].Value += mTabla.getTable(t.restricciones.ElementAt(j).tabla).columnas.ElementAt(t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k));
+                                    else
+                                        resultados.Rows[i].Cells[2].Value += ", " + mTabla.getTable(t.restricciones.ElementAt(j).tabla).columnas.ElementAt(t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k));
+                                resultados.Rows[i].Cells[2].Value += ")";
+                            }
+                        }
                 }
 
                 return "void";
