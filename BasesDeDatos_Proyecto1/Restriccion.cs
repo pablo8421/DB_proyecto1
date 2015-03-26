@@ -51,7 +51,7 @@ namespace BasesDeDatos_Proyecto1
             }
 
         }
-        /*
+        
         //FALTA
         override
         public string ToString(){
@@ -62,26 +62,18 @@ namespace BasesDeDatos_Proyecto1
                 if (!tipo.Equals(""))
                 {
                     descripcion += ", " + tipo;
-                    if (columnas.Count != 0)
-                        descripcion += ", " + columnas.ToString();
+                    if (!tabla.Equals(""))
+                    {
+                        descripcion += ", REFERENCES " + tabla;
+                        if (columnasForaneas.Count != 0)
+                        {
+                            descripcion += columnasForaneas.ToString();
+                        }
+                    }
                 }
-                else
-                    if (columnas.Count != 0)
-                        descripcion += ", " + columnas.ToString();
-            }
-            else {
-                if (!tipo.Equals(""))
-                {
-                    descripcion += tipo;
-                    if (columnas.Count != 0)
-                        descripcion += ", " + columnas.ToString();
-                }
-                else
-                    if (columnas.Count != 0)
-                        descripcion += columnas.ToString();
             }
             return descripcion;
         }
-         */
+        
     }
 }

@@ -287,8 +287,11 @@ namespace BasesDeDatos_Proyecto1
                 for (int i = 1; i < resultados.RowCount; i++) {
                     resultados.Rows[i].Cells[0].Value = t.columnas.ElementAt(i - 1);
                     resultados.Rows[i].Cells[1].Value = t.tipos_columnas.ElementAt(i - 1);
-                    resultados.Rows[i].Cells[2].Value = string.Join(", ",t.restricciones);
+                    for (int j = 0; j < t.restricciones.Count; j++)
+                        if (t.restricciones.ElementAt(j).columnasPropias.Contains(i - 1))
+                            resultados.Rows[i].Cells[2].Value = t.restricciones.ElementAt(j).ToString();
                 }
+
                 return "void";
             }
             else {
