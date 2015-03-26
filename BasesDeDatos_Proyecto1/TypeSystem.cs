@@ -502,6 +502,23 @@ namespace BasesDeDatos_Proyecto1
             ListaTablas.Remove(foranea);
             ListaTablas.Add(propia);
 
+            if (listaPropia.Length != listaForanea.Length)
+            {
+                errores += "Error en línea " + context.start.Line + ": La cantidad de columnas referenciadas no concuerdan con las propias." + Environment.NewLine;
+                return "Error";
+            }
+            else
+            {
+                for (int i = 0; i < listaPropia.Length; i++ )
+                {
+                    if (!propia.tipos_columnas[i].Equals(foranea.tipos_columnas[i]))
+                    {
+                        errores += "Error en línea " + context.start.Line + ": Los tipos de '" + propia.columnas[i] + "' de la tabla '" + propia.nombre + "' y '" + foranea.columnas[i] + "' de la tabla '" + foranea.nombre + "' ('" + propia.tipos_columnas[i] + "', '" + foranea.tipos_columnas[i] + "') no concuerdan." + Environment.NewLine;
+                        return "Error";
+                    }
+                }
+            }
+
             foreach (String item in listaPropia)
             {
                 int num = Convert.ToInt32(item);
