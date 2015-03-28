@@ -227,6 +227,8 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitAccion_DropColumn(SqlParser.Accion_DropColumnContext context)
         {
+            
+            
             throw new NotImplementedException();
         }
 
@@ -580,7 +582,30 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitConstrain_check(SqlParser.Constrain_checkContext context)
         {
-            throw new NotImplementedException();
+            Restriccion restriccion = new Restriccion("CH");
+            Tabla propia = ListaTablas[0];
+            String postfixTipo = Visit(context.GetChild(3));
+            String tipo = postfixTipo.Substring(0, 4);
+            String postfix = "";
+            if (!tipo.Equals("BOOL")) {
+                errores += "Error en línea " + context.start.Line + ": La expresión '" + context.GetChild(3).GetText() + "' no es de tipo boolean.\r\n";
+                return "Error";
+            }
+            postfix = postfixTipo.Substring(5);
+            //Nombrar y agregar la restriccion
+
+            String nombreCH = context.GetChild(0).GetText();
+            foreach (Restriccion r in propia.restricciones)
+                if (r.nombre.Equals(nombreCH))
+                {
+                    errores += "Error en línea " + context.start.Line + ": El nombre '" + nombreCH + "' ya es utilizado en otra restriccion dentro de la tabla '" + propia.nombre + "'.\r\n";
+                    return "Error";
+                }
+
+            restriccion.nombre = nombreCH;
+            restriccion.restriccionCheck = postfix;
+            propia.restricciones.Add(restriccion);
+            return "void";
         }
 
         override
