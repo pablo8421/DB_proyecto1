@@ -499,18 +499,19 @@ namespace BasesDeDatos_Proyecto1
 
             Tabla propia = ListaTablas[0];
             Tabla foranea = masterTabla.getTable(context.GetChild(7).GetText());
-            Console.WriteLine(context.GetChild(7).GetText());
+            //Revisar si la tabla foranea existe
             if (foranea == null)
             {
                 errores += "Error en línea " + context.start.Line + ": La tabla '" + context.GetChild(7).GetText()  + "' no existe."+ Environment.NewLine;
                 return "Error";
             }
-
+            //Obtener la lista de columnas de la tabla propia
             String listaPropiaS = Visit(context.GetChild(4));
             String[] listaPropia = listaPropiaS.Split(',');
 
             ListaTablas.Remove(propia);
 
+            //Obtener la lista de columnas de la tabla foranea
             ListaTablas.Add(foranea);
             String listaForaneaS = Visit(context.GetChild(9));
             String[] listaForanea = listaForaneaS.Split(',');
@@ -518,6 +519,7 @@ namespace BasesDeDatos_Proyecto1
             ListaTablas.Remove(foranea);
             ListaTablas.Add(propia);
 
+            //Verificar si las listas son del mismo tamaño
             if (listaPropia.Length != listaForanea.Length)
             {
                 errores += "Error en línea " + context.start.Line + ": La cantidad de columnas referenciadas no concuerdan con las propias." + Environment.NewLine;
@@ -525,6 +527,8 @@ namespace BasesDeDatos_Proyecto1
             }
             else
             {
+                //ESTE FOR NADA QUE VER VERDAD?
+                //Verificar si los tipos concuerdan
                 for (int i = 0; i < listaPropia.Length; i++ )
                 {
                     if (!propia.tipos_columnas[i].Equals(foranea.tipos_columnas[i]))
@@ -534,7 +538,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                 }
             }
-
+            //Añadir los indices de la tabla propia a la restriccion
             foreach (String item in listaPropia)
             {
                 int num = Convert.ToInt32(item);
@@ -547,7 +551,7 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
             }
-
+            //Añadir los indices de la tabla foranea a la restriccion
             foreach (String item in listaForanea)
             {
                 int num = Convert.ToInt32(item);
@@ -561,6 +565,18 @@ namespace BasesDeDatos_Proyecto1
                 }
             }
 
+            //Verificar si los tipos de ambas tablas concuerdan
+            for (int i=0; i < restriccion.columnasPropias.Count; i++)
+            {
+                int inPro = restriccion.columnasPropias[i];
+                int inFor = restriccion.columnasForaneas[i];
+
+                if (!propia.tipos_columnas[inPro].Equals(foranea.tipos_columnas[inFor]))
+                {
+                    errores += "Error en línea " + context.start.Line + ": Los tipos de '" + propia.columnas[inPro] + "' de la tabla '" + propia.nombre + "' y '" + foranea.columnas[inFor] + "' de la tabla '" + foranea.nombre + "' ('" + propia.tipos_columnas[inPro] + "', '" + foranea.tipos_columnas[inFor] + "') no concuerdan." + Environment.NewLine;
+                    return "Error";
+                }
+            }
             restriccion.nombre = context.GetChild(0).GetText();
             propia.restricciones.Add(restriccion);
             restriccion.tabla = foranea.nombre;
