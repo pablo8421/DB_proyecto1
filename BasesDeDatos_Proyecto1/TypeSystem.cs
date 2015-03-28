@@ -585,7 +585,22 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitAccion_DropConstraint(SqlParser.Accion_DropConstraintContext context)
         {
-            throw new NotImplementedException();
+            Tabla tablaA = ListaTablas.ElementAt(0);
+            String nRestriccion = context.GetChild(2).GetText();
+            for (int i = 0; i < tablaA.restricciones.Count;i++){
+                Restriccion rAux = tablaA.restricciones.ElementAt(i);
+                if (rAux.nombre.Equals(nRestriccion)) {
+                    tablaA.restricciones.RemoveAt(i);
+                    XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                    StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                    mySerializer.Serialize(myWriter, masterTabla);
+                    myWriter.Close();
+                    mensajes += "Se ha eliminado la restricción '" + nRestriccion + "' de la tabla '" + tablaA.nombre + "' con éxito.\r\n";
+                    return "void";
+                }
+            }
+            errores += "Error en la línea "+context.start.Line+": No existe la restriccion '"+nRestriccion+"' en la tabla '"+tablaA.nombre+"'.\r\n";
+            return "Error";
         }
 
         override
@@ -668,7 +683,17 @@ namespace BasesDeDatos_Proyecto1
                 }
             }
             //Nombrar y agregar la restriccion
-            restriccion.nombre = context.GetChild(0).GetText();
+            
+            String nombreFK = context.GetChild(0).GetText();
+            foreach (Restriccion r in propia.restricciones)
+                if (r.Equals(nombreFK))
+                {
+                    errores += "Error en línea " + context.start.Line + ": El nombre '" + nombreFK + "' ya es utilizado en otra restriccion dentro de la tabla '" + propia.nombre + "'.\r\n";
+                    return "Error";
+                }
+
+            restriccion.nombre = nombreFK;
+
             propia.restricciones.Add(restriccion);
             restriccion.tabla = foranea.nombre;
             return "void";
@@ -990,7 +1015,15 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
             }
-            restriccion.nombre = context.GetChild(0).GetText();
+            String nombrePK = context.GetChild(0).GetText();
+            Tabla tActual = ListaTablas[0];
+            foreach (Restriccion r in tActual.restricciones)
+                if (r.Equals(nombrePK))
+                {
+                    errores += "Error en línea "+context.start.Line+": El nombre '"+nombrePK+"' ya es utilizado en otra restriccion dentro de la tabla '"+tActual.nombre+"'.\r\n";
+                    return "Error";
+                }
+            restriccion.nombre = nombrePK;
 
             ListaTablas[0].restricciones.Add(restriccion);
             return "void";
