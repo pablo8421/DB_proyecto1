@@ -686,7 +686,7 @@ namespace BasesDeDatos_Proyecto1
             
             String nombreFK = context.GetChild(0).GetText();
             foreach (Restriccion r in propia.restricciones)
-                if (r.Equals(nombreFK))
+                if (r.nombre.Equals(nombreFK))
                 {
                     errores += "Error en línea " + context.start.Line + ": El nombre '" + nombreFK + "' ya es utilizado en otra restriccion dentro de la tabla '" + propia.nombre + "'.\r\n";
                     return "Error";
@@ -1018,7 +1018,7 @@ namespace BasesDeDatos_Proyecto1
             String nombrePK = context.GetChild(0).GetText();
             Tabla tActual = ListaTablas[0];
             foreach (Restriccion r in tActual.restricciones)
-                if (r.Equals(nombrePK))
+                if (r.nombre.Equals(nombrePK))
                 {
                     errores += "Error en línea "+context.start.Line+": El nombre '"+nombrePK+"' ya es utilizado en otra restriccion dentro de la tabla '"+tActual.nombre+"'.\r\n";
                     return "Error";
