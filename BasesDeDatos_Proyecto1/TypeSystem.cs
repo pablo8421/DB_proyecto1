@@ -435,9 +435,68 @@ namespace BasesDeDatos_Proyecto1
         }
 
         override
-        public string VisitExp(SqlParser.ExpContext context)
+        public string VisitExp_Ident(SqlParser.Exp_IdentContext context)
         {
             throw new NotImplementedException();
+        }
+
+        override
+        public string VisitExp_Int(SqlParser.Exp_IntContext context)
+        {
+            return "INT  " + context.GetText();
+        }
+
+        override
+        public string VisitExp_Float(SqlParser.Exp_FloatContext context)
+        {
+            return "FLOAT" + context.GetText();
+        }
+
+        private bool isDate(String texto)
+        {
+            String[] lista = texto.Split();
+
+            if (lista.Length != 3)
+            {
+                return false;
+            }
+            if (lista[0].Length != 4)
+            {
+                return false;
+            }
+            if(!(lista[1].Length == 2 && lista[2].Length == 2))
+            {
+                return false;
+            }
+
+            int mes;
+            int dia;
+
+            if (Int32.TryParse(lista[1], out mes))
+            {
+                if (Int32.TryParse(lista[2], out dia))
+                {
+                    if(mes >= 1 && mes <= 12
+                    && dia >= 1 && dia <= 31)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        override
+        public string VisitExp_String(SqlParser.Exp_StringContext context)
+        {
+            if (isDate(context.GetText()))
+            {
+                return "DATE " + context.GetText();
+            }
+            else
+            {
+                return "CHAR " + context.GetText();
+            }
         }
 
         override
