@@ -87,6 +87,7 @@ namespace BasesDeDatos_Proyecto1
             parser.RemoveErrorListeners();
             ErrorListener lectorErrores = new ErrorListener();
             parser.AddErrorListener(lectorErrores); 
+            //Comentario
             Antlr4.Runtime.Tree.IParseTree tree = parser.full_query();
 
             consolaText.Text = lectorErrores.erroresTotal;
