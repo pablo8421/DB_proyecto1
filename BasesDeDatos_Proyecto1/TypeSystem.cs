@@ -436,36 +436,81 @@ namespace BasesDeDatos_Proyecto1
             throw new NotImplementedException();
         }
 
+        private List<String> getTablasOrigen(String columna)
+        {
+            List<String> resultado = new List<String>();
+
+            foreach (Tabla t in ListaTablas)
+            {
+                if (t.columnas.Contains(columna))
+                {
+                    resultado.Add(t.nombre);
+                }
+            }
+            return resultado;
+        }
+
         override
         public string VisitExp_Ident(SqlParser.Exp_IdentContext context)
         {
-            String[] split = context.GetText().Split('.');
-            String nombreT = split[0];
-            String columna = split[1];
-
-            Tabla tabla = null;
-            
+            String nombreT, columna;
             int indiceTabla = -1;
             int indiceColumna = -1;
 
-            foreach(Tabla t in ListaTablas){
-                if (t.nombre.Equals(nombreT))
+            Tabla tabla = null;
+
+            if (context.GetText().Contains('.'))
+            {
+                String[] split = context.GetText().Split('.');
+                nombreT = split[0];
+                columna = split[1];
+
+                tabla = null;
+
+                foreach (Tabla t in ListaTablas)
                 {
-                    tabla = t;
-                    indiceTabla = ListaTablas.IndexOf(t);
+                    if (t.nombre.Equals(nombreT))
+                    {
+                        tabla = t;
+                        indiceTabla = ListaTablas.IndexOf(t);
+                    }
+                }
+                if (tabla == null)
+                {
+                    errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe." + Environment.NewLine;
+                    return "ERRORerr";
                 }
             }
-            if (tabla == null)
+            else
             {
-                errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe." + Environment.NewLine;
-                return "ERRORerr";
+                columna = context.GetText();
+                List<String> nombresPosibles = getTablasOrigen(columna);
+                if(nombresPosibles.Count == 1 )
+                {
+                    foreach (Tabla t in ListaTablas)
+                    {
+                        if (t.nombre.Equals(nombresPosibles[0]))
+                        {
+                            tabla = t;
+                            indiceTabla = ListaTablas.IndexOf(t);
+                            nombreT = nombresPosibles[0];
+                        }
+                    }
+                }
+                else
+                {
+                    errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
+                    return "ERRORerr";
+                }
             }
+
             indiceColumna = tabla.columnas.IndexOf(columna);
             if (indiceColumna == -1)
             {
                 errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no existe en la tabla '" + nombreT + "'." + Environment.NewLine;
                 return "ERRORerr";
             }
+
             if(tabla.tipos_columnas[indiceColumna].Equals("INT"))
             {
                 return "INT  " + nombreT + "." + columna;
