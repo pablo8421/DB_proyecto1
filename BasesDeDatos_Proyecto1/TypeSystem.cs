@@ -453,7 +453,7 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitExp_Ident(SqlParser.Exp_IdentContext context)
         {
-            String nombreT, columna;
+            String nombreT = "", columna;
             int indiceTabla = -1;
             int indiceColumna = -1;
 
