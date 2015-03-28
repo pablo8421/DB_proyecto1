@@ -45,9 +45,10 @@ DESC : 'DESC';
 
 fragment LETTER: [a-z] | [A-Z];
 fragment NUMBER: [0-9];
-fragment FLOAT : '-'? NUMBER+ '.' NUMBER+;
-fragment INT : '-'? NUMBER+;
-fragment STRING: '\'' .*? '\'';
+
+FLOAT : '-'? NUMBER+ '.' NUMBER+;
+INT : '-'? NUMBER+;
+STRING: '\'' .*? '\'';
 
 ID : LETTER (LETTER|NUMBER)*; 
 IDENTIFICADOR: ID ('.' ID)?;
