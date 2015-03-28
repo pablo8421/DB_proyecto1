@@ -565,12 +565,11 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
             }
+            //Nombrar y agregar la restriccion
             restriccion.nombre = context.GetChild(0).GetText();
             propia.restricciones.Add(restriccion);
             restriccion.tabla = foranea.nombre;
             return "void";
-
-            throw new NotImplementedException();
         }
 
         override
