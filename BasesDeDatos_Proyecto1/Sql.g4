@@ -46,6 +46,7 @@ DESC : 'DESC';
 fragment LETTER: [a-z] | [A-Z];
 fragment NUMBER: [0-9];
 
+NUM : NUMBER+;
 FLOAT : '-'? NUMBER+ '.' NUMBER+;
 INT : '-'? NUMBER+;
 STRING: '\'' .*? '\'';
@@ -85,7 +86,7 @@ usar_BD: USE DATABASE ID;
 tipo: 'INT'
 	| 'FLOAT'
 	| 'DATE'
-	| 'CHAR' '(' NUMBER+ ')';
+	| 'CHAR' '(' NUM ')';
 
 multi_id: ID ',' multi_id
 		| ID;

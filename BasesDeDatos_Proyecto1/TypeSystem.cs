@@ -298,48 +298,49 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitShow_columns(SqlParser.Show_columnsContext context)
         {
-            String nTabla = context.GetChild(3).GetText();
-            if (BDenUso.Equals("")) { 
-                errores += "Error en línea "+context.start.Line+": No hay ninguna base de datos en uso.\r\n";
-                return "Error";
-            }
-            MasterTabla mTabla;
-            mTabla = deserializarMasterTabla();
-            if (mTabla.containsTable(nTabla))
-            {
-                Tabla t = mTabla.getTable(nTabla);
-                resultados.RowCount = t.columnas.Count+1;
-                resultados.ColumnCount = 3;
-                resultados.Rows[0].Cells[0].Value = "Columna";
-                resultados.Rows[0].Cells[1].Value = "Tipo";
-                resultados.Rows[0].Cells[2].Value = "Restricciones";
-                for (int i = 1; i < resultados.RowCount; i++) {
-                    resultados.Rows[i].Cells[0].Value = t.columnas.ElementAt(i - 1);
-                    resultados.Rows[i].Cells[1].Value = t.tipos_columnas.ElementAt(i - 1);
-                    for (int j = 0; j < t.restricciones.Count; j++)
-                        if (t.restricciones.ElementAt(j).columnasPropias.Contains(i - 1))
-                        {
-                            resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).ToString();
+            //String nTabla = context.GetChild(3).GetText();
+            //if (BDenUso.Equals("")) { 
+            //    errores += "Error en línea "+context.start.Line+": No hay ninguna base de datos en uso.\r\n";
+            //    return "Error";
+            //}
+            //MasterTabla mTabla;
+            //mTabla = deserializarMasterTabla();
+            //if (mTabla.containsTable(nTabla))
+            //{
+            //    Tabla t = mTabla.getTable(nTabla);
+            //    resultados.RowCount = t.columnas.Count+1;
+            //    resultados.ColumnCount = 3;
+            //    resultados.Rows[0].Cells[0].Value = "Columna";
+            //    resultados.Rows[0].Cells[1].Value = "Tipo";
+            //    resultados.Rows[0].Cells[2].Value = "Restricciones";
+            //    for (int i = 1; i < resultados.RowCount; i++) {
+            //        resultados.Rows[i].Cells[0].Value = t.columnas.ElementAt(i - 1);
+            //        resultados.Rows[i].Cells[1].Value = t.tipos_columnas.ElementAt(i - 1);
+            //        for (int j = 0; j < t.restricciones.Count; j++)
+            //            if (t.restricciones.ElementAt(j).columnasPropias.Contains(i - 1))
+            //            {
+            //                resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).ToString();
 
-                            if (t.restricciones.ElementAt(j).columnasForaneas.Count != 0)
-                            {
-                                resultados.Rows[i].Cells[2].Value += "(";
-                                for (int k = 0; k < t.restricciones.ElementAt(j).columnasForaneas.Count; k++)
-                                    if (k == 0)
-                                        resultados.Rows[i].Cells[2].Value += mTabla.getTable(t.restricciones.ElementAt(j).tabla).columnas.ElementAt(t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k));
-                                    else
-                                        resultados.Rows[i].Cells[2].Value += ", "+mTabla.getTable(t.restricciones.ElementAt(j).tabla).columnas.ElementAt(t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k));
-                                resultados.Rows[i].Cells[2].Value += ")";
-                            }
-                        }
-                }
+            //                if (t.restricciones.ElementAt(j).columnasForaneas.Count != 0)
+            //                {
+            //                    resultados.Rows[i].Cells[2].Value += "(";
+            //                    for (int k = 0; k < t.restricciones.ElementAt(j).columnasForaneas.Count; k++)
+            //                        if (k == 0)
+            //                            resultados.Rows[i].Cells[2].Value += mTabla.getTable(t.restricciones.ElementAt(j).tabla).columnas.ElementAt(t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k));
+            //                        else
+            //                            resultados.Rows[i].Cells[2].Value += ", "+mTabla.getTable(t.restricciones.ElementAt(j).tabla).columnas.ElementAt(t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k));
+            //                    resultados.Rows[i].Cells[2].Value += ")";
+            //                }
+            //            }
+            //    }
 
-                return "void";
-            }
-            else {
-                errores += "Error en línea " + context.start.Line + ": No existe una tabla '"+nTabla+"' en la base de datos '"+BDenUso+"'.\r\n";
-                return "Error";
-            }
+            //    return "void";
+            //}
+            //else {
+            //    errores += "Error en línea " + context.start.Line + ": No existe una tabla '"+nTabla+"' en la base de datos '"+BDenUso+"'.\r\n";
+            //    return "Error";
+            //}    
+            throw new NotImplementedException();
         }
 
         override
@@ -383,9 +384,10 @@ namespace BasesDeDatos_Proyecto1
                 if (num == -1)
                 {
                     errores += "Error en línea " + context.start.Line + ": No se encontro la columna '" + context.GetText() + "' en la tabla '"+tabla.nombre+"'." + Environment.NewLine;
+                    return "";
                 }
-                
-                return Convert.ToString(num);
+
+                return context.GetText();
             }
             else
             {
@@ -393,9 +395,10 @@ namespace BasesDeDatos_Proyecto1
                 if (num == -1)
                 {
                     errores += "Error en línea " + context.start.Line + ": No se encontro la columna '" + context.GetChild(0).GetText() + "' en la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                    return "" + "," + Visit(context.GetChild(2));
                 }
 
-                return Convert.ToString(num) + "," + Visit(context.GetChild(2));
+                return context.GetChild(0).GetText() + "," + Visit(context.GetChild(2));
             }
         }
 
@@ -418,7 +421,9 @@ namespace BasesDeDatos_Proyecto1
                 String tipo_neg = neg.Substring(0, 5).Trim();
                 neg = neg.Substring(5);
 
-                if (tipo_mayMin.Equals(tipo_neg))
+                if (tipo_mayMin.Equals(tipo_neg)
+                || (tipo_mayMin.Equals("FLOAT") && tipo_neg.Equals("INT")) 
+                || (tipo_mayMin.Equals("INT") && tipo_neg.Equals("FLOAT")))
                 {
                     return "BOOL " + mayMin + " " + neg + " " + context.GetChild(1).GetText();
                 }
@@ -647,7 +652,9 @@ namespace BasesDeDatos_Proyecto1
                 String tipo_mayMin = mayMin.Substring(0, 5).Trim();
                 mayMin = mayMin.Substring(5);
 
-                if (tipo_difEq.Equals(tipo_mayMin))
+                if (tipo_difEq.Equals(tipo_mayMin) 
+                || (tipo_difEq.Equals("FLOAT") && tipo_mayMin.Equals("INT")) 
+                || (tipo_difEq.Equals("INT") && tipo_mayMin.Equals("FLOAT")))
                 {
                     return "BOOL " + difEq + " " + mayMin + " " + context.GetChild(1).GetText();
                 }
@@ -823,10 +830,9 @@ namespace BasesDeDatos_Proyecto1
             //Añadir los indices de la tabla propia a la restriccion
             foreach (String item in listaPropia)
             {
-                int num = Convert.ToInt32(item);
-                if (num >= 0 && num < propia.columnas.Count)
+                if (!item.Equals(""))
                 {
-                    restriccion.columnasPropias.Add(num);
+                    restriccion.columnasPropias.Add(item);
                 }
                 else
                 {
@@ -836,10 +842,9 @@ namespace BasesDeDatos_Proyecto1
             //Añadir los indices de la tabla foranea a la restriccion
             foreach (String item in listaForanea)
             {
-                int num = Convert.ToInt32(item);
-                if (num >= 0 && num <foranea.columnas.Count)
+                if (!item.Equals(""))
                 {
-                    restriccion.columnasForaneas.Add(num);
+                    restriccion.columnasForaneas.Add(item);
                 }
                 else
                 {
@@ -850,8 +855,8 @@ namespace BasesDeDatos_Proyecto1
             //Verificar si los tipos de ambas tablas concuerdan
             for (int i=0; i < restriccion.columnasPropias.Count; i++)
             {
-                int inPro = restriccion.columnasPropias[i];
-                int inFor = restriccion.columnasForaneas[i];
+                int inPro = propia.columnas.IndexOf(restriccion.columnasPropias[i]);
+                int inFor = foranea.columnas.IndexOf(restriccion.columnasForaneas[i]);
 
                 if (!propia.tipos_columnas[inPro].Equals(foranea.tipos_columnas[inFor]))
                 {
@@ -1182,10 +1187,9 @@ namespace BasesDeDatos_Proyecto1
             String[] lista = listaS.Split(',');
 
             foreach (String item in lista){
-                int num = Convert.ToInt32(item);
-                if (num >= 0 && num < ListaTablas[0].columnas.Count)
+                if (!item.Equals(""))
                 {
-                    restriccion.columnasPropias.Add(num);
+                    restriccion.columnasPropias.Add(item);
                 }
                 else
                 {

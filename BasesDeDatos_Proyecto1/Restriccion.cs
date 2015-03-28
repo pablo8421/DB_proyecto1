@@ -15,11 +15,11 @@ namespace BasesDeDatos_Proyecto1
         //PK, FK, CH
         public String tipo;
         //Sirve para PK y FK
-        public List<int> columnasPropias;
+        public List<String> columnasPropias;
         //Sirve para FK
         public String tabla;
         //Sirve para FK 
-        public List<int> columnasForaneas;
+        public List<String> columnasForaneas;
 
         //Expresion del Check
         public String restriccionCheck;
@@ -27,9 +27,9 @@ namespace BasesDeDatos_Proyecto1
         public Restriccion() {
             nombre = "";
             tipo = "";
-            columnasPropias = new List<int>();
+            columnasPropias = new List<String>();
             tabla = "";
-            columnasForaneas = new List<int>();
+            columnasForaneas = new List<String>();
         }
 
         public Restriccion(String tipo)
@@ -38,13 +38,13 @@ namespace BasesDeDatos_Proyecto1
             this.tipo = tipo;
             if (tipo.Equals("PK"))
             {
-                columnasPropias = new List<int>();
+                columnasPropias = new List<String>();
             }
             else if (tipo.Equals("FK"))
             {
-                columnasPropias = new List<int>();
+                columnasPropias = new List<String>();
                 tabla = "";
-                columnasForaneas = new List<int>();
+                columnasForaneas = new List<String>();
 
             }
             else if (tipo.Equals("CH"))
