@@ -25,6 +25,7 @@ COLUMN: 'COLUMN';
 COLUMNS: 'COLUMNS';
 TABLES:'TABLES';
 FROM: 'FROM';
+CHECK: 'CHECK';
 
 //---------------------------------
 

@@ -64,7 +64,7 @@ namespace BasesDeDatos_Proyecto1
                                             "SHOW", "USE", "TABLE", "CONSTRAINT", "PRIMARY", "FOREIGN", "KEY",
                                             "REFERENCES", "ADD", "COLUMN", "COLUMNS", "TABLES", "FROM", "INSERT", "INTO", 
                                             "VALUES", "UPDATE", "SET", "WHERE", "DELETE", "SELECT", "ORDER", 
-                                            "BY", "ASC", "DESC", "INT", "FLOAT", "DATE", "CHAR", "AND", "OR", "NOT" };
+                                            "BY", "ASC", "DESC", "INT", "FLOAT", "DATE", "CHAR", "AND", "OR", "NOT", "CHECK" };
 
             for (int i = 0; i < palabrasReservadas.Length; i++)
             {
