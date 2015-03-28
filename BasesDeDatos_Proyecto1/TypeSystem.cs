@@ -75,7 +75,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else
                 {
-                    //TODO mensaje de ERROR
+                    errores += "Error en línea " + context.start.Line + ": Los tipos de los elementos no concuerdan en un 'OR'." + Environment.NewLine;
                     return "ERROR" + multi + " " + and + " " + "OR";
                 }
             }
@@ -367,8 +367,8 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else
                 {
-                    //TODO mensaje de ERROR
-                    return "ERROR" + and + " " + difEq + " " + "OR";
+                    errores += "Error en línea " + context.start.Line + ": Los tipos de los elementos no concuerdan en un 'AND'." + Environment.NewLine;
+                    return "ERROR" + and + " " + difEq + " " + "AND";
                 }
             }
         }
@@ -424,7 +424,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else
                 {
-                    //TODO mensaje de ERROR
+                    errores += "Error en línea " + context.start.Line + ": Los tipos de los elementos no concuerdan en un '" + context.GetChild(1).GetText() + "'." + Environment.NewLine;
                     return "ERROR" + mayMin + " " + neg + " " + context.GetChild(1).GetText();
                 }
             }
@@ -457,34 +457,34 @@ namespace BasesDeDatos_Proyecto1
             }
             if (tabla == null)
             {
-                errores += ""; //No existe la tabla
+                errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe." + Environment.NewLine;
                 return "ERRORerr";
             }
             indiceColumna = tabla.columnas.IndexOf(columna);
             if (indiceColumna == -1)
             {
-                errores += ""; //No existe la columna
+                errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no existe en la tabla '" + nombreT + "'." + Environment.NewLine;
                 return "ERRORerr";
             }
             if(tabla.tipos_columnas[indiceColumna].Equals("INT"))
             {
-                return "INT  " + indiceTabla + "." + indiceColumna;
+                return "INT  " + nombreT + "." + columna;
             }
             else if (tabla.tipos_columnas[indiceColumna].Equals("FLOAT"))
             {
-                return "FLOAT" + indiceTabla + "." + indiceColumna;
+                return "FLOAT" + nombreT + "." + columna;
             }
             else if (tabla.tipos_columnas[indiceColumna].Equals("DATE"))
             {
-                return "DATE " + indiceTabla + "." + indiceColumna;
+                return "DATE " + nombreT + "." + columna;
             }
             else if (tabla.tipos_columnas[indiceColumna].StartsWith("CHAR"))
             {
-                return "CHAR " + indiceTabla + "." + indiceColumna;
+                return "CHAR " + nombreT + "." + columna;
             }
             else
             {
-                errores += ""; //Error desconocido, no deberia pasar
+                errores += "Error en línea " + context.start.Line + ": Error desconocido." + Environment.NewLine;
                 return "ERRORerr";
             }
         }
@@ -608,7 +608,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else
                 {
-                    //TODO mensaje de ERROR
+                    errores += "Error en línea " + context.start.Line + ": Los tipos de los elementos no concuerdan en un '" + context.GetChild(1).GetText() + "'." + Environment.NewLine;
                     return "ERROR" + difEq + " " + mayMin + " " + context.GetChild(1).GetText();
                 }
             }
@@ -885,7 +885,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else
                 {
-                    //TODO mensaje de ERROR
+                    errores += "Error en línea " + context.start.Line + ": Los tipos de los elementos no concuerdan, para negarlo debe ser booleano." + Environment.NewLine;
                     return "ERROR" + neg + " " + "NOT";
                 }
             }
