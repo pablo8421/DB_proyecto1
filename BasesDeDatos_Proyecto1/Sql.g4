@@ -51,7 +51,7 @@ INT : '-'? NUMBER+;
 STRING: '\'' .*? '\'';
 
 ID : LETTER (LETTER|NUMBER)*; 
-IDENTIFICADOR: ID ('.' ID)?;
+IDENTIFICADOR: ID '.' ID;
 VALUE : (INT | FLOAT | STRING); 
 
 
@@ -124,10 +124,10 @@ neg_expression : 'NOT' neg_expression
 paren_expression : '(' multi_exp ')'
 				| exp;
 
-exp: IDENTIFICADOR	#exp_Ident
-   | INT			#exp_Int
-   | FLOAT			#exp_Float
-   | STRING			#exp_String;
+exp: IDENTIFICADOR | ID	#exp_Ident
+   | INT				#exp_Int
+   | FLOAT				#exp_Float
+   | STRING				#exp_String;
 
 accion: RENAME TO ID #accion_rename
 	  | ADD COLUMN ID tipo  (multi_constraint_completo)? #accion_addColumn
@@ -163,8 +163,8 @@ asignacion : asignacion ',' ID '=' VALUE
 
 delete : DELETE FROM ID (WHERE multi_exp)?;
 
-identificador_completo : identificador_completo ',' IDENTIFICADOR
-				 | IDENTIFICADOR;
+identificador_completo : identificador_completo ',' (IDENTIFICADOR | ID)
+				 | (IDENTIFICADOR | ID);
 
 select :  SELECT ('*' | identificador_completo) 
 		  FROM id_completo select_where select_orderBy;
@@ -173,5 +173,5 @@ select_where: (WHERE multi_exp)?;
 
 select_orderBy: (ORDER BY id_completo_order)?;
 
-id_completo_order : id_completo_order ',' IDENTIFICADOR  (ASC|DESC)?
-				 | IDENTIFICADOR (ASC|DESC)?;
+id_completo_order : id_completo_order ',' (IDENTIFICADOR | ID)  (ASC|DESC)?
+				 | (IDENTIFICADOR | ID) (ASC|DESC)?;
