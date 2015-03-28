@@ -103,6 +103,7 @@ namespace BasesDeDatos_Proyecto1
                 else
                     consolaText.Text = sistemaTipos.mensajes + sistemaTipos.errores;
             }
+
             databaseActual = sistemaTipos.BDenUso;
         }
     }
