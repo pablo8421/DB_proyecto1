@@ -651,6 +651,7 @@ namespace BasesDeDatos_Proyecto1
 
             restriccion.nombre = nombreCH;
             restriccion.restriccionCheck = postfix;
+            Console.WriteLine(postfix);
             propia.restricciones.Add(restriccion);
             return "void";
         }
