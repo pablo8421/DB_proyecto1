@@ -20,6 +20,7 @@ namespace BasesDeDatos_Proyecto1
         public String BDenUso;
         private MasterTabla masterTabla;
         private List<Tabla> ListaTablas;
+        private Stack<String> expStack;
 
         public TypeSystem() {
             errores = "";
@@ -28,6 +29,7 @@ namespace BasesDeDatos_Proyecto1
             resultados = new DataGridView();
             masterTabla = new MasterTabla();
             ListaTablas = new List<Tabla>();
+            expStack = new Stack<String>();
         }
 
         override
@@ -51,7 +53,32 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitMulti_exp(SqlParser.Multi_expContext context)
         {
-            throw new NotImplementedException();
+            if(context.ChildCount == 1)
+            {
+                return Visit(context.GetChild(0));
+            }
+            else
+            {
+                //Obtener el primer hijo
+                String multi = Visit(context.GetChild(0));
+                String tipo_multi = multi.Substring(0,5).Trim();
+                multi = multi.Substring(5, multi.Length);
+                
+                //Obtener el segundo hijo
+                String and = Visit(context.GetChild(2));
+                String tipo_and = and.Substring(0, 5).Trim();
+                and = and.Substring(5, and.Length);
+
+                if (tipo_and.Equals("BOOL") && tipo_multi.Equals("BOOL"))
+                {
+                    return "BOOL " + multi + " " + and + " " + "OR";
+                }
+                else
+                {
+                    //TODO mensaje de ERROR
+                    return "ERROR" + multi + " " + and + " " + "OR";
+                }
+            }
         }
 
         override
@@ -316,7 +343,32 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitAnd_expression(SqlParser.And_expressionContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 1)
+            {
+                return Visit(context.GetChild(0));
+            }
+            else
+            {
+                //Obtener el primer hijo
+                String and = Visit(context.GetChild(0));
+                String tipo_and = and.Substring(0, 5).Trim();
+                and = and.Substring(5, and.Length);
+
+                //Obtener el segundo hijo
+                String difEq = Visit(context.GetChild(2));
+                String tipo_difEq = difEq.Substring(0, 5).Trim();
+                difEq = difEq.Substring(5, difEq.Length);
+
+                if (tipo_difEq.Equals("BOOL") && tipo_and.Equals("BOOL"))
+                {
+                    return "BOOL " + and + " " + difEq + " " + "AND";
+                }
+                else
+                {
+                    //TODO mensaje de ERROR
+                    return "ERROR" + and + " " + difEq + " " + "OR";
+                }
+            }
         }
 
         override
@@ -348,7 +400,32 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitMayMin_expression(SqlParser.MayMin_expressionContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 1)
+            {
+                return Visit(context.GetChild(0));
+            }
+            else
+            {
+                //Obtener el primer hijo
+                String mayMin = Visit(context.GetChild(0));
+                String tipo_mayMin = mayMin.Substring(0, 5).Trim();
+                mayMin = mayMin.Substring(5, mayMin.Length);
+
+                //Obtener el segundo hijo
+                String neg = Visit(context.GetChild(2));
+                String tipo_neg = neg.Substring(0, 5).Trim();
+                neg = neg.Substring(5, neg.Length);
+
+                if (tipo_mayMin.Equals(tipo_neg))
+                {
+                    return "BOOL " + mayMin + " " + neg + " " + context.GetChild(1).GetText();
+                }
+                else
+                {
+                    //TODO mensaje de ERROR
+                    return "ERROR" + mayMin + " " + neg + " " + context.GetChild(1).GetText();
+                }
+            }
         }
 
         override
@@ -401,7 +478,32 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitDifEq_expression(SqlParser.DifEq_expressionContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 1)
+            {
+                return Visit(context.GetChild(0));
+            }
+            else
+            {
+                //Obtener el primer hijo
+                String difEq = Visit(context.GetChild(0));
+                String tipo_difEq = difEq.Substring(0, 5).Trim();
+                difEq = difEq.Substring(5, difEq.Length);
+
+                //Obtener el segundo hijo
+                String mayMin = Visit(context.GetChild(2));
+                String tipo_mayMin = mayMin.Substring(0, 5).Trim();
+                mayMin = mayMin.Substring(5, mayMin.Length);
+
+                if (tipo_difEq.Equals(tipo_mayMin))
+                {
+                    return "BOOL " + difEq + " " + mayMin + " " + context.GetChild(1).GetText();
+                }
+                else
+                {
+                    //TODO mensaje de ERROR
+                    return "ERROR" + difEq + " " + mayMin + " " + context.GetChild(1).GetText();
+                }
+            }
         }
 
         override
@@ -575,7 +677,14 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitParen_expression(SqlParser.Paren_expressionContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 1)
+            {
+                return Visit(context.GetChild(0));
+            }
+            else
+            {
+                return Visit(context.GetChild(1));
+            }
         }
 
         override
@@ -602,7 +711,27 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitNeg_expression(SqlParser.Neg_expressionContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 1)
+            {
+                return Visit(context.GetChild(0));
+            }
+            else
+            {
+                //Obtener el hijo
+                String neg = Visit(context.GetChild(0));
+                String tipo_neg = neg.Substring(0, 5).Trim();
+                neg = neg.Substring(5, neg.Length);
+
+                if (tipo_neg.Equals("BOOl"))
+                {
+                    return "BOOL " + neg + " " + "NOT";
+                }
+                else
+                {
+                    //TODO mensaje de ERROR
+                    return "ERROR" + neg + " " + "NOT";
+                }
+            }
         }
 
         override
