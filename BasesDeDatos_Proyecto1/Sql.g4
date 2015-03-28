@@ -124,10 +124,10 @@ neg_expression : 'NOT' neg_expression
 paren_expression : '(' multi_exp ')'
 				| exp;
 
-exp: IDENTIFICADOR | ID	#exp_Ident
-   | INT				#exp_Int
-   | FLOAT				#exp_Float
-   | STRING				#exp_String;
+exp: (IDENTIFICADOR | ID)	#exp_Ident
+   | INT					#exp_Int
+   | FLOAT					#exp_Float
+   | STRING					#exp_String;
 
 accion: RENAME TO ID #accion_rename
 	  | ADD COLUMN ID tipo  (multi_constraint_completo)? #accion_addColumn
