@@ -525,19 +525,7 @@ namespace BasesDeDatos_Proyecto1
                 errores += "Error en línea " + context.start.Line + ": La cantidad de columnas referenciadas no concuerdan con las propias." + Environment.NewLine;
                 return "Error";
             }
-            else
-            {
-                //ESTE FOR NADA QUE VER VERDAD?
-                //Verificar si los tipos concuerdan
-                for (int i = 0; i < listaPropia.Length; i++ )
-                {
-                    if (!propia.tipos_columnas[i].Equals(foranea.tipos_columnas[i]))
-                    {
-                        errores += "Error en línea " + context.start.Line + ": Los tipos de '" + propia.columnas[i] + "' de la tabla '" + propia.nombre + "' y '" + foranea.columnas[i] + "' de la tabla '" + foranea.nombre + "' ('" + propia.tipos_columnas[i] + "', '" + foranea.tipos_columnas[i] + "') no concuerdan." + Environment.NewLine;
-                        return "Error";
-                    }
-                }
-            }
+
             //Añadir los indices de la tabla propia a la restriccion
             foreach (String item in listaPropia)
             {
