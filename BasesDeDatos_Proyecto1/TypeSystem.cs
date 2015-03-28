@@ -62,12 +62,12 @@ namespace BasesDeDatos_Proyecto1
                 //Obtener el primer hijo
                 String multi = Visit(context.GetChild(0));
                 String tipo_multi = multi.Substring(0,5).Trim();
-                multi = multi.Substring(5, multi.Length);
+                multi = multi.Substring(5);
                 
                 //Obtener el segundo hijo
                 String and = Visit(context.GetChild(2));
                 String tipo_and = and.Substring(0, 5).Trim();
-                and = and.Substring(5, and.Length);
+                and = and.Substring(5);
 
                 if (tipo_and.Equals("BOOL") && tipo_multi.Equals("BOOL"))
                 {
@@ -359,7 +359,7 @@ namespace BasesDeDatos_Proyecto1
                 //Obtener el segundo hijo
                 String difEq = Visit(context.GetChild(2));
                 String tipo_difEq = difEq.Substring(0, 5).Trim();
-                difEq = difEq.Substring(5, difEq.Length);
+                difEq = difEq.Substring(5);
 
                 if (tipo_difEq.Equals("BOOL") && tipo_and.Equals("BOOL"))
                 {
@@ -411,12 +411,12 @@ namespace BasesDeDatos_Proyecto1
                 //Obtener el primer hijo
                 String mayMin = Visit(context.GetChild(0));
                 String tipo_mayMin = mayMin.Substring(0, 5).Trim();
-                mayMin = mayMin.Substring(5, mayMin.Length);
+                mayMin = mayMin.Substring(5);
 
                 //Obtener el segundo hijo
                 String neg = Visit(context.GetChild(2));
                 String tipo_neg = neg.Substring(0, 5).Trim();
-                neg = neg.Substring(5, neg.Length);
+                neg = neg.Substring(5);
 
                 if (tipo_mayMin.Equals(tipo_neg))
                 {
@@ -595,12 +595,12 @@ namespace BasesDeDatos_Proyecto1
                 //Obtener el primer hijo
                 String difEq = Visit(context.GetChild(0));
                 String tipo_difEq = difEq.Substring(0, 5).Trim();
-                difEq = difEq.Substring(5, difEq.Length);
+                difEq = difEq.Substring(5);
 
                 //Obtener el segundo hijo
                 String mayMin = Visit(context.GetChild(2));
                 String tipo_mayMin = mayMin.Substring(0, 5).Trim();
-                mayMin = mayMin.Substring(5, mayMin.Length);
+                mayMin = mayMin.Substring(5);
 
                 if (tipo_difEq.Equals(tipo_mayMin))
                 {
@@ -876,7 +876,7 @@ namespace BasesDeDatos_Proyecto1
                 //Obtener el hijo
                 String neg = Visit(context.GetChild(0));
                 String tipo_neg = neg.Substring(0, 5).Trim();
-                neg = neg.Substring(5, neg.Length);
+                neg = neg.Substring(5);
 
                 if (tipo_neg.Equals("BOOl"))
                 {
