@@ -437,7 +437,54 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitExp_Ident(SqlParser.Exp_IdentContext context)
         {
-            throw new NotImplementedException();
+            String[] split = context.GetText().Split('.');
+            String nombreT = split[0];
+            String columna = split[1];
+
+            Tabla tabla = null;
+            
+            int indiceTabla = -1;
+            int indiceColumna = -1;
+
+            foreach(Tabla t in ListaTablas){
+                if (t.nombre.Equals(nombreT))
+                {
+                    tabla = t;
+                    indiceTabla = ListaTablas.IndexOf(t);
+                }
+            }
+            if (tabla == null)
+            {
+                errores += ""; //No existe la tabla
+                return "ERRORerr";
+            }
+            indiceColumna = tabla.columnas.IndexOf(columna);
+            if (indiceColumna == -1)
+            {
+                errores += ""; //No existe la columna
+                return "ERRORerr";
+            }
+            if(tabla.tipos_columnas[indiceColumna].Equals("INT"))
+            {
+                return "INT  " + indiceTabla + "." + indiceColumna;
+            }
+            else if (tabla.tipos_columnas[indiceColumna].Equals("FLOAT"))
+            {
+                return "FLOAT" + indiceTabla + "." + indiceColumna;
+            }
+            else if (tabla.tipos_columnas[indiceColumna].Equals("DATE"))
+            {
+                return "DATE " + indiceTabla + "." + indiceColumna;
+            }
+            else if (tabla.tipos_columnas[indiceColumna].StartsWith("CHAR"))
+            {
+                return "CHAR " + indiceTabla + "." + indiceColumna;
+            }
+            else
+            {
+                errores += ""; //Error desconocido, no deberia pasar
+                return "ERRORerr";
+            }
         }
 
         override
