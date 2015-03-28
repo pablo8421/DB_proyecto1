@@ -354,7 +354,7 @@ namespace BasesDeDatos_Proyecto1
                 //Obtener el primer hijo
                 String and = Visit(context.GetChild(0));
                 String tipo_and = and.Substring(0, 5).Trim();
-                and = and.Substring(5, and.Length);
+                and = and.Substring(5);
 
                 //Obtener el segundo hijo
                 String difEq = Visit(context.GetChild(2));
