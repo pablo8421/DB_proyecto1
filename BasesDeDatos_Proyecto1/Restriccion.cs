@@ -56,18 +56,20 @@ namespace BasesDeDatos_Proyecto1
         
         override
         public string ToString(){
-            string descripcion = "";
+            string descripcion = "\"";
             if (!nombre.Equals(""))
             {
-                descripcion += nombre;
-                if (!tipo.Equals(""))
-                {
-                    descripcion += ", " + tipo;
-                    if (!tabla.Equals(""))
-                    {
-                        descripcion += ", REFERENCES " + tabla;
-                    }
-                }
+                descripcion += "CONSTRAINT "+nombre+" ";
+                if (tipo.Equals("PK"))
+                    descripcion += "PRIMARY KEY";
+                if (tipo.Equals("FK"))
+                    descripcion += "FOREIGN KEY";
+                if (tipo.Equals("CH"))
+                    descripcion += "CHECK("+restriccionCheck+")";
+                if (!tabla.Equals(""))
+                    descripcion += " REFERENCES " + tabla;
+                else
+                    descripcion += "\"";
             }
             return descripcion;
         }
