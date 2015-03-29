@@ -573,7 +573,8 @@ namespace BasesDeDatos_Proyecto1
                 StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
                 mySerializer.Serialize(myWriter, masterTabla);
                 myWriter.Close();
-                
+
+                mensajes += "Se ha agregado la columna '" + columna + "' en la tabla '" + tabla.nombre + "' con éxito." + Environment.NewLine;
                 return "void";
             }
             //Con constraints
@@ -910,8 +911,9 @@ namespace BasesDeDatos_Proyecto1
 
             restriccion.nombre = nombreCH;
             restriccion.restriccionCheck = postfix;
-            Console.WriteLine(postfix);
             propia.restricciones.Add(restriccion);
+
+            mensajes += "Se ha agregado la Constraint '" + nombreCH + "' en la tabla '" + propia.nombre + "' con éxito." + Environment.NewLine;
             return "void";
         }
 
@@ -1085,6 +1087,8 @@ namespace BasesDeDatos_Proyecto1
 
             propia.restricciones.Add(restriccion);
             restriccion.tabla = foranea.nombre;
+
+            mensajes += "Se ha agregado la Constraint '" + nombreFK + "' en la tabla '" + propia.nombre + "' con éxito." + Environment.NewLine;
             return "void";
         }
 
@@ -1414,6 +1418,8 @@ namespace BasesDeDatos_Proyecto1
             restriccion.nombre = nombrePK;
 
             ListaTablas[0].restricciones.Add(restriccion);
+
+            mensajes += "Se ha agregado la Constraint '" + nombrePK + "' en la tabla '" + tActual.nombre + "' con éxito." + Environment.NewLine;
             return "void";
         }
 
