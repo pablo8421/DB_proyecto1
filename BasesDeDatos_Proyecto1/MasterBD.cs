@@ -65,5 +65,11 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        public BaseDatos getBD(String nombre){
+            foreach (BaseDatos bd in basesDeDatos)
+                if (nombre.Equals(bd.nombre))
+                    return bd;
+            return null;
+        }
     }
 }
