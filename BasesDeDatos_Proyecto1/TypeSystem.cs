@@ -400,12 +400,12 @@ namespace BasesDeDatos_Proyecto1
                     resultados.Rows[i].Cells[1].Value = t.tipos_columnas.ElementAt(i - 1);
                     for (int j = 0; j < t.restricciones.Count; j++)
                     {
-                        if (resultados.Rows[i].Cells[2].Value != null)
-                        {
-                            resultados.Rows[i].Cells[2].Value += ", ";
-                        }
                         if (t.restricciones.ElementAt(j).columnasPropias.Contains(t.columnas.ElementAt(i - 1)))
                         {
+                            if (resultados.Rows[i].Cells[2].Value != null)
+                            {
+                                resultados.Rows[i].Cells[2].Value += ", ";
+                            }                       
                             resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).ToString();
 
                             if (t.restricciones.ElementAt(j).columnasForaneas.Count != 0)
@@ -421,7 +421,7 @@ namespace BasesDeDatos_Proyecto1
                         }
                     }
                 }
-
+                resultados.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
                 return "void";
             }
             else
