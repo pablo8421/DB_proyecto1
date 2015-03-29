@@ -379,11 +379,12 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitBotar_table(SqlParser.Botar_tableContext context)
         {
+            masterTabla = deserializarMasterTabla();
             Tabla tabla = masterTabla.getTable(context.GetChild(2).GetText());
             if (tabla == null)
             {
-                errores += "Error en linea" + context.start.Line +
-                           "No existe la tabla'" + context.GetChild(2).GetText() + 
+                errores += "Error en línea " + context.start.Line +
+                           ": No existe la tabla '" + context.GetChild(2).GetText() + 
                            "' en la base de datos '" + BDenUso + "'."+Environment.NewLine;
                 return "Error";
             }
@@ -405,10 +406,10 @@ namespace BasesDeDatos_Proyecto1
             End:
             if (esReferenciada)
             {
-                errores += "Error en linea" + context.start.Line +
-                           "La tabla '" + tabla.nombre +
+                errores += "Error en línea " + context.start.Line +
+                           ": La tabla '" + tabla.nombre +
                            "' es referenciada por '" + referencia +
-                           "', bote la restriccion antes de botar la tabla." + Environment.NewLine;
+                           "', bote la restricción antes de botar la tabla." + Environment.NewLine;
                 return "Error";
             }
             else
@@ -418,11 +419,12 @@ namespace BasesDeDatos_Proyecto1
                 String path = "Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat";
                 System.IO.File.Delete(path);
 
-
                 XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
                 StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
                 mySerializer.Serialize(myWriter, masterTabla);
                 myWriter.Close();
+
+                mensajes += "Se ha eliminado la tabla '" + tabla.nombre + "' de la base de datos '" + BDenUso + "' con éxito.\r\n";
 
                 return "void";
             }
