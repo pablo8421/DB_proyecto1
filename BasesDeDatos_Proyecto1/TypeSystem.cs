@@ -101,13 +101,60 @@ namespace BasesDeDatos_Proyecto1
         {
             if (context.ChildCount == 1)
             {
-                Console.WriteLine(context.GetChild(0).GetType());
+                if (context.STRING() != null)
+                {
+                    if( isDate(context.STRING().GetText()))
+                    {
+                        return "DATE " + context.STRING().GetText();
+                    }
+                    else
+                    {
+                        return "CHAR " + context.STRING().GetText();
+                    }
+                }
+                if (context.FLOAT() != null)
+                {
+                    return "FLOAT " + context.FLOAT().GetText();
+                }
+                if (context.INT() != null)
+                {
+                    return "INT " + context.INT().GetText();
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
             else
             {
-
+                String propio;
+                if (context.STRING() != null)
+                {
+                    if (isDate(context.STRING().GetText()))
+                    {
+                        propio = "DATE " + context.STRING().GetText();
+                    }
+                    else
+                    {
+                        propio = "CHAR " + context.STRING().GetText();
+                    }
+                }
+                if (context.FLOAT() != null)
+                {
+                    propio = "FLOAT " + context.FLOAT().GetText();
+                }
+                if (context.INT() != null)
+                {
+                    propio = "INT " + context.INT().GetText();
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                
+                return Visit(context.GetChild(0)) + "," + propio;
             }
-            throw new NotImplementedException();
+            
         }
 
         override
@@ -222,6 +269,19 @@ namespace BasesDeDatos_Proyecto1
                               "'." + Environment.NewLine;
                     return "Error";
                 }
+
+                //Obtener valores a insertar
+                String[] valores= Visit(context.GetChild(5)).Split(',');
+                if (valores.Length != tabla.columnas.Count)
+                {
+                    errores = "Error en línea " + context.start.Line +
+                              ": La cantidad de columnas en la tabla '" + tabla.nombre +
+                              "' no concuerda con la cantidad de valores ingresados  (" + valores.Length + 
+                              "," + tabla.columnas.Count +
+                              ")." + Environment.NewLine;
+                    return "Error";
+                }
+                //TODO verificar si los tipos concuerdan entre ellos, tambien la conversion implicita
             }
             //Con id_completo de columnas
             else
