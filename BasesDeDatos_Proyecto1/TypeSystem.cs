@@ -110,6 +110,7 @@ namespace BasesDeDatos_Proyecto1
                 {
                     t.nombre = nuevoNombre;
 
+                    //Comentario
                     String pathViejo = "Databases\\" + BDenUso + "\\" + nombre + ".dat";
                     String pathNuevo = "Databases\\" + BDenUso + "\\" + nuevoNombre + ".dat";
                     System.IO.File.Move(pathViejo, pathNuevo);
@@ -255,7 +256,10 @@ namespace BasesDeDatos_Proyecto1
                     }    
                 }
             }
+
+            int ind = tActual.columnas.IndexOf(cBorrar);
             tActual.columnas.Remove(cBorrar);
+            tActual.tipos_columnas.RemoveAt(ind);
             XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
             StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
             mySerializer.Serialize(myWriter, masterTabla);
