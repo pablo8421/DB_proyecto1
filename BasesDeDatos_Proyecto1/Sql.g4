@@ -46,14 +46,12 @@ DESC : 'DESC';
 fragment LETTER: [a-z] | [A-Z];
 fragment NUMBER: [0-9];
 
-NUM : NUMBER+;
 FLOAT : '-'? NUMBER+ '.' NUMBER+;
 INT : '-'? NUMBER+;
 STRING: '\'' .*? '\'';
 
 ID : LETTER (LETTER|NUMBER)*; 
-IDENTIFICADOR: ID '.' ID;
-VALUE : (INT | FLOAT | STRING); 
+IDENTIFICADOR: ID '.' ID; 
 
 
 full_query: (queries+= query ';')*;
@@ -86,7 +84,7 @@ usar_BD: USE DATABASE ID;
 tipo: 'INT'
 	| 'FLOAT'
 	| 'DATE'
-	| 'CHAR' '(' NUM ')';
+	| 'CHAR' '(' INT ')';
 
 multi_id: ID ',' multi_id
 		| ID;
@@ -154,13 +152,13 @@ insert : INSERT INTO ID ('(' id_completo ')')? VALUES '(' valor_completo ')';
 id_completo : id_completo ',' ID
 				 | ID;
 
-valor_completo : valor_completo ',' VALUE
-				 | VALUE;
+valor_completo : valor_completo ',' (INT | FLOAT | STRING)
+				 | (INT | FLOAT | STRING);
 
 update : UPDATE ID SET asignacion (WHERE multi_exp)?;
 
-asignacion : asignacion ',' ID '=' VALUE
-			| ID '=' VALUE;
+asignacion : asignacion ',' ID '=' (INT | FLOAT | STRING)
+			| ID '=' (INT | FLOAT | STRING);
 
 delete : DELETE FROM ID (WHERE multi_exp)?;
 

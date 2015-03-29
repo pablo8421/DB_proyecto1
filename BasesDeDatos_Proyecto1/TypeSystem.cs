@@ -47,7 +47,16 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitTipo(SqlParser.TipoContext context)
         {
-            throw new NotImplementedException();
+            String tipo = context.GetText();
+            if (tipo.StartsWith("CHAR"))
+            {
+                int num = Convert.ToInt32(context.GetChild(2).GetText());
+                if (num <= 0)
+                {
+                    return "Error";
+                }
+            }
+            return tipo;
         }
 
         override
@@ -90,6 +99,14 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitValor_completo(SqlParser.Valor_completoContext context)
         {
+            if (context.ChildCount == 1)
+            {
+                Console.WriteLine(context.GetChild(0).GetType());
+            }
+            else
+            {
+
+            }
             throw new NotImplementedException();
         }
 
@@ -177,6 +194,42 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitInsert(SqlParser.InsertContext context)
         {
+            //Deserealizar el archivo maestro de tablas
+            MasterTabla mTabla;
+            XmlSerializer serializer = new XmlSerializer(typeof(MasterTabla));
+            StreamReader reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+            try
+            {
+                mTabla = (MasterTabla)serializer.Deserialize(reader);
+            }
+            catch (Exception e)
+            {
+                mTabla = new MasterTabla();
+            }
+            reader.Close();
+            
+            //Obtener el nombre de la tabla que se desea
+            String nombre = context.GetChild(2).GetText();
+            //Si id_completo de columnas
+            if (context.ChildCount == 7)
+            {
+                Tabla tabla = mTabla.getTable(nombre);
+
+                //Verificar que exista la tabla
+                if (tabla == null)
+                {
+                    errores = "Error en línea " + context.start.Line +
+                              ": La tabla '" + nombre + 
+                              "' no existe en la base de datos '" + BDenUso + 
+                              "'." + Environment.NewLine;
+                    return "Error";
+                }
+            }
+            //Con id_completo de columnas
+            else
+            {
+
+            }
             throw new NotImplementedException();
         }
 
@@ -527,7 +580,15 @@ namespace BasesDeDatos_Proyecto1
             {
                 Tabla tabla = ListaTablas[0];
                 String columna = context.GetChild(2).GetText();
-                String tipo = context.GetChild(3).GetText();
+                String tipo = Visit(context.GetChild(3));
+
+                if (tipo.Equals("Error"))
+                {
+                    errores += "Error en línea " + context.start.Line +
+                               ": El tipo CHAR debe contener al menos 1 caracter." + Environment.NewLine;
+                    return "Error";
+
+                }
 
                 //Revisar si ya existe la columna
                 if (tabla.columnas.Contains(columna))
@@ -842,7 +903,7 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitColumnas(SqlParser.ColumnasContext context)
         {
-            return context.GetChild(0).GetText() + " " + context.GetChild(1).GetText();
+            return context.GetChild(0).GetText() + " " + Visit(context.GetChild(1));
         }
 
         override
@@ -1222,6 +1283,21 @@ namespace BasesDeDatos_Proyecto1
             List<String> columnas = Visit(context.GetChild(4)).Split(',').ToList();
             Tabla nueva = new Tabla();
             nueva.nombre = context.GetChild(2).GetText();
+
+            //Verificar si los tipos estan correctos
+            foreach (String columna in columnas)
+            {
+                String[] tupla = columna.Split(' ');
+                if (tupla[1].Equals("Error"))
+                {
+                    errores += "Error en línea " + context.start.Line +
+                            ": El tipo CHAR debe contener al menos 1 caracter." + Environment.NewLine;
+                    return "Error";
+
+                }
+            }
+
+            //Generar las columnas
             nueva.generarColumnas(columnas);
 
             //Deserealizar el archivo maestro de tablas
