@@ -110,7 +110,6 @@ namespace BasesDeDatos_Proyecto1
                 {
                     t.nombre = nuevoNombre;
 
-                    //Comentario
                     String pathViejo = "Databases\\" + BDenUso + "\\" + nombre + ".dat";
                     String pathNuevo = "Databases\\" + BDenUso + "\\" + nuevoNombre + ".dat";
                     System.IO.File.Move(pathViejo, pathNuevo);

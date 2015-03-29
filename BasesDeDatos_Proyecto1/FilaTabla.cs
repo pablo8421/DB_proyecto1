@@ -35,12 +35,19 @@ namespace BasesDeDatos_Proyecto1
 
         public void cargar()
         {
-            var serializer = MessagePackSerializer.Get<Filas>();
-
-            using (Stream stream = File.Open("Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat", FileMode.Open))
+            try
             {
-                datos = serializer.Unpack(stream);
-                stream.Close();
+                var serializer = MessagePackSerializer.Get<Filas>();
+                using (Stream stream = File.Open("Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat", FileMode.Open))
+                {
+                    datos = serializer.Unpack(stream);
+                    stream.Close();
+                }
+
+            }
+            catch (Exception e)
+            {
+                datos = new Filas();
             }
         }
 
