@@ -1179,6 +1179,7 @@ namespace BasesDeDatos_Proyecto1
                 resultados.Rows[i].Cells[0].Value = mTabla.tablas.ElementAt(i - 1).nombre;
                 resultados.Rows[i].Cells[1].Value = mTabla.tablas.ElementAt(i - 1).cantidad_registros;
             }
+            resultados.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
             mensajes += "Se han mostrado todas las tablas ("+mTabla.tablas.Count+") que contiene '" + BDenUso + "' con éxito.\r\n";
             return "void";
         }
