@@ -64,7 +64,7 @@ query: crear_BD			//CHECK
 	 | mostrar_BD		//CHECK
 	 | usar_BD			//CHECK
 	 | crear_tabla		//CHECK
-	 | alter_table		
+	 | alter_table		//CHECK
 	 | botar_table		
 	 | show_tables		//CHECK
 	 | show_columns		//CHECK

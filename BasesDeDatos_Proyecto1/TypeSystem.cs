@@ -292,7 +292,53 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitBotar_table(SqlParser.Botar_tableContext context)
         {
-            throw new NotImplementedException();
+            Tabla tabla = masterTabla.getTable(context.GetChild(2).GetText());
+            if (tabla == null)
+            {
+                errores += "Error en linea" + context.start.Line +
+                           "No existe la tabla'" + context.GetChild(2).GetText() + 
+                           "' en la base de datos '" + BDenUso + "'."+Environment.NewLine;
+                return "Error";
+            }
+            bool esReferenciada = false;
+            String referencia = "";
+            foreach (Tabla t in masterTabla.tablas)
+            {
+                foreach (Restriccion restriccion in t.restricciones)
+                {
+                    if (restriccion.tipo.Equals("FK") && restriccion.tabla.Equals(tabla.nombre))
+                    {
+                        esReferenciada = true;
+                        referencia = t.nombre;
+                        goto End;
+                        
+                    }
+                }
+            }
+            End:
+            if (esReferenciada)
+            {
+                errores += "Error en linea" + context.start.Line +
+                           "La tabla '" + tabla.nombre +
+                           "' es referenciada por '" + referencia +
+                           "', bote la restriccion antes de botar la tabla." + Environment.NewLine;
+                return "Error";
+            }
+            else
+            {
+                masterTabla.tablas.Remove(tabla);
+
+                String path = "Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat";
+                System.IO.File.Delete(path);
+
+
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, masterTabla);
+                myWriter.Close();
+
+                return "void";
+            }
         }
 
         override
@@ -491,6 +537,11 @@ namespace BasesDeDatos_Proyecto1
 
                 contenido.guardar();
 
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, masterTabla);
+                myWriter.Close();
+                
                 return "void";
             }
             //Con constraints
@@ -555,6 +606,11 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 contenido.guardar();
+
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, masterTabla);
+                myWriter.Close();
 
                 return "void";
             }
