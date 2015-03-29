@@ -110,12 +110,10 @@ namespace BasesDeDatos_Proyecto1
                 {
                     t.nombre = nuevoNombre;
 
-                    //Comentario
                     String pathViejo = "Databases\\" + BDenUso + "\\" + nombre + ".dat";
                     String pathNuevo = "Databases\\" + BDenUso + "\\" + nuevoNombre + ".dat";
                     System.IO.File.Move(pathViejo, pathNuevo);
 
-                    
                     XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
                     StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
                     mySerializer.Serialize(myWriter, masterTabla);
@@ -401,7 +399,12 @@ namespace BasesDeDatos_Proyecto1
                     resultados.Rows[i].Cells[0].Value = t.columnas.ElementAt(i - 1);
                     resultados.Rows[i].Cells[1].Value = t.tipos_columnas.ElementAt(i - 1);
                     for (int j = 0; j < t.restricciones.Count; j++)
-                        if (t.restricciones.ElementAt(j).columnasPropias.Contains(t.columnas.ElementAt(i-1)))
+                    {
+                        if (resultados.Rows[i].Cells[2].Value != null)
+                        {
+                            resultados.Rows[i].Cells[2].Value += ", ";
+                        }
+                        if (t.restricciones.ElementAt(j).columnasPropias.Contains(t.columnas.ElementAt(i - 1)))
                         {
                             resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).ToString();
 
@@ -416,6 +419,7 @@ namespace BasesDeDatos_Proyecto1
                                 resultados.Rows[i].Cells[2].Value += ")\"";
                             }
                         }
+                    }
                 }
 
                 return "void";
@@ -1430,7 +1434,15 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitAccion_addConstraint(SqlParser.Accion_addConstraintContext context)
         {
-            return Visit(context.GetChild(1));
+            if (Visit(context.GetChild(1)).Equals("void"))
+            {
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, masterTabla);
+                myWriter.Close();
+                return "void";
+            }
+            return "Error";
         }
 
         private MasterBD deserializarMasterBD() {
