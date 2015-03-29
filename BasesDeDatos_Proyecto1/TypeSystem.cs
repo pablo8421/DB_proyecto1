@@ -331,7 +331,7 @@ namespace BasesDeDatos_Proyecto1
                                         resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k);
                                     else
                                         resultados.Rows[i].Cells[2].Value += ", " + t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k);
-                                resultados.Rows[i].Cells[2].Value += ")";
+                                resultados.Rows[i].Cells[2].Value += ")\"";
                             }
                         }
                 }
