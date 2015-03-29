@@ -29,6 +29,7 @@ namespace BasesDeDatos_Proyecto1
             using (Stream stream = File.Open("Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat", FileMode.Open))
             {
                 serializer.Pack(stream, datos);
+                stream.Close();
             }
         }
 
@@ -39,6 +40,7 @@ namespace BasesDeDatos_Proyecto1
             using (Stream stream = File.Open("Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat", FileMode.Open))
             {
                 datos = serializer.Unpack(stream);
+                stream.Close();
             }
         }
 
