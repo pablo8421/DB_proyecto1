@@ -424,6 +424,15 @@ namespace BasesDeDatos_Proyecto1
                 mySerializer.Serialize(myWriter, masterTabla);
                 myWriter.Close();
 
+                MasterBD masterDB = deserializarMasterBD();
+                BaseDatos bd = masterDB.getBD(BDenUso);
+                bd.cantidad_tablas--;
+
+                mySerializer = new XmlSerializer(typeof(MasterBD));
+                myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                mySerializer.Serialize(myWriter, masterDB);
+                myWriter.Close();
+
                 mensajes += "Se ha eliminado la tabla '" + tabla.nombre + "' de la base de datos '" + BDenUso + "' con éxito.\r\n";
 
                 return "void";
