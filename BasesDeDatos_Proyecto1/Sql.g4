@@ -63,7 +63,7 @@ query: crear_BD			//CHECK
 	 | botar_BD			//CHECK
 	 | mostrar_BD		//CHECK
 	 | usar_BD			//CHECK
-	 | crear_tabla		//CHECK (La Mitad)
+	 | crear_tabla		//CHECK
 	 | alter_table		
 	 | botar_table		
 	 | show_tables		//CHECK

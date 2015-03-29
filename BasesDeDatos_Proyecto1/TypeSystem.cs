@@ -438,7 +438,124 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitAccion_addColumn(SqlParser.Accion_addColumnContext context)
         {
-            throw new NotImplementedException();
+            //No constraints
+            if(context.ChildCount == 4)
+            {
+                Tabla tabla = ListaTablas[0];
+                String columna = context.GetChild(2).GetText();
+                String tipo = context.GetChild(3).GetText();
+
+                //Revisar si ya existe la columna
+                if (tabla.columnas.Contains(columna))
+                {
+                    errores += "Error en línea " + context.start.Line +
+                               ": La tabla '" + tabla.nombre +
+                               "' ya contiene una columna con el nombre '" +
+                               columna + "'." + Environment.NewLine;
+                    return "Error";
+                }
+
+                //Agregar la columna
+                tabla.columnas.Add(columna);
+                tabla.tipos_columnas.Add(tipo);
+                
+                //Agregar la columna a los datos
+                FilaTabla contenido = new FilaTabla(tabla, BDenUso);
+                contenido.cargar();
+
+                for (int i = 0; i < contenido.getTamanio(); i++ )
+                {
+                    List<Object> fila = contenido.getRow(i);
+                    if (tipo.Equals("INT"))
+                    {
+                        fila.Add(0);
+                    }
+                    else if (tipo.Equals("FLOAT"))
+                    {
+                        fila.Add(0.0);
+                    }
+                    else if (tipo.Equals("DATE"))
+                    {
+                        DateTime myDateTime = DateTime.Now;
+                        fila.Add(myDateTime.ToString("yyyy-MM-dd"));
+
+                    }
+                    else if (tipo.StartsWith("CHAR"))
+                    {
+                        fila.Add("");
+                    }
+                    
+                }
+
+                contenido.guardar();
+
+                return "void";
+            }
+            //Con constraints
+            else
+            {
+                Tabla tabla = ListaTablas[0];
+                String columna = context.GetChild(2).GetText();
+                String tipo = context.GetChild(3).GetText();
+
+                //Revisar si ya existe la columna
+                if (tabla.columnas.Contains(columna))
+                {
+                    errores += "Error en línea " + context.start.Line + 
+                               ": La tabla '" + tabla.nombre + 
+                               "' ya contiene una columna con el nombre '" + 
+                               columna + "'." + Environment.NewLine;
+                    return "Error";
+                }
+
+                //Agregar la columna
+                tabla.columnas.Add(columna);
+                tabla.tipos_columnas.Add(tipo);
+
+                //Verificar las constraints agregadas
+                String resultadoConstraints = Visit(context.GetChild(4));
+                if (resultadoConstraints.Equals("Error"))
+                {
+                    tabla.columnas.Remove(columna);
+                    errores += "Error en línea " + context.start.Line +
+                               ": La columna '" + columna +
+                               "' no fue agregada en la tabla'" +
+                               tabla.nombre + "' por errores en las Constraints." + Environment.NewLine;
+                    return "Error";
+                }
+
+                //Agregar la columna a los datos
+                FilaTabla contenido = new FilaTabla(tabla, BDenUso);
+                contenido.cargar();
+
+                for (int i = 0; i < contenido.getTamanio(); i++)
+                {
+                    List<Object> fila = contenido.getRow(i);
+                    if (tipo.Equals("INT"))
+                    {
+                        fila.Add(0);
+                    }
+                    else if (tipo.Equals("FLOAT"))
+                    {
+                        fila.Add(0.0);
+                    }
+                    else if (tipo.Equals("DATE"))
+                    {
+                        DateTime myDateTime = DateTime.Now;
+                        fila.Add(myDateTime.ToString("yyyy-MM-dd"));
+
+                    }
+                    else if (tipo.StartsWith("CHAR"))
+                    {
+                        fila.Add("");
+                    }
+
+                }
+
+                contenido.guardar();
+
+                return "void";
+            }
         }
 
         private List<String> getTablasOrigen(String columna)
