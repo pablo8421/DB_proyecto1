@@ -227,9 +227,42 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitAccion_DropColumn(SqlParser.Accion_DropColumnContext context)
         {
+            Tabla tActual = ListaTablas[0];
+            String cBorrar = context.GetChild(2).GetText();
+            if (!tActual.columnas.Contains(cBorrar)) { 
+                errores += "Error en la línea "+context.start.Line+": La tabla '"+tActual.nombre+"' no contiene la columna '"+cBorrar+"'.\r\n";
+                return "Error";
+            }
             
-            
-            throw new NotImplementedException();
+            foreach (Restriccion r in tActual.restricciones){
+                if (r.columnasPropias.Contains(cBorrar)) {
+                    errores += "Error en la línea " + context.start.Line + ": La columna '" + cBorrar + "' tiene una restricción por lo que no se puede borrar.\r\n";
+                    return "Error";
+                }
+            }
+
+            foreach (Tabla t in masterTabla.tablas)
+            {
+                if (!t.nombre.Equals(tActual.nombre))
+                {
+                    foreach (Restriccion r in t.restricciones)
+                    {
+                        if (r.columnasForaneas.Contains(cBorrar))
+                        {
+                            int i = r.columnasForaneas.IndexOf(cBorrar);
+                            errores += "Error en la línea " + context.start.Line + ": La columna '" + cBorrar + "' es referenciada como llave foránea de la columna '"+r.columnasPropias.ElementAt(i)+"' de la tabla '"+t.nombre+"'.\r\n";
+                            return "Error";
+                        }
+                    }    
+                }
+            }
+            tActual.columnas.Remove(cBorrar);
+            XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+            StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+            mySerializer.Serialize(myWriter, masterTabla);
+            myWriter.Close();
+            mensajes += "Se ha removido la columna '" + cBorrar + "' de la tabla '" + tActual.nombre + "' con éxito.\r\n";
+            return "void";
         }
 
         override
