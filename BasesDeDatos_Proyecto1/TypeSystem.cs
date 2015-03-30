@@ -1238,7 +1238,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                     else
                     {
-                        errores += "Error en línea " + nLinea + ": Inserción en la tabla '" + restriccion.tabla + "' viola la revisión '" + restriccion.nombre + "'." + Environment.NewLine;
+                        errores += "Error en línea " + nLinea + ": Inserción en la tabla '" + datos.tabla.nombre + "' viola la revisión '" + restriccion.nombre + "'." + Environment.NewLine;
                         return false;
                     }
                 }
