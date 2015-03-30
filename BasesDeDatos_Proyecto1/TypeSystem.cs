@@ -305,7 +305,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
-        private bool verificarRestricciones(FilaTabla datos, List<Object> row)
+        private bool verificarRestricciones(FilaTabla datos, List<Object> row, int nLinea)
         {
             //Por cada restriccion
             foreach (Restriccion restriccion in datos.tabla.restricciones)
@@ -337,7 +337,7 @@ namespace BasesDeDatos_Proyecto1
                         //Si ya existe la llave Primaria, no se puede agregar
                         if (yaExistePK)
                         {
-                            //Mensaje de error
+                            errores += "Error en la línea " + nLinea + ": Llave duplicada viola restricción de unicidad '" + restriccion.nombre + "'.\r\n";
                             return false;
                         }
 
@@ -351,7 +351,7 @@ namespace BasesDeDatos_Proyecto1
                     Tabla tForanea = masterTabla.getTable(nTablaF);
                     if (tForanea == null)
                     {
-                        //Mensaje de error
+                        errores += "Error en línea " + nLinea + ": La tabla '" + restriccion.tabla + "' no existe en la base de datos '" + BDenUso + "'.\r\n";
                         return false;
                     }
                     FilaTabla fTabla = new FilaTabla(tForanea, BDenUso);
@@ -371,11 +371,10 @@ namespace BasesDeDatos_Proyecto1
                         }
                         if (!banderaExiste)
                         {
-                            //Mensaje de error
+                            errores += "Error en línea " + nLinea + ": Inserción en la tabla '"+restriccion.tabla+"' viola la llave foránea '"+restriccion.nombre+"'.\r\n";
                             return false;
                         }
                     }
-                    return true;
                 }
                 //Si es Check
                 else if (restriccion.tipo.Equals("CH"))
@@ -515,7 +514,7 @@ namespace BasesDeDatos_Proyecto1
                 datos.cargar();
 
                 //Verificar las restricciones
-                bool aceptado = verificarRestricciones(datos, row);
+                bool aceptado = verificarRestricciones(datos, row, context.start.Line);
 
                 //Agregar los elementos
                 datos.mostrarTablaEnConsola();
@@ -688,7 +687,7 @@ namespace BasesDeDatos_Proyecto1
                 datos.cargar();
 
                 //Verificar las restricciones
-                bool aceptado = verificarRestricciones(datos, row);
+                bool aceptado = verificarRestricciones(datos, row, context.start.Line);
 
                 //Agregar los elementos
                 datos.mostrarTablaEnConsola();
