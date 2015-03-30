@@ -499,8 +499,8 @@ namespace BasesDeDatos_Proyecto1
                                 }
                             }
                             
-                            if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                             && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            if (datoUno is Int32
+                             && datoDos is Int32)
                             {
                                 if(((Int32) datoUno).Equals(((Int32) datoDos))){
                                     stack.Push("FALSE ");
@@ -510,8 +510,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("TRUE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Single
+                             && datoDos is Single)
                             {
                                 if (((Single)datoUno).Equals(((Single)datoDos)))
                                 {
@@ -522,8 +522,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("TRUE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            else if (datoUno is Single
+                             && datoDos is Int32)
                             {
                                 if (((Single)datoUno).Equals(((Int32)datoDos)))
                                 {
@@ -534,8 +534,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("TRUE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Int32
+                             && datoDos is Single)
                             {
                                 if (((Int32)datoUno).Equals(((Single)datoDos)))
                                 {
@@ -618,8 +618,8 @@ namespace BasesDeDatos_Proyecto1
                                 }
                             }
 
-                            if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                             && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            if (datoUno is Int32
+                             && datoDos is Int32)
                             {
                                 if (!((Int32)datoUno).Equals(((Int32)datoDos)))
                                 {
@@ -630,8 +630,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("TRUE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Single
+                             && datoDos is Single)
                             {
                                 if (!((Single)datoUno).Equals(((Single)datoDos)))
                                 {
@@ -642,8 +642,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("TRUE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            else if (datoUno is Single
+                             && datoDos is Int32)
                             {
                                 if (!((Single)datoUno).Equals(((Int32)datoDos)))
                                 {
@@ -654,8 +654,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("TRUE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Int32
+                             && datoDos is Single)
                             {
                                 if (!((Int32)datoUno).Equals(((Single)datoDos)))
                                 {
@@ -738,8 +738,8 @@ namespace BasesDeDatos_Proyecto1
                                 }
                             }
 
-                            if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                             && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            if (datoUno is Int32
+                             && datoDos is Int32)
                             {
                                 if (((Int32)datoUno).CompareTo(((Int32)datoDos)) >= 0)
                                 {
@@ -750,8 +750,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Single
+                             && datoDos is Single)
                             {
                                 if (((Single)datoUno).CompareTo(((Single)datoDos)) >= 0)
                                 {
@@ -762,8 +762,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            else if (datoUno is Single
+                             && datoDos is Int32)
                             {
                                 if (((Single)datoUno).CompareTo(((Int32)datoDos)) >= 0)
                                 {
@@ -774,8 +774,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Int32
+                             && datoDos is Single)
                             {
                                 if (((Int32)datoUno).CompareTo(((Single)datoDos)) >= 0)
                                 {
@@ -786,7 +786,7 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("DATE"))
+                            else if (isDate((String)datoUno) && isDate((String)datoDos))
                             {
                                 DateTime primera = Convert.ToDateTime(((String)datoUno));
                                 DateTime segunda = Convert.ToDateTime(((String)datoDos));
@@ -872,8 +872,8 @@ namespace BasesDeDatos_Proyecto1
                                 }
                             }
 
-                            if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                             && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            if (datoUno is Int32
+                             && datoDos is Int32)
                             {
                                 if (((Int32)datoUno).CompareTo(((Int32)datoDos)) <= 0)
                                 {
@@ -884,8 +884,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Single
+                             && datoDos is Single)
                             {
                                 if (((Single)datoUno).CompareTo(((Single)datoDos)) <= 0)
                                 {
@@ -896,8 +896,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            else if (datoUno is Single
+                             && datoDos is Int32)
                             {
                                 if (((Single)datoUno).CompareTo(((Int32)datoDos)) <= 0)
                                 {
@@ -908,8 +908,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Int32
+                             && datoDos is Single)
                             {
                                 if (((Int32)datoUno).CompareTo(((Single)datoDos)) <= 0)
                                 {
@@ -920,7 +920,7 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("DATE"))
+                            else if (isDate((String)datoUno) && isDate((String)datoDos))
                             {
                                 DateTime primera = Convert.ToDateTime(((String)datoUno));
                                 DateTime segunda = Convert.ToDateTime(((String)datoDos));
@@ -1006,8 +1006,8 @@ namespace BasesDeDatos_Proyecto1
                                 }
                             }
 
-                            if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                             && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            if (datoUno is Int32
+                             && datoDos is Int32)
                             {
                                 if (((Int32)datoUno).CompareTo(((Int32)datoDos)) > 0)
                                 {
@@ -1018,8 +1018,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Single
+                             && datoDos is Single)
                             {
                                 if (((Single)datoUno).CompareTo(((Single)datoDos)) > 0)
                                 {
@@ -1030,8 +1030,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            else if (datoUno is Single
+                             && datoDos is Int32)
                             {
                                 if (((Single)datoUno).CompareTo(((Int32)datoDos)) > 0)
                                 {
@@ -1042,8 +1042,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Int32
+                             && datoDos is Single)
                             {
                                 if (((Int32)datoUno).CompareTo(((Single)datoDos)) > 0)
                                 {
@@ -1054,7 +1054,7 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("DATE"))
+                            else if (isDate((String)datoUno) && isDate((String)datoDos))
                             {
                                 DateTime primera = Convert.ToDateTime(((String)datoUno));
                                 DateTime segunda = Convert.ToDateTime(((String)datoDos));
@@ -1140,8 +1140,8 @@ namespace BasesDeDatos_Proyecto1
                                 }
                             }
 
-                            if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                             && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            if (datoUno is Int32
+                             && datoDos is Int32)
                             {
                                 if (((Int32)datoUno).CompareTo(((Int32)datoDos)) < 0)
                                 {
@@ -1152,8 +1152,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Single
+                             && datoDos is Single)
                             {
                                 if (((Single)datoUno).CompareTo(((Single)datoDos)) < 0)
                                 {
@@ -1164,8 +1164,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                            else if (datoUno is Single
+                             && datoDos is Int32)
                             {
                                 if (((Single)datoUno).CompareTo(((Int32)datoDos)) < 0)
                                 {
@@ -1176,8 +1176,8 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("INT")
-                                  && datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                            else if (datoUno is Int32
+                             && datoDos is Single)
                             {
                                 if (((Int32)datoUno).CompareTo(((Single)datoDos)) < 0)
                                 {
@@ -1188,7 +1188,7 @@ namespace BasesDeDatos_Proyecto1
                                     stack.Push("FALSE ");
                                 }
                             }
-                            else if (datos.tabla.tipos_columnas[indexUno].Equals("DATE"))
+                            else if (isDate((String)datoUno) && isDate((String)datoDos))
                             {
                                 DateTime primera = Convert.ToDateTime(((String)datoUno));
                                 DateTime segunda = Convert.ToDateTime(((String)datoDos));
