@@ -328,9 +328,39 @@ namespace BasesDeDatos_Proyecto1
                         //El ciclo para cuando se analizan todos o se encuentra uno distinto
                         while (yaExistePK && i < indices.Count)
                         {
-                            if (!fila[i].Equals(row[i]))
+                            MsgPack.MessagePackObject enTabla = (MsgPack.MessagePackObject) fila[indices[i]];
+                            MsgPack.MessagePackObject porAgregar = (MsgPack.MessagePackObject)fila[indices[i]];
+                            if (datos.tabla.tipos_columnas[indices[i]].Equals("INT"))
                             {
-                                yaExistePK  = false;
+                                if (!(enTabla.AsInt32()
+                             .Equals(porAgregar.AsInt32())))
+                                {
+                                    yaExistePK = false;
+                                }
+                            }
+                            else if (datos.tabla.tipos_columnas[indices[i]].Equals("FLOAT"))
+                            {
+                                if (!(enTabla.AsSingle()
+                             .Equals(porAgregar.AsSingle())))
+                                {
+                                    yaExistePK = false;
+                                }
+                            }
+                            else if (datos.tabla.tipos_columnas[indices[i]].Equals("DATE"))
+                            {
+                                if (!(enTabla.AsString()
+                             .Equals(porAgregar.AsString())))
+                                {
+                                    yaExistePK = false;
+                                }
+                            }
+                            else if (datos.tabla.tipos_columnas[indices[i]].StartsWith("CHAR"))
+                            {
+                                if (!(enTabla.AsString()
+                             .Equals(porAgregar.AsString())))
+                                {
+                                    yaExistePK = false;
+                                }
                             }
                             i++;
                         }
