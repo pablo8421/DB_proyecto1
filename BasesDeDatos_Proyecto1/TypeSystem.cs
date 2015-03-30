@@ -101,24 +101,24 @@ namespace BasesDeDatos_Proyecto1
         {
             if (context.ChildCount == 1)
             {
-                if (context.STRING() != null)
+                if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(0)).symbol.Type == SqlParser.STRING)
                 {
                     if( isDate(context.STRING().GetText()))
                     {
-                        return "DATE " + context.STRING().GetText();
+                        return "DATE " + context.GetChild(0).GetText();
                     }
                     else
                     {
-                        return "CHAR " + context.STRING().GetText();
+                        return "CHAR " + context.GetChild(0).GetText();
                     }
                 }
-                if (context.FLOAT() != null)
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(0)).symbol.Type == SqlParser.FLOAT)
                 {
-                    return "FLOAT " + context.FLOAT().GetText();
+                    return "FLOAT " + context.GetChild(0).GetText();
                 }
-                if (context.INT() != null)
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(0)).symbol.Type == SqlParser.INT)
                 {
-                    return "INT " + context.INT().GetText();
+                    return "INT " + context.GetChild(0).GetText();
                 }
                 else
                 {
@@ -128,24 +128,24 @@ namespace BasesDeDatos_Proyecto1
             else
             {
                 String propio;
-                if (context.STRING() != null)
+                if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.STRING)
                 {
-                    if (isDate(context.STRING().GetText()))
+                    if (isDate(context.GetChild(2).GetText()))
                     {
-                        propio = "DATE " + context.STRING().GetText();
+                        propio = "DATE " + context.GetChild(2).GetText();
                     }
                     else
                     {
-                        propio = "CHAR " + context.STRING().GetText();
+                        propio = "CHAR " + context.GetChild(2).GetText();
                     }
                 }
-                if (context.FLOAT() != null)
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.FLOAT)
                 {
-                    propio = "FLOAT " + context.FLOAT().GetText();
+                    propio = "FLOAT " + context.GetChild(2).GetText();
                 }
-                if (context.INT() != null)
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.INT)
                 {
-                    propio = "INT " + context.INT().GetText();
+                    propio = "INT " + context.GetChild(2).GetText();
                 }
                 else
                 {
@@ -281,7 +281,76 @@ namespace BasesDeDatos_Proyecto1
                               ")." + Environment.NewLine;
                     return "Error";
                 }
-                //TODO verificar si los tipos concuerdan entre ellos, tambien la conversion implicita
+                //Separar los tipos y valores en listas
+                List<String> listaValores = new List<String>();
+                List<String> listaTipos = new List<String>();
+
+                foreach(String elemento in valores){
+                    String[] valoresSeparado = elemento.Split(' ');
+                    listaTipos.Add(valoresSeparado[0]);
+                    listaValores.Add(valoresSeparado[1]);
+                }
+                //Verificar si los tipos concuerdan o la conversion implicita entre los tipos
+                for (int i = 0; i < listaTipos.Count; i++ ) 
+                {
+                    if (!(listaTipos[i].Equals(tabla.tipos_columnas[i]) 
+                      || (listaTipos[i].Equals("INT") && tabla.tipos_columnas[i].Equals("FLOAT"))
+                      || (listaTipos[i].Equals("FLOAT") && tabla.tipos_columnas[i].Equals("INT"))
+                      || (listaTipos[i].StartsWith("CHAR") && tabla.tipos_columnas[i].StartsWith("CHAR"))))
+                      //Deberia haber conversion implicita de DATE guardado en Char?
+                    {
+                        errores = "Error en línea " + context.start.Line +
+                                  ": El tipo del valor '" + listaValores[i] +
+                                  "' no concuerda con el tipo de la columna '" + tabla.tipos_columnas[i] + 
+                                  "' (" + listaTipos[i] +
+                                  "," + tabla.tipos_columnas[i] +
+                                  ")." + Environment.NewLine;
+                        return "Error";
+
+                    }
+                }
+                //Generar lo que se va a agregar
+                List<Object> row = new List<Object>();
+                for (int i = 0; i < listaValores.Count; i++)
+                {
+                    if (listaTipos[i].Equals("INT"))
+                    {
+                        row.Add(Convert.ToInt32(listaValores[i]));
+                    }
+                    else if (listaTipos[i].Equals("FLOAT"))
+                    {
+                        row.Add(Convert.ToSingle(listaValores[i]));
+                    }
+                    else if (listaTipos[i].Equals("DATE"))
+                    {
+                        row.Add(Convert.ToString(listaValores[i].Substring(1,listaValores[i].Length - 2)));
+                    }
+                    else if (listaTipos[i].StartsWith("CHAR"))
+                    {
+                        String tipo = tabla.tipos_columnas[i];
+                        tipo = tipo.Substring(5);
+                        tipo = tipo.Substring(0, tipo.Length - 1);
+                        int largo = Convert.ToInt32(tipo);
+
+                        String elemento = listaValores[i].Substring(1, listaValores[i].Length - 2);
+                        if (elemento.Length > largo)
+                        {
+                            elemento = elemento.Substring(0, largo);
+                            //Cambiar el tamaño
+                            row.Add(elemento);
+                        }
+                        else
+                        {
+                            row.Add(elemento);
+                        }
+                    }
+
+                }
+                //TODO Agregar los elementos
+                FilaTabla datos = new FilaTabla(tabla, BDenUso);
+                datos.cargar();
+                
+
             }
             //Con id_completo de columnas
             else
