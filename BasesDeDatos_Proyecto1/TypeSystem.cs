@@ -409,6 +409,7 @@ namespace BasesDeDatos_Proyecto1
                 //Si es Check
                 else if (restriccion.tipo.Equals("CH"))
                 {
+                    //TODO todo esto
                     return true;
                 }
                 else
