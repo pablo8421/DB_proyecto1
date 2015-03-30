@@ -32,16 +32,22 @@ namespace BasesDeDatos_Proyecto1
             this.restricciones = restricciones;
         }
 
-        public void generarColumnas(List<String> columnas)
+        public bool generarColumnas(List<String> columnas)
         {
             this.columnas = new List<String>();
             tipos_columnas= new List<String>();
             foreach (String columna in columnas)
             {
                 String[] tupla = columna.Split(' ');
+                if (this.columnas.Contains(tupla[0]))
+                {
+                    this.columnas[0] = tupla[0];
+                    return false;
+                }
                 tipos_columnas.Add(tupla[1]);
                 this.columnas.Add(tupla[0]);
             }
+            return true;
         }
     }
 }

@@ -36,6 +36,65 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitId_completo(SqlParser.Id_completoContext context)
         {
+            bool agregado = false;
+            if (context.ChildCount == 1)
+            {
+                //Verificar si el ID esta, de que tabla es y si esta duplicado
+                String retorno = "";
+                String col = context.GetChild(0).GetText();
+                foreach(Tabla tabla in ListaTablas){
+                    if (tabla.columnas.Contains(col))
+                    {
+                        if (!agregado)
+                        {
+                            retorno = tabla.nombre + "." + col;
+                            agregado = true;
+                        }
+                        else
+                        {
+                            String tablas = "("+retorno.Replace("."+col,"")+","+tabla.nombre+")";
+                            errores += "Error en línea " + context.start.Line +
+                                       ": Existe mas de una posible referencia a la columna '" + col +
+                                       " "+ tablas +"'." + Environment.NewLine;
+                            return "";
+                        }
+                    }
+                }
+                return retorno;
+            }
+            else
+            {
+                //Verificar si el ID esta, de que tabla es y si esta duplicado, para el hijo
+                String retornoHijo = Visit(context.GetChild(0));
+                if (retornoHijo.Equals(""))
+                {
+                    return "";
+                }
+
+                //Verificar si el ID esta, de que tabla es y si esta duplicado
+                String retornoID = "";
+                String col = context.GetChild(2).GetText();
+                foreach (Tabla tabla in ListaTablas)
+                {
+                    if (tabla.columnas.Contains(col))
+                    {
+                        if (!agregado)
+                        {
+                            retornoID = tabla.nombre + "." + col;
+                            agregado = true;
+                        }
+                        else
+                        {
+                            String tablas = "(" + retornoID.Replace("." + col, "") + "," + tabla.nombre + ")";
+                            errores += "Error en línea " + context.start.Line +
+                                       ": Existe mas de una posible referencia a la columna '" + col +
+                                       " " + tablas + "'." + Environment.NewLine;
+                            return "";
+                        }
+                    }
+                }
+                return retornoHijo + "," + retornoID;
+            }
             throw new NotImplementedException();
         }
 
@@ -319,6 +378,7 @@ namespace BasesDeDatos_Proyecto1
             try
             {
                 mTabla = (MasterTabla)serializer.Deserialize(reader);
+                masterTabla = mTabla;
             }
             catch (Exception e)
             {
@@ -462,7 +522,175 @@ namespace BasesDeDatos_Proyecto1
             //Con id_completo de columnas
             else
             {
+                Tabla tabla = mTabla.getTable(nombre);
 
+                //Verificar que exista la tabla
+                if (tabla == null)
+                {
+                    errores = "Error en línea " + context.start.Line +
+                              ": La tabla '" + nombre +
+                              "' no existe en la base de datos '" + BDenUso +
+                              "'." + Environment.NewLine;
+                    return "Error";
+                }
+                //Obtener las columnas a las cuales insertar
+                ListaTablas = new List<Tabla>();
+                ListaTablas.Add(tabla);
+                String columnasSelectas = Visit(context.GetChild(4));
+                if (columnasSelectas.Equals(""))
+                {
+                    return "Error";
+                }
+                String[] listaColumnas = columnasSelectas.Replace(tabla.nombre+".","").Split(','); 
+
+                //Obtener valores a insertar 
+                String[] valores = Regex.Split(Visit(context.GetChild(5)), ",(?=(?:[^']*'[^']*')*[^']*$)"); ;
+                if (valores.Length != listaColumnas.Length)
+                {
+                    errores = "Error en línea " + context.start.Line +
+                              ": La cantidad de columnas selectas en la tabla '" + tabla.nombre +
+                              "' no concuerda con la cantidad de valores ingresados  (" + valores.Length +
+                              "," + listaColumnas.Length +
+                              ")." + Environment.NewLine;
+                    return "Error";
+                }
+                //Separar los tipos y valores en listas
+                List<String> listaValores = new List<String>();
+                List<String> listaTipos = new List<String>();
+
+                foreach (String elemento in valores)
+                {
+                    String tipo = elemento.Substring(0, 5).Trim();
+                    String valor = elemento.Substring(5);
+                    listaTipos.Add(tipo);
+                    listaValores.Add(valor);
+                }
+                //Verificar si los tipos concuerdan o la conversion implicita entre los tipos
+                for (int i = 0; i < listaTipos.Count; i++)
+                {
+                    int indice = tabla.columnas.IndexOf(listaColumnas[i]);
+                    if (!(listaTipos[i].Equals(tabla.tipos_columnas[indice])
+                      || (listaTipos[i].Equals("INT") && tabla.tipos_columnas[indice].Equals("FLOAT"))
+                      || (listaTipos[i].Equals("FLOAT") && tabla.tipos_columnas[indice].Equals("INT"))
+                      || (listaTipos[i].StartsWith("CHAR") && tabla.tipos_columnas[indice].StartsWith("CHAR"))))
+                    //Deberia haber conversion implicita de DATE guardado en Char?
+                    {
+                        errores = "Error en línea " + context.start.Line +
+                                  ": El tipo del valor '" + listaValores[i] +
+                                  "' no concuerda con el tipo de la columna '" + tabla.tipos_columnas[indice] +
+                                  "' (" + listaTipos[i] +
+                                  "," + tabla.tipos_columnas[indice] +
+                                  ")." + Environment.NewLine;
+                        return "Error";
+
+                    }
+                }
+
+                //Generar lo que se va a agregar
+                List<String> listaCol = new List<String>(listaColumnas);
+                List<Object> row = new List<Object>();
+                for (int i = 0; i < tabla.columnas.Count; i++)
+                {
+                    if (listaCol.Contains(tabla.columnas[i]))
+                    {
+                        //Saber que valor se va a agregar aqui
+                        int indice = listaCol.IndexOf(tabla.columnas[i]);
+
+                        //Se agrega el valor segun el tipo
+                        if (listaTipos[i].Equals("INT"))
+                        {
+                            row.Add(Convert.ToInt32(listaValores[indice]));
+                        }
+                        else if (listaTipos[i].Equals("FLOAT"))
+                        {
+                            row.Add(Convert.ToSingle(listaValores[indice]));
+                        }
+                        else if (listaTipos[i].Equals("DATE"))
+                        {
+                            row.Add(Convert.ToString(listaValores[indice].Substring(1, listaValores[indice].Length - 2)));
+                        }
+                        else if (listaTipos[i].StartsWith("CHAR"))
+                        {
+                            String tipo = tabla.tipos_columnas[i];
+                            tipo = tipo.Substring(5);
+                            tipo = tipo.Substring(0, tipo.Length - 1);
+                            int largo = Convert.ToInt32(tipo);
+
+                            String elemento = listaValores[indice].Substring(1, listaValores[indice].Length - 2);
+                            //Revisar si no se pasa del tamaño establecido por la columna
+                            if (elemento.Length > largo)
+                            {
+                                elemento = elemento.Substring(0, largo);
+                                row.Add(elemento);
+                            }
+                            else
+                            {
+                                row.Add(elemento);
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        //Se agrega el valor default
+                        if (listaTipos[i].Equals("INT"))
+                        {
+                            row.Add(0);
+                        }
+                        else if (listaTipos[i].Equals("FLOAT"))
+                        {
+                            row.Add(Convert.ToSingle(0.0));
+                        }
+                        else if (listaTipos[i].Equals("DATE"))
+                        {
+                            DateTime myDateTime = DateTime.Now;
+                            row.Add(myDateTime.ToString("yyyy-MM-dd"));
+                        }
+                        else if (listaTipos[i].StartsWith("CHAR"))
+                        {
+                            row.Add("");
+                        }
+                    }
+
+
+                }
+
+                //Cargar la tabla
+                FilaTabla datos = new FilaTabla(tabla, BDenUso);
+                datos.cargar();
+
+                //Verificar las restricciones
+                bool aceptado = verificarRestricciones(datos, row);
+
+                //Agregar los elementos
+                datos.mostrarTablaEnConsola();
+                datos.agregarFila(row);
+                datos.guardar();
+
+                //Serializar masterTabla
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, mTabla);
+                myWriter.Close();
+
+                //Deserealizar masterBD
+                MasterBD bdatos;
+                serializer = new XmlSerializer(typeof(MasterBD));
+                reader = new StreamReader("Databases\\masterBDs.xml");
+                bdatos = (MasterBD)serializer.Deserialize(reader);
+                reader.Close();
+
+                //Actualizar cantidad de registros
+                bdatos.getBD(BDenUso).registros++;
+
+                //Serializar masterBD
+                mySerializer = new XmlSerializer(typeof(MasterBD));
+                myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                mySerializer.Serialize(myWriter, bdatos);
+                myWriter.Close();
+
+                mensajes += "Se han insertado los datos(" + row.Count + ") en la tabla '" + tabla.nombre + "' exitosamente." + Environment.NewLine;
+                return "void";
             }
             throw new NotImplementedException();
         }
@@ -1552,7 +1780,12 @@ namespace BasesDeDatos_Proyecto1
             }
 
             //Generar las columnas
-            nueva.generarColumnas(columnas);
+            if (!nueva.generarColumnas(columnas))
+            {
+                errores += "Error en línea " + context.start.Line +
+                           ": Se declararon dos columnas con el mismo nombre '" + nueva.columnas[0] + "'." + Environment.NewLine;
+                return "Error";
+            }
 
             //Deserealizar el archivo maestro de tablas
             MasterTabla mTabla;
