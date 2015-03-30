@@ -346,11 +346,13 @@ namespace BasesDeDatos_Proyecto1
                     }
 
                 }
-                //TODO Agregar los elementos
+                //Agregar los elementos
                 FilaTabla datos = new FilaTabla(tabla, BDenUso);
                 datos.cargar();
-                
-
+                datos.agregarFila(row);
+                datos.guardar();
+                //TODO verificar si hay algo mas que agregar aqui, creo que hay que serialiar el masterTable
+                return "void";
             }
             //Con id_completo de columnas
             else

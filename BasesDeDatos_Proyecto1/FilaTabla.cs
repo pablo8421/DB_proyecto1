@@ -86,34 +86,13 @@ namespace BasesDeDatos_Proyecto1
             } 
         }
 
-        public void agregarFila(List<String> fila)
+        public void agregarFila(List<Object> fila)
         {
-            List<Object> row = new List<Object>();
-            int i = 0;
-            foreach (String elemento in fila)
-            {
-                if (tabla.tipos_columnas[i].Equals("INT"))
-                {
-                    row.Add(Convert.ToInt32(elemento));
-                }
-                if (tabla.tipos_columnas[i].Equals("FLOAT"))
-                {
-                    row.Add(Convert.ToSingle(elemento));
-                }
-                if (tabla.tipos_columnas[i].Equals("DATE"))
-                {
-                    row.Add(elemento);
-                }
-                if (tabla.tipos_columnas[i].StartsWith("CHAR"))
-                {
-                    row.Add(elemento);
-                }
-                i++;
-            }
             tabla.cantidad_registros++;
-
-            datos.elementos.Add(row);
+            datos.elementos.Add(fila);
+            //TODO actualizar la cantidad de registros en otro lado. 
         }
+
 
         public void mostrarTablaEnConsola()
         {
