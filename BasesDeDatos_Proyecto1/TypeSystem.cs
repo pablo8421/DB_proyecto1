@@ -179,17 +179,26 @@ namespace BasesDeDatos_Proyecto1
                     String pathNuevo = "Databases\\" + BDenUso + "\\" + nuevoNombre + ".dat";
                     System.IO.File.Move(pathViejo, pathNuevo);
 
-                    XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                    StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                    mySerializer.Serialize(myWriter, masterTabla);
-                    myWriter.Close();
-
-                    mensajes += "Se ha renombrado la tabla '" + nombre + "' a '" + nuevoNombre + "' con éxito.\r\n";
-
                     break;
                 }
             }
-            
+
+            foreach (Tabla t in masterTabla.tablas)
+            {
+                foreach (Restriccion r in t.restricciones)
+                {
+                    if (r.tabla.Equals(nombre))
+                        r.tabla = nuevoNombre;
+                }   
+            }
+
+            XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+            StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+            mySerializer.Serialize(myWriter, masterTabla);
+            myWriter.Close();
+
+            mensajes += "Se ha renombrado la tabla '" + nombre + "' a '" + nuevoNombre + "' con éxito.\r\n";
+
             return "void";
         }
 
@@ -1731,14 +1740,23 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
             }
+            
+
             String nombrePK = context.GetChild(0).GetText();
             Tabla tActual = ListaTablas[0];
             foreach (Restriccion r in tActual.restricciones)
+            {
                 if (r.nombre.Equals(nombrePK))
                 {
-                    errores += "Error en línea "+context.start.Line+": El nombre '"+nombrePK+"' ya es utilizado en otra restriccion dentro de la tabla '"+tActual.nombre+"'.\r\n";
+                    errores += "Error en línea " + context.start.Line + ": El nombre '" + nombrePK + "' ya es utilizado en otra restriccion dentro de la tabla '" + tActual.nombre + "'.\r\n";
                     return "Error";
                 }
+                if (r.tipo.Equals("PK"))
+                {
+                    errores += "Error en línea " + context.start.Line + ": No se pueden admitir dos llaves primarias en la tabla '" + tActual.nombre + "'.\r\n";
+                    return "Error";
+                }
+            }
             restriccion.nombre = nombrePK;
 
             ListaTablas[0].restricciones.Add(restriccion);
