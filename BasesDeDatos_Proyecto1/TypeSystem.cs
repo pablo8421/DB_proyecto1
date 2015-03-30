@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -114,11 +115,11 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(0)).symbol.Type == SqlParser.FLOAT)
                 {
-                    return "FLOAT " + context.GetChild(0).GetText();
+                    return "FLOAT" + context.GetChild(0).GetText();
                 }
                 else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(0)).symbol.Type == SqlParser.INT)
                 {
-                    return "INT " + context.GetChild(0).GetText();
+                    return "INT  " + context.GetChild(0).GetText();
                 }
                 else
                 {
@@ -141,11 +142,11 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.FLOAT)
                 {
-                    propio = "FLOAT " + context.GetChild(2).GetText();
+                    propio = "FLOAT" + context.GetChild(2).GetText();
                 }
                 else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.INT)
                 {
-                    propio = "INT " + context.GetChild(2).GetText();
+                    propio = "INT  " + context.GetChild(2).GetText();
                 }
                 else
                 {
@@ -278,12 +279,12 @@ namespace BasesDeDatos_Proyecto1
                 //Si es llave foranea
                 else if (restriccion.tipo.Equals("FK"))
                 {
-                    
+                    return true;
                 }
                 //Si es Check
                 else if (restriccion.tipo.Equals("CH"))
                 {
-
+                    return true;
                 }
                 else
                 {
@@ -333,8 +334,8 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
 
-                //Obtener valores a insertar
-                String[] valores= Visit(context.GetChild(5)).Split(',');
+                //Obtener valores a insertar 
+                String[] valores= Regex.Split(Visit(context.GetChild(5)), ",(?=(?:[^']*'[^']*')*[^']*$)");;
                 if (valores.Length != tabla.columnas.Count)
                 {
                     errores = "Error en línea " + context.start.Line +
@@ -348,11 +349,12 @@ namespace BasesDeDatos_Proyecto1
                 List<String> listaValores = new List<String>();
                 List<String> listaTipos = new List<String>();
 
-                foreach(String elemento in valores){
-                    //El split tal vez habria que cambiarlo para String que contengan espacio
-                    String[] valoresSeparado = elemento.Split(' ');
-                    listaTipos.Add(valoresSeparado[0]);
-                    listaValores.Add(valoresSeparado[1]);
+                foreach(String elemento in valores)
+                {
+                    String tipo = elemento.Substring(0, 5).Trim();
+                    String valor = elemento.Substring(5);
+                    listaTipos.Add(tipo);
+                    listaValores.Add(valor);
                 }
                 //Verificar si los tipos concuerdan o la conversion implicita entre los tipos
                 for (int i = 0; i < listaTipos.Count; i++ ) 
@@ -419,7 +421,8 @@ namespace BasesDeDatos_Proyecto1
                 bool aceptado = verificarRestricciones(datos, row);
 
                 //Agregar los elementos
-                datos.agregarFila(row);
+                datos.mostrarTablaEnConsola();
+                datos.agregarFila(row);                
                 datos.guardar();
                 
                 //Serializar masterTabla
