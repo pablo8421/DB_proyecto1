@@ -329,11 +329,11 @@ namespace BasesDeDatos_Proyecto1
                         while (yaExistePK && i < indices.Count)
                         {
                             MsgPack.MessagePackObject enTabla = (MsgPack.MessagePackObject) fila[indices[i]];
-                            MsgPack.MessagePackObject porAgregar = (MsgPack.MessagePackObject)fila[indices[i]];
+                            Object porAgregar = (Object) row[indices[i]];
                             if (datos.tabla.tipos_columnas[indices[i]].Equals("INT"))
                             {
                                 if (!(enTabla.AsInt32()
-                             .Equals(porAgregar.AsInt32())))
+                             .Equals(((Int32)porAgregar))))
                                 {
                                     yaExistePK = false;
                                 }
@@ -341,7 +341,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datos.tabla.tipos_columnas[indices[i]].Equals("FLOAT"))
                             {
                                 if (!(enTabla.AsSingle()
-                             .Equals(porAgregar.AsSingle())))
+                             .Equals(((Single)porAgregar))))
                                 {
                                     yaExistePK = false;
                                 }
@@ -349,7 +349,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datos.tabla.tipos_columnas[indices[i]].Equals("DATE"))
                             {
                                 if (!(enTabla.AsString()
-                             .Equals(porAgregar.AsString())))
+                             .Equals(((String)porAgregar))))
                                 {
                                     yaExistePK = false;
                                 }
@@ -357,7 +357,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datos.tabla.tipos_columnas[indices[i]].StartsWith("CHAR"))
                             {
                                 if (!(enTabla.AsString()
-                             .Equals(porAgregar.AsString())))
+                             .Equals(((String)porAgregar))))
                                 {
                                     yaExistePK = false;
                                 }
