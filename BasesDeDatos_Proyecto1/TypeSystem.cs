@@ -236,6 +236,63 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        private bool verificarRestricciones(FilaTabla datos, List<Object> row)
+        {
+            //Por cada restriccion
+            foreach (Restriccion restriccion in datos.tabla.restricciones)
+            {
+                //Si es llave primaria
+                if (restriccion.tipo.Equals("PK"))
+                {
+                    //Obtener los indices de la llave primaria
+                    List<int> indices = new List<int>();
+                    foreach (String columna in restriccion.columnasPropias)
+                    {
+                        indices.Add(datos.tabla.columnas.IndexOf(columna));
+                    }
+                    //Revisar para cada fila en la tabla
+                    foreach (List<Object> fila in datos.datos.elementos)
+                    {
+                        bool yaExistePK = true;
+                        int i = 0;
+                        //Mientras los datos sean los mismos, se siguen evaluando los datos
+                        //El ciclo para cuando se analizan todos o se encuentra uno distinto
+                        while (yaExistePK && i < indices.Count)
+                        {
+                            if (!fila[i].Equals(row[i]))
+                            {
+                                yaExistePK  = false;
+                            }
+                            i++;
+                        }
+                        //Si ya existe la llave Primaria, no se puede agregar
+                        if (yaExistePK)
+                        {
+                            //Mensaje de error
+                            return false;
+                        }
+
+                    }
+
+                }
+                //Si es llave foranea
+                else if (restriccion.tipo.Equals("FK"))
+                {
+                    
+                }
+                //Si es Check
+                else if (restriccion.tipo.Equals("CH"))
+                {
+
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            return true;
+        }
+
         override
         public string VisitInsert(SqlParser.InsertContext context)
         {
@@ -333,10 +390,10 @@ namespace BasesDeDatos_Proyecto1
                         int largo = Convert.ToInt32(tipo);
 
                         String elemento = listaValores[i].Substring(1, listaValores[i].Length - 2);
+                        //Revisar si no se pasa del tamaño establecido por la columna
                         if (elemento.Length > largo)
                         {
                             elemento = elemento.Substring(0, largo);
-                            //Cambiar el tamaño
                             row.Add(elemento);
                         }
                         else
@@ -346,12 +403,43 @@ namespace BasesDeDatos_Proyecto1
                     }
 
                 }
-                //Agregar los elementos
+ 
+                //Cargar la tabla
                 FilaTabla datos = new FilaTabla(tabla, BDenUso);
                 datos.cargar();
+
+                //Verificar las restricciones
+                bool aceptado = verificarRestricciones(datos, row);
+
+                //Agregar los elementos
                 datos.agregarFila(row);
                 datos.guardar();
-                //TODO verificar si hay algo mas que agregar aqui, creo que hay que serialiar el masterTable
+
+                //TODO verificar si hay algo mas que agregar aqui
+                
+                //Serializar masterTabla
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, mTabla);
+                myWriter.Close();
+                
+                //Deserealizar masterBD
+                MasterBD bdatos;
+                serializer = new XmlSerializer(typeof(MasterBD));
+                reader = new StreamReader("Databases\\masterBDs.xml");
+                bdatos = (MasterBD)serializer.Deserialize(reader);
+                reader.Close();
+
+                //Actualizar cantidad de registros
+                bdatos.getBD(BDenUso).registros++;
+
+                //Serializar masterBD
+                mySerializer = new XmlSerializer(typeof(MasterBD));
+                myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                mySerializer.Serialize(myWriter, bdatos);
+                myWriter.Close();
+
+                mensajes += "Se han insertado los datos en la tabla '" + tabla.nombre + "' exitosamente."+ Environment.NewLine;
                 return "void";
             }
             //Con id_completo de columnas

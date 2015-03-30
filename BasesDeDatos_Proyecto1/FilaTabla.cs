@@ -90,7 +90,6 @@ namespace BasesDeDatos_Proyecto1
         {
             tabla.cantidad_registros++;
             datos.elementos.Add(fila);
-            //TODO actualizar la cantidad de registros en otro lado. 
         }
 
 
