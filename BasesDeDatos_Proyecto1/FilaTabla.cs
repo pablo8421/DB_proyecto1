@@ -66,19 +66,19 @@ namespace BasesDeDatos_Proyecto1
         {
             if (tabla.tipos_columnas[columna].Equals("INT"))
             {
-                return (Int32) datos.elementos[row][columna];
+                return  ((MsgPack.MessagePackObject) datos.elementos[row][columna]).AsInt32();
             }
             else if (tabla.tipos_columnas[columna].Equals("FLOAT"))
             {
-                return (Single) datos.elementos[row][columna];
+                return ((MsgPack.MessagePackObject)datos.elementos[row][columna]).AsSingle();
             }
             else if (tabla.tipos_columnas[columna].Equals("DATE"))
             {
-                return (String)datos.elementos[row][columna];
+                return ((MsgPack.MessagePackObject)datos.elementos[row][columna]).AsString();
             }
             else if (tabla.tipos_columnas[columna].StartsWith("CHAR"))
             {
-                return (String) datos.elementos[row][columna];
+                return ((MsgPack.MessagePackObject)datos.elementos[row][columna]).AsString();
             }
             else
             {

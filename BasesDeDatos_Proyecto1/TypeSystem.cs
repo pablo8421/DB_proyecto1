@@ -515,6 +515,10 @@ namespace BasesDeDatos_Proyecto1
 
                 //Verificar las restricciones
                 bool aceptado = verificarRestricciones(datos, row, context.start.Line);
+                if (!aceptado)
+                {
+                    return "Error";
+                }
 
                 //Agregar los elementos
                 datos.mostrarTablaEnConsola();
@@ -688,7 +692,10 @@ namespace BasesDeDatos_Proyecto1
 
                 //Verificar las restricciones
                 bool aceptado = verificarRestricciones(datos, row, context.start.Line);
-
+                if (!aceptado)
+                {
+                    return "Error";
+                }
                 //Agregar los elementos
                 datos.mostrarTablaEnConsola();
                 datos.agregarFila(row);
