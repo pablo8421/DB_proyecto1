@@ -663,6 +663,7 @@ namespace BasesDeDatos_Proyecto1
                 MasterBD masterDB = deserializarMasterBD();
                 BaseDatos bd = masterDB.getBD(BDenUso);
                 bd.cantidad_tablas--;
+                bd.registros = bd.registros - tabla.cantidad_registros;
 
                 mySerializer = new XmlSerializer(typeof(MasterBD));
                 myWriter = new StreamWriter("Databases\\masterBDs.xml");
