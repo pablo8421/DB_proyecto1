@@ -462,16 +462,39 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 //Obtener valores a insertar 
-                String[] valores= Regex.Split(Visit(context.GetChild(5)), ",(?=(?:[^']*'[^']*')*[^']*$)");;
-                if (valores.Length != tabla.columnas.Count)
+                List<String> valores= new List<String>(Regex.Split(Visit(context.GetChild(5)), ",(?=(?:[^']*'[^']*')*[^']*$)"));
+                if (valores.Count > tabla.columnas.Count)
                 {
                     errores = "Error en línea " + context.start.Line +
                               ": La cantidad de columnas en la tabla '" + tabla.nombre +
-                              "' no concuerda con la cantidad de valores ingresados  (" + valores.Length + 
+                              "' no concuerda con la cantidad de valores ingresados  (" + valores.Count + 
                               "," + tabla.columnas.Count +
                               ")." + Environment.NewLine;
                     return "Error";
                 }
+                //Llenar los valores que faltan con lo default
+                while(valores.Count != tabla.columnas.Count)
+                {
+                    int i = valores.Count;
+                    if (tabla.tipos_columnas[i].Equals("INT"))
+                    {
+                        valores.Add("INT  0");
+                    }
+                    else if (tabla.tipos_columnas[i].Equals("FLOAT"))
+                    {
+                        valores.Add("FLOAT0.0");
+                    }
+                    else if (tabla.tipos_columnas[i].Equals("DATE"))
+                    {
+                        DateTime myDateTime = DateTime.Now;
+                        valores.Add("DATE " + myDateTime.ToString("yyyy-MM-dd"));
+                    }
+                    else if (tabla.tipos_columnas[i].StartsWith("CHAR"))
+                    {
+                        valores.Add("CHAR ");
+                    }
+                }
+
                 //Separar los tipos y valores en listas
                 List<String> listaValores = new List<String>();
                 List<String> listaTipos = new List<String>();
@@ -486,11 +509,11 @@ namespace BasesDeDatos_Proyecto1
                 //Verificar si los tipos concuerdan o la conversion implicita entre los tipos
                 for (int i = 0; i < listaTipos.Count; i++ ) 
                 {
-                    if (!(listaTipos[i].Equals(tabla.tipos_columnas[i]) 
+                    if (!(listaTipos[i].Equals(tabla.tipos_columnas[i])
+                      || (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[i].StartsWith("CHAR"))
                       || (listaTipos[i].Equals("INT") && tabla.tipos_columnas[i].Equals("FLOAT"))
                       || (listaTipos[i].Equals("FLOAT") && tabla.tipos_columnas[i].Equals("INT"))
                       || (listaTipos[i].StartsWith("CHAR") && tabla.tipos_columnas[i].StartsWith("CHAR"))))
-                      //Deberia haber conversion implicita de DATE guardado en Char?
                     {
                         errores = "Error en línea " + context.start.Line +
                                   ": El tipo del valor '" + listaValores[i] +
@@ -500,6 +523,10 @@ namespace BasesDeDatos_Proyecto1
                                   ")." + Environment.NewLine;
                         return "Error";
 
+                    }
+                    if (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[i].StartsWith("CHAR"))
+                    {
+                        listaTipos[i] = "CHAR";
                     }
                 }
                 //Generar lo que se va a agregar
@@ -632,10 +659,10 @@ namespace BasesDeDatos_Proyecto1
                 {
                     int indice = tabla.columnas.IndexOf(listaColumnas[i]);
                     if (!(listaTipos[i].Equals(tabla.tipos_columnas[indice])
+                      || (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[i].StartsWith("CHAR"))
                       || (listaTipos[i].Equals("INT") && tabla.tipos_columnas[indice].Equals("FLOAT"))
                       || (listaTipos[i].Equals("FLOAT") && tabla.tipos_columnas[indice].Equals("INT"))
                       || (listaTipos[i].StartsWith("CHAR") && tabla.tipos_columnas[indice].StartsWith("CHAR"))))
-                    //Deberia haber conversion implicita de DATE guardado en Char?
                     {
                         errores = "Error en línea " + context.start.Line +
                                   ": El tipo del valor '" + listaValores[i] +
@@ -644,7 +671,10 @@ namespace BasesDeDatos_Proyecto1
                                   "," + tabla.tipos_columnas[indice] +
                                   ")." + Environment.NewLine;
                         return "Error";
-
+                    }
+                    if (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[i].StartsWith("CHAR"))
+                    {
+                        listaTipos[i] = "CHAR";
                     }
                 }
 
