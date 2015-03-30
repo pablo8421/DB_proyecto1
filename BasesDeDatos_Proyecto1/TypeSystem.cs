@@ -347,6 +347,34 @@ namespace BasesDeDatos_Proyecto1
                 //Si es llave foranea
                 else if (restriccion.tipo.Equals("FK"))
                 {
+                    String nTablaF = restriccion.tabla;
+                    Tabla tForanea = masterTabla.getTable(nTablaF);
+                    if (tForanea == null)
+                    {
+                        //Mensaje de error
+                        return false;
+                    }
+                    FilaTabla fTabla = new FilaTabla(tForanea, BDenUso);
+                    fTabla.cargar();
+
+                    for(int cindex = 0; cindex<restriccion.columnasPropias.Count;cindex++){
+                        bool banderaExiste = false;
+                        String cP = restriccion.columnasPropias.ElementAt(cindex);
+                        String cF = restriccion.columnasForaneas.ElementAt(cindex);
+                        int index1 = fTabla.tabla.columnas.IndexOf(cF);
+                        int index2 = datos.tabla.columnas.IndexOf(cP);
+                        for (int j = 0; j < fTabla.getTamanio(); j++) {
+                            if (fTabla.getRowElement(j, index1).Equals(row.ElementAt(index2))) {
+                                banderaExiste = true;
+                                break;
+                            }
+                        }
+                        if (!banderaExiste)
+                        {
+                            //Mensaje de error
+                            return false;
+                        }
+                    }
                     return true;
                 }
                 //Si es Check
