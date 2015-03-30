@@ -491,7 +491,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                     else if (tabla.tipos_columnas[i].StartsWith("CHAR"))
                     {
-                        valores.Add("CHAR ");
+                        valores.Add("CHAR ''");
                     }
                 }
 
@@ -551,7 +551,6 @@ namespace BasesDeDatos_Proyecto1
                         tipo = tipo.Substring(5);
                         tipo = tipo.Substring(0, tipo.Length - 1);
                         int largo = Convert.ToInt32(tipo);
-
                         String elemento = listaValores[i].Substring(1, listaValores[i].Length - 2);
                         //Revisar si no se pasa del tamaño establecido por la columna
                         if (elemento.Length > largo)
