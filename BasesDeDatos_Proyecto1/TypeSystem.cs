@@ -605,7 +605,7 @@ namespace BasesDeDatos_Proyecto1
                 String[] listaColumnas = columnasSelectas.Replace(tabla.nombre+".","").Split(','); 
 
                 //Obtener valores a insertar 
-                String[] valores = Regex.Split(Visit(context.GetChild(5)), ",(?=(?:[^']*'[^']*')*[^']*$)"); ;
+                String[] valores = Regex.Split(Visit(context.GetChild(8)), ",(?=(?:[^']*'[^']*')*[^']*$)"); ;
                 if (valores.Length != listaColumnas.Length)
                 {
                     errores = "Error en línea " + context.start.Line +
@@ -658,19 +658,19 @@ namespace BasesDeDatos_Proyecto1
                         int indice = listaCol.IndexOf(tabla.columnas[i]);
 
                         //Se agrega el valor segun el tipo
-                        if (listaTipos[i].Equals("INT"))
+                        if (tabla.tipos_columnas[i].Equals("INT"))
                         {
                             row.Add(Convert.ToInt32(listaValores[indice]));
                         }
-                        else if (listaTipos[i].Equals("FLOAT"))
+                        else if (tabla.tipos_columnas[i].Equals("FLOAT"))
                         {
                             row.Add(Convert.ToSingle(listaValores[indice]));
                         }
-                        else if (listaTipos[i].Equals("DATE"))
+                        else if (tabla.tipos_columnas[i].Equals("DATE"))
                         {
                             row.Add(Convert.ToString(listaValores[indice].Substring(1, listaValores[indice].Length - 2)));
                         }
-                        else if (listaTipos[i].StartsWith("CHAR"))
+                        else if (tabla.tipos_columnas[i].StartsWith("CHAR"))
                         {
                             String tipo = tabla.tipos_columnas[i];
                             tipo = tipo.Substring(5);
@@ -694,20 +694,20 @@ namespace BasesDeDatos_Proyecto1
                     else
                     {
                         //Se agrega el valor default
-                        if (listaTipos[i].Equals("INT"))
+                        if (tabla.tipos_columnas[i].Equals("INT"))
                         {
                             row.Add(0);
                         }
-                        else if (listaTipos[i].Equals("FLOAT"))
+                        else if (tabla.tipos_columnas[i].Equals("FLOAT"))
                         {
                             row.Add(Convert.ToSingle(0.0));
                         }
-                        else if (listaTipos[i].Equals("DATE"))
+                        else if (tabla.tipos_columnas[i].Equals("DATE"))
                         {
                             DateTime myDateTime = DateTime.Now;
                             row.Add(myDateTime.ToString("yyyy-MM-dd"));
                         }
-                        else if (listaTipos[i].StartsWith("CHAR"))
+                        else if (tabla.tipos_columnas[i].StartsWith("CHAR"))
                         {
                             row.Add("");
                         }
