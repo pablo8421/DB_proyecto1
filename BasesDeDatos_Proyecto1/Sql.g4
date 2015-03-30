@@ -4,7 +4,6 @@ options {
 language=Csharp;
 }
 
-WS : [ \t\r\n]+ -> skip ;
 CREATE : 'CREATE';
 DATABASE : 'DATABASE';
 DATABASES : 'DATABASES';
@@ -174,3 +173,5 @@ select_orderBy: (ORDER BY id_completo_order)?;
 
 id_completo_order : id_completo_order ',' (IDENTIFICADOR | ID)  (ASC|DESC)?
 				 | (IDENTIFICADOR | ID) (ASC|DESC)?;
+
+WS : [ \t\r\n]+ -> skip ;
