@@ -296,6 +296,12 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitInsert(SqlParser.InsertContext context)
         {
+            if (BDenUso.Equals(""))
+            {
+                errores += "Error en línea " + context.start.Line + ": No hay base de datos en uso por lo que no se puede alterar la tabla.";
+                return "Error";
+            }
+
             //Deserealizar el archivo maestro de tablas
             MasterTabla mTabla;
             XmlSerializer serializer = new XmlSerializer(typeof(MasterTabla));
@@ -343,6 +349,7 @@ namespace BasesDeDatos_Proyecto1
                 List<String> listaTipos = new List<String>();
 
                 foreach(String elemento in valores){
+                    //El split tal vez habria que cambiarlo para String que contengan espacio
                     String[] valoresSeparado = elemento.Split(' ');
                     listaTipos.Add(valoresSeparado[0]);
                     listaValores.Add(valoresSeparado[1]);
@@ -414,8 +421,6 @@ namespace BasesDeDatos_Proyecto1
                 //Agregar los elementos
                 datos.agregarFila(row);
                 datos.guardar();
-
-                //TODO verificar si hay algo mas que agregar aqui
                 
                 //Serializar masterTabla
                 XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
@@ -439,7 +444,7 @@ namespace BasesDeDatos_Proyecto1
                 mySerializer.Serialize(myWriter, bdatos);
                 myWriter.Close();
 
-                mensajes += "Se han insertado los datos en la tabla '" + tabla.nombre + "' exitosamente."+ Environment.NewLine;
+                mensajes += "Se han insertado los datos(" + row.Count + ") en la tabla '" + tabla.nombre + "' exitosamente."+ Environment.NewLine;
                 return "void";
             }
             //Con id_completo de columnas
