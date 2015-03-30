@@ -1206,6 +1206,7 @@ namespace BasesDeDatos_Proyecto1
                 return "Error";
             }
             postfix = postfixTipo.Substring(5);
+            postfix = postfix.Replace(propia.nombre+".", "");
             //Nombrar y agregar la restriccion
 
             String nombreCH = context.GetChild(0).GetText();
