@@ -1703,10 +1703,985 @@ namespace BasesDeDatos_Proyecto1
             return "void";
         }
 
+        private bool cumpleCondicion(List<Object> row, Tabla tabla, String postfix)
+        {
+            Stack<String> stack = new Stack<String>();
+            List<String> expresiones = new List<String>(postfix.Split(' '));
+            foreach (String e in expresiones)
+            {
+                if (e.Equals("OR"))
+                {
+                    String dos = stack.Pop();
+                    String uno = stack.Pop();
+
+                    if (uno.Equals("FALSE ") && dos.Equals("FALSE "))
+                    {
+                        stack.Push("FALSE ");
+                    }
+                    else
+                    {
+                        stack.Push("TRUE ");
+                    }
+                }
+                else if (e.Equals("AND"))
+                {
+                    String dos = stack.Pop();
+                    String uno = stack.Pop();
+
+                    if (uno.Equals("TRUE ") && dos.Equals("TRUE "))
+                    {
+                        stack.Push("TRUE ");
+                    }
+                    else
+                    {
+                        stack.Push("FALSE ");
+                    }
+                }
+                else if (e.Equals("<>"))
+                {
+                    String dos = stack.Pop();
+                    String uno = stack.Pop();
+                    int indexUno = tabla.columnas.IndexOf(uno);
+                    int indexDos = tabla.columnas.IndexOf(dos);
+                    Object datoUno, datoDos;
+                    if (indexUno >= 0)
+                    {
+                        datoUno = row[indexUno];
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (uno.StartsWith("'"))
+                        {
+                            datoUno = uno.Substring(1, uno.Length - 2);
+                        }
+                        else if (int.TryParse(uno, out num))
+                        {
+                            datoUno = num;
+                        }
+                        else if (float.TryParse(uno, out numF))
+                        {
+                            datoUno = numF;
+                        }
+                        else
+                        {
+                            datoUno = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+                    if (indexDos >= 0)
+                    {
+                        datoDos = row[indexDos];
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (dos.StartsWith("'"))
+                        {
+                            datoDos = dos.Substring(1, dos.Length - 2);
+                        }
+                        else if (int.TryParse(dos, out num))
+                        {
+                            datoDos = num;
+                        }
+                        else if (float.TryParse(dos, out numF))
+                        {
+                            datoDos = numF;
+                        }
+                        else
+                        {
+                            datoDos = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+
+                    if (datoUno is Int32
+                     && datoDos is Int32)
+                    {
+                        if (((Int32)datoUno).Equals(((Int32)datoDos)))
+                        {
+                            stack.Push("FALSE ");
+                        }
+                        else
+                        {
+                            stack.Push("TRUE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Single)
+                    {
+                        if (((Single)datoUno).Equals(((Single)datoDos)))
+                        {
+                            stack.Push("FALSE ");
+                        }
+                        else
+                        {
+                            stack.Push("TRUE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Int32)
+                    {
+                        if (((Single)datoUno).Equals(((Int32)datoDos)))
+                        {
+                            stack.Push("FALSE ");
+                        }
+                        else
+                        {
+                            stack.Push("TRUE ");
+                        }
+                    }
+                    else if (datoUno is Int32
+                     && datoDos is Single)
+                    {
+                        if (((Int32)datoUno).Equals(((Single)datoDos)))
+                        {
+                            stack.Push("FALSE ");
+                        }
+                        else
+                        {
+                            stack.Push("TRUE ");
+                        }
+                    }
+                    else
+                    {
+                        if (((String)datoUno).Equals(((String)datoDos)))
+                        {
+                            stack.Push("FALSE ");
+                        }
+                        else
+                        {
+                            stack.Push("TRUE ");
+                        }
+                    }
+                }
+                else if (e.Equals("="))
+                {
+                    String dos = stack.Pop();
+                    String uno = stack.Pop();
+                    int indexUno = tabla.columnas.IndexOf(uno);
+                    int indexDos = tabla.columnas.IndexOf(dos);
+                    Object datoUno, datoDos;
+                    if (indexUno >= 0)
+                    {
+                        if (tabla.tipos_columnas[indexUno].Equals("INT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject) row[indexUno]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                        }
+                        else
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                        }
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (uno.StartsWith("'"))
+                        {
+                            datoUno = uno.Substring(1, uno.Length - 2);
+                        }
+                        else if (int.TryParse(uno, out num))
+                        {
+                            datoUno = num;
+                        }
+                        else if (float.TryParse(uno, out numF))
+                        {
+                            datoUno = numF;
+                        }
+                        else
+                        {
+                            datoUno = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+                    if (indexDos >= 0)
+                    {
+                        if (tabla.tipos_columnas[indexDos].Equals("INT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                        }
+                        else
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                        }
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (dos.StartsWith("'"))
+                        {
+                            datoDos = dos.Substring(1, dos.Length - 2);
+                        }
+                        else if (int.TryParse(dos, out num))
+                        {
+                            datoDos = num;
+                        }
+                        else if (float.TryParse(dos, out numF))
+                        {
+                            datoDos = numF;
+                        }
+                        else
+                        {
+                            datoDos = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+
+                    if (datoUno is Int32
+                     && datoDos is Int32)
+                    {
+                        if (!((Int32)datoUno).Equals(((Int32)datoDos)))
+                        {
+                            stack.Push("FALSE ");
+                        }
+                        else
+                        {
+                            stack.Push("TRUE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Single)
+                    {
+                        if (!((Single)datoUno).Equals(((Single)datoDos)))
+                        {
+                            stack.Push("FALSE ");
+                        }
+                        else
+                        {
+                            stack.Push("TRUE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Int32)
+                    {
+                        if (!((Single)datoUno).Equals(((Int32)datoDos)))
+                        {
+                            stack.Push("FALSE ");
+                        }
+                        else
+                        {
+                            stack.Push("TRUE ");
+                        }
+                    }
+                    else if (datoUno is Int32
+                     && datoDos is Single)
+                    {
+                        if (!((Int32)datoUno).Equals(((Single)datoDos)))
+                        {
+                            stack.Push("FALSE ");
+                        }
+                        else
+                        {
+                            stack.Push("TRUE ");
+                        }
+                    }
+                    else
+                    {
+                        if (!((String)datoUno).Equals(((String)datoDos)))
+                        {
+                            stack.Push("FALSE ");
+                        }
+                        else
+                        {
+                            stack.Push("TRUE ");
+                        }
+                    }
+                }
+                else if (e.Equals(">="))
+                {
+                    String dos = stack.Pop();
+                    String uno = stack.Pop();
+                    int indexUno = tabla.columnas.IndexOf(uno);
+                    int indexDos = tabla.columnas.IndexOf(dos);
+                    Object datoUno, datoDos;
+                    if (indexUno >= 0)
+                    {
+                        datoUno = row[indexUno];
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (uno.StartsWith("'"))
+                        {
+                            datoUno = uno.Substring(1, uno.Length - 2);
+                        }
+                        else if (int.TryParse(uno, out num))
+                        {
+                            datoUno = num;
+                        }
+                        else if (float.TryParse(uno, out numF))
+                        {
+                            datoUno = numF;
+                        }
+                        else
+                        {
+                            datoUno = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+                    if (indexDos >= 0)
+                    {
+                        datoDos = row[indexDos];
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (dos.StartsWith("'"))
+                        {
+                            datoDos = dos.Substring(1, dos.Length - 2);
+                        }
+                        else if (int.TryParse(dos, out num))
+                        {
+                            datoDos = num;
+                        }
+                        else if (float.TryParse(dos, out numF))
+                        {
+                            datoDos = numF;
+                        }
+                        else
+                        {
+                            datoDos = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+
+                    if (datoUno is Int32
+                     && datoDos is Int32)
+                    {
+                        if (((Int32)datoUno).CompareTo(((Int32)datoDos)) >= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Single)
+                    {
+                        if (((Single)datoUno).CompareTo(((Single)datoDos)) >= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Int32)
+                    {
+                        if (((Single)datoUno).CompareTo(((Int32)datoDos)) >= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Int32
+                     && datoDos is Single)
+                    {
+                        if (((Int32)datoUno).CompareTo(((Single)datoDos)) >= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (isDate((String)datoUno) && isDate((String)datoDos))
+                    {
+                        DateTime primera = Convert.ToDateTime(((String)datoUno));
+                        DateTime segunda = Convert.ToDateTime(((String)datoDos));
+
+                        if (primera.CompareTo(segunda) >= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else
+                    {
+                        if (((String)datoUno).CompareTo(((String)datoDos)) >= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                }
+                else if (e.Equals("<="))
+                {
+                    String dos = stack.Pop();
+                    String uno = stack.Pop();
+                    int indexUno = tabla.columnas.IndexOf(uno);
+                    int indexDos = tabla.columnas.IndexOf(dos);
+                    Object datoUno, datoDos;
+                    if (indexUno >= 0)
+                    {
+                        datoUno = row[indexUno];
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (uno.StartsWith("'"))
+                        {
+                            datoUno = uno.Substring(1, uno.Length - 2);
+                        }
+                        else if (int.TryParse(uno, out num))
+                        {
+                            datoUno = num;
+                        }
+                        else if (float.TryParse(uno, out numF))
+                        {
+                            datoUno = numF;
+                        }
+                        else
+                        {
+                            datoUno = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+                    if (indexDos >= 0)
+                    {
+                        datoDos = row[indexDos];
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (dos.StartsWith("'"))
+                        {
+                            datoDos = dos.Substring(1, dos.Length - 2);
+                        }
+                        else if (int.TryParse(dos, out num))
+                        {
+                            datoDos = num;
+                        }
+                        else if (float.TryParse(dos, out numF))
+                        {
+                            datoDos = numF;
+                        }
+                        else
+                        {
+                            datoDos = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+
+                    if (datoUno is Int32
+                     && datoDos is Int32)
+                    {
+                        if (((Int32)datoUno).CompareTo(((Int32)datoDos)) <= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Single)
+                    {
+                        if (((Single)datoUno).CompareTo(((Single)datoDos)) <= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Int32)
+                    {
+                        if (((Single)datoUno).CompareTo(((Int32)datoDos)) <= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Int32
+                     && datoDos is Single)
+                    {
+                        if (((Int32)datoUno).CompareTo(((Single)datoDos)) <= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (isDate((String)datoUno) && isDate((String)datoDos))
+                    {
+                        DateTime primera = Convert.ToDateTime(((String)datoUno));
+                        DateTime segunda = Convert.ToDateTime(((String)datoDos));
+
+                        if (primera.CompareTo(segunda) <= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else
+                    {
+                        if (((String)datoUno).CompareTo(((String)datoDos)) <= 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                }
+                else if (e.Equals(">"))
+                {
+                    String dos = stack.Pop();
+                    String uno = stack.Pop();
+                    int indexUno = tabla.columnas.IndexOf(uno);
+                    int indexDos = tabla.columnas.IndexOf(dos);
+                    Object datoUno, datoDos;
+                    if (indexUno >= 0)
+                    {
+                        datoUno = row[indexUno];
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (uno.StartsWith("'"))
+                        {
+                            datoUno = uno.Substring(1, uno.Length - 2);
+                        }
+                        else if (int.TryParse(uno, out num))
+                        {
+                            datoUno = num;
+                        }
+                        else if (float.TryParse(uno, out numF))
+                        {
+                            datoUno = numF;
+                        }
+                        else
+                        {
+                            datoUno = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+                    if (indexDos >= 0)
+                    {
+                        datoDos = row[indexDos];
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (dos.StartsWith("'"))
+                        {
+                            datoDos = dos.Substring(1, dos.Length - 2);
+                        }
+                        else if (int.TryParse(dos, out num))
+                        {
+                            datoDos = num;
+                        }
+                        else if (float.TryParse(dos, out numF))
+                        {
+                            datoDos = numF;
+                        }
+                        else
+                        {
+                            datoDos = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+
+                    if (datoUno is Int32
+                     && datoDos is Int32)
+                    {
+                        if (((Int32)datoUno).CompareTo(((Int32)datoDos)) > 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Single)
+                    {
+                        if (((Single)datoUno).CompareTo(((Single)datoDos)) > 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Int32)
+                    {
+                        if (((Single)datoUno).CompareTo(((Int32)datoDos)) > 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Int32
+                     && datoDos is Single)
+                    {
+                        if (((Int32)datoUno).CompareTo(((Single)datoDos)) > 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (isDate((String)datoUno) && isDate((String)datoDos))
+                    {
+                        DateTime primera = Convert.ToDateTime(((String)datoUno));
+                        DateTime segunda = Convert.ToDateTime(((String)datoDos));
+
+                        if (primera.CompareTo(segunda) > 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else
+                    {
+                        if (((String)datoUno).CompareTo(((String)datoDos)) > 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                }
+                else if (e.Equals("<"))
+                {
+                    String dos = stack.Pop();
+                    String uno = stack.Pop();
+                    int indexUno = tabla.columnas.IndexOf(uno);
+                    int indexDos = tabla.columnas.IndexOf(dos);
+                    Object datoUno, datoDos;
+                    if (indexUno >= 0)
+                    {
+                        datoUno = row[indexUno];
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (uno.StartsWith("'"))
+                        {
+                            datoUno = uno.Substring(1, uno.Length - 2);
+                        }
+                        else if (int.TryParse(uno, out num))
+                        {
+                            datoUno = num;
+                        }
+                        else if (float.TryParse(uno, out numF))
+                        {
+                            datoUno = numF;
+                        }
+                        else
+                        {
+                            datoUno = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+                    if (indexDos >= 0)
+                    {
+                        datoDos = row[indexDos];
+                    }
+                    else
+                    {
+                        int num;
+                        float numF;
+                        if (dos.StartsWith("'"))
+                        {
+                            datoDos = dos.Substring(1, dos.Length - 2);
+                        }
+                        else if (int.TryParse(dos, out num))
+                        {
+                            datoDos = num;
+                        }
+                        else if (float.TryParse(dos, out numF))
+                        {
+                            datoDos = numF;
+                        }
+                        else
+                        {
+                            datoDos = "Para que deje de alegar abajo";
+                            throw new NotImplementedException();
+                        }
+                    }
+
+                    if (datoUno is Int32
+                     && datoDos is Int32)
+                    {
+                        if (((Int32)datoUno).CompareTo(((Int32)datoDos)) < 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Single)
+                    {
+                        if (((Single)datoUno).CompareTo(((Single)datoDos)) < 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Single
+                     && datoDos is Int32)
+                    {
+                        if (((Single)datoUno).CompareTo(((Int32)datoDos)) < 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (datoUno is Int32
+                     && datoDos is Single)
+                    {
+                        if (((Int32)datoUno).CompareTo(((Single)datoDos)) < 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else if (isDate((String)datoUno) && isDate((String)datoDos))
+                    {
+                        DateTime primera = Convert.ToDateTime(((String)datoUno));
+                        DateTime segunda = Convert.ToDateTime(((String)datoDos));
+
+                        if (primera.CompareTo(segunda) < 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                    else
+                    {
+                        if (((String)datoUno).CompareTo(((String)datoDos)) < 0)
+                        {
+                            stack.Push("TRUE ");
+                        }
+                        else
+                        {
+                            stack.Push("FALSE ");
+                        }
+                    }
+                }
+                else if (e.Equals("NOT"))
+                {
+                    String uno = stack.Pop();
+                    if (uno.Equals("TRUE "))
+                    {
+                        stack.Push("FALSE ");
+                    }
+                    else
+                    {
+                        stack.Push("TRUE ");
+                    }
+                }
+                //Es el nombre de la columna o un dato
+                else
+                {
+                    stack.Push(e);
+                }
+            }
+            return stack.Pop().Equals("TRUE ");
+        }
+
         override
         public string VisitDelete(SqlParser.DeleteContext context)
         {
-            throw new NotImplementedException();
+            //Revisar que haya base de datos en uso
+            if (BDenUso.Equals(""))
+            {
+                errores += "Error en línea " + context.start.Line + ": No hay base de datos en uso por lo que no se puede alterar la tabla.";
+                return "Error";
+            }
+
+            //Deserealizar el archivo maestro de tablas
+            MasterTabla mTabla = deserializarMasterTabla();
+            
+            //Obtener el nombre de la tabla que se desea
+            String nombre = context.GetChild(2).GetText();
+            Tabla tabla = mTabla.getTable(nombre);
+
+            //Verificar que exista la tabla
+            if (tabla == null)
+            {
+                errores = "Error en línea " + context.start.Line +
+                            ": La tabla '" + nombre +
+                            "' no existe en la base de datos '" + BDenUso +
+                            "'." + Environment.NewLine;
+                return "Error";
+            }
+
+            if (context.ChildCount == 3)
+            {
+                //Cargar los datos en si
+                FilaTabla datos = new FilaTabla(tabla, BDenUso);
+                datos.cargar();
+
+                //Contar los datos a borrar
+                int cantidad = datos.datos.elementos.Count;
+                
+                //Borrar los datos y guardar los cambios
+                datos.datos.elementos.Clear();
+                datos.guardar();
+
+                //Actualizar cantidad de registros
+                tabla.cantidad_registros = tabla.cantidad_registros - cantidad;
+                MasterBD mBD = deserializarMasterBD();
+                mBD.getBD(BDenUso).registros -= cantidad;
+
+                //Serializar masterTabla
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, mTabla);
+                myWriter.Close();
+                
+                //Serializar masterBD
+                mySerializer = new XmlSerializer(typeof(MasterBD));
+                myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                mySerializer.Serialize(myWriter, mBD);
+                myWriter.Close();
+
+                mensajes += "Se ha vaciado la tabla '" + tabla.nombre+ "'." + Environment.NewLine; 
+                return "void";
+            }
+            else
+            {
+                //Obtener expresion postfix
+                ListaTablas = new List<Tabla>();
+                ListaTablas.Add(tabla);
+                String postfix = Visit(context.GetChild(4));
+                postfix = postfix.Replace(tabla.nombre+".","");
+                if (postfix.StartsWith("BOOL "))
+                {
+                    postfix = postfix.Substring(5);
+                }
+                else
+                {
+                    errores = "Error en línea " + context.start.Line +
+                              ": La condicion del where no regresa un valor booleano." + Environment.NewLine;
+                    return "Error";
+                }
+
+                //Lista de elementos a borrar
+                List<List<Object>> paraBorrar = new List<List<Object>>();
+
+                //Cargar los datos en si
+                FilaTabla datos = new FilaTabla(tabla, BDenUso);
+                datos.cargar();
+
+                foreach(List<Object> fila in datos.datos.elementos)
+                {
+                    if (cumpleCondicion(fila, tabla, postfix))
+                    {
+                        paraBorrar.Add(fila);
+                        //Verificar si es referenciado, si lo es, error
+                    }
+                }
+                //Cantidad de datos a borrar
+                int cantidad = paraBorrar.Count;
+
+                //Borrar los datos
+                foreach (List<Object> fila in paraBorrar)
+                {
+                    datos.datos.elementos.Remove(fila);
+                }
+                //Guardar cambios
+                datos.guardar();
+
+                //Actualizar cantidad de registros
+                tabla.cantidad_registros = tabla.cantidad_registros - cantidad;
+                MasterBD mBD = deserializarMasterBD();
+                mBD.getBD(BDenUso).registros -= cantidad;
+
+                //Serializar masterTabla
+                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                mySerializer.Serialize(myWriter, mTabla);
+                myWriter.Close();
+
+                //Serializar masterBD
+                mySerializer = new XmlSerializer(typeof(MasterBD));
+                myWriter = new StreamWriter("Databases\\masterBDs.xml");
+                mySerializer.Serialize(myWriter, mBD);
+                myWriter.Close();
+
+                mensajes += "Se han removido " + cantidad + " registros de la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                return "void";
+
+            }
+
         }
 
         override
