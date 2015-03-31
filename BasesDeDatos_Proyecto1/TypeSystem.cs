@@ -2793,6 +2793,12 @@ namespace BasesDeDatos_Proyecto1
                 //Para cada restriccion
                 foreach (Restriccion restriccion in otra.restricciones)
                 {
+                    //Verificar que no sea la misma tabla
+                    if (tabla == otra)
+                    {
+                        break;
+                    }
+
                     //La restriccion es llave foranea y hacia la tabla en cuestion
                     if (restriccion.tipo.Equals("FK") && restriccion.tabla.Equals(tabla.nombre))
                     {
