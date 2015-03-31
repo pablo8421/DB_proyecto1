@@ -21,6 +21,7 @@ namespace BasesDeDatos_Proyecto1
         public String BDenUso;
         private MasterTabla masterTabla;
         private List<Tabla> ListaTablas;
+        private List<Object> datosUpdate;
 
         public TypeSystem() {
             errores = "";
@@ -29,6 +30,7 @@ namespace BasesDeDatos_Proyecto1
             resultados = new DataGridView();
             masterTabla = new MasterTabla();
             ListaTablas = new List<Tabla>();
+            datosUpdate = null;
         }
 
         override
@@ -99,7 +101,151 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitAsignacion(SqlParser.AsignacionContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 3)
+            {
+                String tipoValor = "";
+                String nColumna = context.GetChild(0).GetText();
+                String valor = context.GetChild(2).GetText();
+                Tabla tActual = ListaTablas[0];
+                if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.STRING)
+                {
+                    if (isDate(context.STRING().GetText()))
+                    {
+                        tipoValor = "DATE";
+                    }
+                    else
+                    {
+                        tipoValor = "CHAR";
+                    }
+                }
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.FLOAT)
+                {
+                    tipoValor = "FLOAT";
+                }
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.INT)
+                {
+                    tipoValor = "INT";
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                int indice = tActual.columnas.IndexOf(nColumna);
+                if (indice == -1) //La columna no existe en la tabla
+                {
+                    errores += "Error en línea "+context.start.Line+": La columna '"+nColumna+"' no existe en la tabla '"+tActual.nombre+"'."+Environment.NewLine;
+                    return "Error";
+                }
+
+                String tipoColumna = tActual.tipos_columnas[indice];
+                
+                //Verificacion de tipos
+                if (!(tipoValor.Equals(tipoColumna)
+                    || (tipoValor.Equals("DATE") && tipoColumna.StartsWith("CHAR"))
+                    || (tipoValor.Equals("INT") && tipoColumna.Equals("FLOAT"))
+                    || (tipoValor.Equals("FLOAT") && tipoColumna.Equals("INT"))
+                    || (tipoValor.StartsWith("CHAR") && tipoColumna.StartsWith("CHAR"))))
+                {
+                    errores = "Error en línea " + context.start.Line +
+                                ": El tipo del valor '" + tipoValor +
+                                "' no concuerda con el tipo de la columna '" + tipoColumna +
+                                "' (" + tipoValor +
+                                "," + tipoColumna +
+                                ")." + Environment.NewLine;
+                    return "Error";
+
+                }
+
+                if (tipoValor.Equals("DATE") && tipoColumna.StartsWith("CHAR"))
+                {
+                    tipoValor = "CHAR";
+                }
+
+                if (tipoColumna.StartsWith("CHAR"))
+                    datosUpdate.Add((String)valor);
+                else if (tipoColumna.StartsWith("INT"))
+                    datosUpdate.Add(Convert.ToInt32(valor));
+                else if (tipoColumna.StartsWith("FLOAT"))
+                    datosUpdate.Add(Convert.ToSingle(valor));
+                else
+                    datosUpdate.Add((String)valor);
+                return "void";
+            }
+            else { //Varias asignaciones
+                String exp = Visit(context.GetChild(0));
+                if (exp.Equals("Error")) { 
+                    //Mensaje de error
+                    return "Error";
+                }
+
+                String tipoValor = "";
+                String nColumna = context.GetChild(2).GetText();
+                String valor = context.GetChild(4).GetText();
+                Tabla tActual = ListaTablas[0];
+                if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(4)).symbol.Type == SqlParser.STRING)
+                {
+                    if (isDate(context.STRING().GetText()))
+                    {
+                        tipoValor = "DATE";
+                    }
+                    else
+                    {
+                        tipoValor = "CHAR";
+                    }
+                }
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(4)).symbol.Type == SqlParser.FLOAT)
+                {
+                    tipoValor = "FLOAT";
+                }
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(4)).symbol.Type == SqlParser.INT)
+                {
+                    tipoValor = "INT";
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                int indice = tActual.columnas.IndexOf(nColumna);
+                if (indice == -1) //La columna no existe en la tabla
+                {
+                    errores += "Error en línea " + context.start.Line + ": La columna '" + nColumna + "' no existe en la tabla '" + tActual.nombre + "'." + Environment.NewLine;
+                    return "Error";
+                }
+
+                String tipoColumna = tActual.tipos_columnas[indice];
+
+                //Verificacion de tipos
+                if (!(tipoValor.Equals(tipoColumna)
+                    || (tipoValor.Equals("DATE") && tipoColumna.StartsWith("CHAR"))
+                    || (tipoValor.Equals("INT") && tipoColumna.Equals("FLOAT"))
+                    || (tipoValor.Equals("FLOAT") && tipoColumna.Equals("INT"))
+                    || (tipoValor.StartsWith("CHAR") && tipoColumna.StartsWith("CHAR"))))
+                {
+                    errores = "Error en línea " + context.start.Line +
+                                ": El tipo del valor '" + tipoValor +
+                                "' no concuerda con el tipo de la columna '" + tipoColumna +
+                                "' (" + tipoValor +
+                                "," + tipoColumna +
+                                ")." + Environment.NewLine;
+                    return "Error";
+
+                }
+
+                if (tipoValor.Equals("DATE") && tipoColumna.StartsWith("CHAR"))
+                {
+                    tipoValor = "CHAR";
+                }
+
+                if (tipoColumna.StartsWith("CHAR"))
+                    datosUpdate.Add((String)valor);
+                else if (tipoColumna.StartsWith("INT"))
+                    datosUpdate.Add(Convert.ToInt32(valor));
+                else if (tipoColumna.StartsWith("FLOAT"))
+                    datosUpdate.Add(Convert.ToSingle(valor));
+                else
+                    datosUpdate.Add((String)valor);
+                return "void";
+            }
         }
 
         override
@@ -1629,7 +1775,47 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitUpdate(SqlParser.UpdateContext context)
         {
-            throw new NotImplementedException();
+            String nTabla = context.GetChild(1).GetText();
+            if (BDenUso.Equals("")) { //No hay ninguna base de datos en uso
+                errores += "Error en línea "+context.start.Line+": No se encuentra ninguna base de datos en uso." + Environment.NewLine;
+                return "Error";
+            }
+
+            if (context.ChildCount == 4) //No tiene WHERE
+            {
+                masterTabla = deserializarMasterTabla();
+                Tabla tActual = masterTabla.getTable(nTabla);
+                if (tActual == null) { //No existe la tabla
+                    errores = "Error en línea " + context.start.Line + ": La tabla '" + nTabla + "' no existe en la base de datos '" + BDenUso + "'." + Environment.NewLine;
+                    return "Error";
+                }
+                ListaTablas[0] = tActual;
+                datosUpdate = new List<Object>();
+                if (Visit(context.GetChild(3)).Equals("Error")) {
+                    //Mensaje de error
+                    return "Error";
+                }
+                FilaTabla datos = new FilaTabla(tActual, BDenUso);
+                datos.cargar();
+
+                //Agregar los datos faltantes y ordenarlos
+
+                //VERIFICAR SI NO SE REPITEN COLUMNAS PARA UPDATE
+
+                //Verificar restricciones
+                bool banderaR = verificarRestricciones(datos, datosUpdate, context.start.Line);
+                if (!banderaR) {
+                    errores += "";
+                    return "Error";
+                }
+
+                //Hacer update
+            }
+            else { //Si tiene WHERE
+            
+            }
+
+            return "void";
         }
 
         override
