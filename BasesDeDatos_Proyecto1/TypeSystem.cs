@@ -22,6 +22,7 @@ namespace BasesDeDatos_Proyecto1
         private MasterTabla masterTabla;
         private List<Tabla> ListaTablas;
         private List<Object> datosUpdate;
+        private List<String> columnasUpdate;
 
         public TypeSystem() {
             errores = "";
@@ -31,6 +32,7 @@ namespace BasesDeDatos_Proyecto1
             masterTabla = new MasterTabla();
             ListaTablas = new List<Tabla>();
             datosUpdate = null;
+            columnasUpdate = null;
         }
 
         override
@@ -161,6 +163,11 @@ namespace BasesDeDatos_Proyecto1
                     tipoValor = "CHAR";
                 }
 
+                if (columnasUpdate.Contains(nColumna)) { //Error, no se pueden repetir columnas en la asignacion
+                    errores += "Error en línea " + context.start.Line + ": No se puede colocar la columna '" + nColumna + "' más de una vez." + Environment.NewLine;
+                    return "Error";
+                }
+
                 if (tipoColumna.StartsWith("CHAR"))
                     datosUpdate.Add((String)valor);
                 else if (tipoColumna.StartsWith("INT"))
@@ -169,6 +176,8 @@ namespace BasesDeDatos_Proyecto1
                     datosUpdate.Add(Convert.ToSingle(valor));
                 else
                     datosUpdate.Add((String)valor);
+                
+                columnasUpdate.Add(nColumna);
                 return "void";
             }
             else { //Varias asignaciones
@@ -236,6 +245,11 @@ namespace BasesDeDatos_Proyecto1
                     tipoValor = "CHAR";
                 }
 
+                if (columnasUpdate.Contains(nColumna))
+                { //Error, no se pueden repetir columnas en la asignacion
+                    errores += "Error en línea " + context.start.Line + ": No se puede colocar la columna '" + nColumna + "' más de una vez." + Environment.NewLine;
+                    return "Error";
+                }
                 if (tipoColumna.StartsWith("CHAR"))
                     datosUpdate.Add((String)valor);
                 else if (tipoColumna.StartsWith("INT"))
@@ -244,6 +258,7 @@ namespace BasesDeDatos_Proyecto1
                     datosUpdate.Add(Convert.ToSingle(valor));
                 else
                     datosUpdate.Add((String)valor);
+                columnasUpdate.Add(nColumna);
                 return "void";
             }
         }
@@ -1791,6 +1806,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 ListaTablas[0] = tActual;
                 datosUpdate = new List<Object>();
+                columnasUpdate = new List<String>();
                 if (Visit(context.GetChild(3)).Equals("Error")) {
                     //Mensaje de error
                     return "Error";
@@ -1798,16 +1814,12 @@ namespace BasesDeDatos_Proyecto1
                 FilaTabla datos = new FilaTabla(tActual, BDenUso);
                 datos.cargar();
 
-                //Agregar los datos faltantes y ordenarlos
+                //Verificar restricciones (El foreign key no es igual)
 
-                //VERIFICAR SI NO SE REPITEN COLUMNAS PARA UPDATE
-
-                //Verificar restricciones
                 bool banderaR = verificarRestricciones(datos, datosUpdate, context.start.Line);
-                if (!banderaR) {
-                    errores += "";
+                
+                if (!banderaR) 
                     return "Error";
-                }
 
                 //Hacer update
             }
@@ -2773,8 +2785,8 @@ namespace BasesDeDatos_Proyecto1
                         {
                             //Se verifica que toda la llave sea igual en ambas tablas
                             bool esReferenciada = true;
-                            for (int i = 0; i < restriccion.columnasForaneas.Count; i++)
-                            {
+                        for (int i = 0; i < restriccion.columnasForaneas.Count; i++)
+                        {
                                 //Indices de columnas en cada tabla
                                 int indicePropio = tabla.columnas.IndexOf(restriccion.columnasForaneas[i]);
                                 int indiceOtro = tabla.columnas.IndexOf(restriccion.columnasPropias[i]);
@@ -2825,7 +2837,7 @@ namespace BasesDeDatos_Proyecto1
                                 pk = "'" + restriccion.nombre + "'" + "de la tabla '" + otra.nombre + "'";
                                 return true;
                             }
-
+                            
                         }
                     }
                 }
