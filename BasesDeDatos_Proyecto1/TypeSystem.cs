@@ -1808,6 +1808,11 @@ namespace BasesDeDatos_Proyecto1
             return true;
         }
 
+        public bool verificarCheckUpdate(List<Object> rowUpdate, List<String> columnas, FilaTabla fila, int nLinea)
+        {
+            return true;
+        }
+
         override
         public string VisitUpdate(SqlParser.UpdateContext context)
         {
