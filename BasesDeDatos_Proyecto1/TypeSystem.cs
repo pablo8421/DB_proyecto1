@@ -2815,7 +2815,7 @@ namespace BasesDeDatos_Proyecto1
                         {
                                 //Indices de columnas en cada tabla
                                 int indicePropio = tabla.columnas.IndexOf(restriccion.columnasForaneas[i]);
-                                int indiceOtro = tabla.columnas.IndexOf(restriccion.columnasPropias[i]);
+                                int indiceOtro = otra.columnas.IndexOf(restriccion.columnasPropias[i]);
                             
                                 //Cada caso segun el tipo que es
                                 if (tabla.tipos_columnas[indicePropio].Equals("INT"))
