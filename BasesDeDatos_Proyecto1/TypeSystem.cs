@@ -1960,7 +1960,9 @@ namespace BasesDeDatos_Proyecto1
 
                 if (tipo_mayMin.Equals(tipo_neg)
                 || (tipo_mayMin.Equals("FLOAT") && tipo_neg.Equals("INT")) 
-                || (tipo_mayMin.Equals("INT") && tipo_neg.Equals("FLOAT")))
+                || (tipo_mayMin.Equals("INT") && tipo_neg.Equals("FLOAT"))
+                || (tipo_mayMin.StartsWith("CHAR") && tipo_neg.Equals("DATE")) 
+                || (tipo_mayMin.Equals("DATE") && tipo_neg.StartsWith("CHAR")))
                 {
                     return "BOOL " + mayMin + " " + neg + " " + context.GetChild(1).GetText();
                 }
@@ -2328,7 +2330,9 @@ namespace BasesDeDatos_Proyecto1
 
                 if (tipo_difEq.Equals(tipo_mayMin) 
                 || (tipo_difEq.Equals("FLOAT") && tipo_mayMin.Equals("INT")) 
-                || (tipo_difEq.Equals("INT") && tipo_mayMin.Equals("FLOAT")))
+                || (tipo_difEq.Equals("INT") && tipo_mayMin.Equals("FLOAT"))
+                || (tipo_difEq.StartsWith("CHAR") && tipo_mayMin.Equals("DATE")) 
+                || (tipo_difEq.Equals("DATE") && tipo_mayMin.StartsWith("CHAR")))
                 {
                     return "BOOL " + difEq + " " + mayMin + " " + context.GetChild(1).GetText();
                 }
