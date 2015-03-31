@@ -2247,15 +2247,51 @@ namespace BasesDeDatos_Proyecto1
 
             int mes;
             int dia;
+            int ano;
 
+            if (!Int32.TryParse(lista[0], out ano))
+            {
+                return false;
+            }
             if (Int32.TryParse(lista[1], out mes))
             {
                 if (Int32.TryParse(lista[2], out dia))
                 {
-                    if(mes >= 1 && mes <= 12
-                    && dia >= 1 && dia <= 31)
+                    if(mes >= 1 && mes <= 12)
                     {
-                        return true;
+                        if (mes == 1
+                         || mes == 3
+                         || mes == 5
+                         || mes == 7
+                         || mes == 8
+                         || mes == 10
+                         || mes == 12)
+                        {
+                            if (dia >= 1 && dia <= 31)
+                            {
+                                return true;
+                            }
+                        }
+                        if (mes == 4
+                         || mes == 6
+                         || mes == 9
+                         || mes == 11)
+                        {
+                            if (dia >= 1 && dia <= 30)
+                            {
+                                return true;
+                            }
+                        }
+                        if (mes == 2)
+                        {
+                            if (dia >= 1 && dia <= 28)
+                            {
+                                return true;
+                            }
+                            else if(dia == 29 && ano % 4 == 0){
+
+                            }
+                        }
                     }
                 }
             }
