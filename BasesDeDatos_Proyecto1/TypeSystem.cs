@@ -2567,6 +2567,27 @@ namespace BasesDeDatos_Proyecto1
             return stack.Pop().Equals("TRUE ");
         }
 
+        private bool esReferenciado(List<Object> row, Tabla tabla, MasterTabla mTablas)
+        {
+            foreach (Tabla otra in mTablas.tablas)
+            {
+                foreach (Restriccion restriccion in otra.restricciones)
+                {
+                    if (restriccion.tipo.Equals("FK") && restriccion.tabla.Equals(tabla.nombre))
+                    {
+                        FilaTabla datos = new FilaTabla(otra, BDenUso);
+                        datos.cargar();
+                        bool esReferenciada = false;
+                        for (int i = 0; i < restriccion.columnasForaneas.Count; i++)
+                        {
+                            
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         override
         public string VisitDelete(SqlParser.DeleteContext context)
         {
