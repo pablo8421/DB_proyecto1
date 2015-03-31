@@ -2899,6 +2899,18 @@ namespace BasesDeDatos_Proyecto1
                 FilaTabla datos = new FilaTabla(tabla, BDenUso);
                 datos.cargar();
 
+                //Verificar si existe alguna referencia hacia la tabla
+                foreach (List<Object> fila in datos.datos.elementos)
+                {
+                    string pk = "";
+                    if (esReferenciado(fila, tabla, mTabla, out pk))
+                    {
+                        errores = "Error en línea " + context.start.Line +
+                                    ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
+                        return "Error";
+                    }
+                }
+
                 //Contar los datos a borrar
                 int cantidad = datos.datos.elementos.Count;
                 
@@ -2951,8 +2963,10 @@ namespace BasesDeDatos_Proyecto1
                 FilaTabla datos = new FilaTabla(tabla, BDenUso);
                 datos.cargar();
 
+                //Verificar si existe alguna referencia hacia la tabla
                 foreach(List<Object> fila in datos.datos.elementos)
                 {
+                    //Llena la lista de los elementos que seran borrados
                     if (cumpleCondicion(fila, tabla, postfix))
                     {
                         paraBorrar.Add(fila);
