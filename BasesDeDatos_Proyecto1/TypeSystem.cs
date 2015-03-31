@@ -1484,7 +1484,7 @@ namespace BasesDeDatos_Proyecto1
                 {
                     int indice = tabla.columnas.IndexOf(listaColumnas[i]);
                     if (!(listaTipos[i].Equals(tabla.tipos_columnas[indice])
-                      || (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[i].StartsWith("CHAR"))
+                      || (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[indice].StartsWith("CHAR"))
                       || (listaTipos[i].Equals("INT") && tabla.tipos_columnas[indice].Equals("FLOAT"))
                       || (listaTipos[i].Equals("FLOAT") && tabla.tipos_columnas[indice].Equals("INT"))
                       || (listaTipos[i].StartsWith("CHAR") && tabla.tipos_columnas[indice].StartsWith("CHAR"))))
@@ -1497,7 +1497,7 @@ namespace BasesDeDatos_Proyecto1
                                   ")." + Environment.NewLine;
                         return "Error";
                     }
-                    if (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[i].StartsWith("CHAR"))
+                    if (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[indice].StartsWith("CHAR"))
                     {
                         listaTipos[i] = "CHAR";
                     }
