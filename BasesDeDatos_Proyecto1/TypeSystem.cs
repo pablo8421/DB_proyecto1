@@ -2228,7 +2228,8 @@ namespace BasesDeDatos_Proyecto1
 
         private bool isDate(String texto)
         {
-            texto = texto.Substring(1, texto.Length - 2);
+            if (texto.StartsWith("'"))
+                texto = texto.Substring(1, texto.Length - 2);
             String[] lista = texto.Split('-');
 
             if (lista.Length != 3)
