@@ -1788,6 +1788,27 @@ namespace BasesDeDatos_Proyecto1
             throw new NotImplementedException();
         }
 
+        public bool verificarPrimaryKeyUpdate(List<Object> rowUpdate, List<String> columnas, FilaTabla fila, int nLinea) {
+            foreach (Restriccion r in fila.tabla.restricciones) {
+                if (r.tipo.Equals("PK")) {
+                    foreach (String cP in r.columnasPropias) {
+                        int i = columnas.IndexOf(cP);
+                        if (i != -1) {
+                            String nColumna = columnas.ElementAt(i);
+                            int indexC = fila.tabla.columnas.IndexOf(nColumna);
+                            for (int j = 0; j < fila.datos.elementos.Count; j++) {
+                                if (fila.datos.elementos[j].ElementAt(indexC).Equals(rowUpdate.ElementAt(i))) {
+                                    errores += "Error en la línea " + nLinea + ": Llave duplicada viola restricción de unicidad '" + r.nombre + "'.\r\n";
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         override
         public string VisitUpdate(SqlParser.UpdateContext context)
         {
@@ -1815,9 +1836,8 @@ namespace BasesDeDatos_Proyecto1
                 FilaTabla datos = new FilaTabla(tActual, BDenUso);
                 datos.cargar();
 
-                //Verificar restricciones (El foreign key no es igual)
-                
-                bool banderaR = verificarRestricciones(datos, datosUpdate, context.start.Line);
+                //Verificar restricciones
+                bool banderaR = verificarPrimaryKeyUpdate(datosUpdate, columnasUpdate, datos, context.start.Line);
                 
                 if (!banderaR) 
                     return "Error";
