@@ -65,7 +65,7 @@ query: crear_BD			//CHECK
 	 | botar_table		//CHECK
 	 | show_tables		//CHECK
 	 | show_columns		//CHECK
-	 | insert			
+	 | insert			//CHECK
 	 | update			
 	 | delete			
 	 | select;			
