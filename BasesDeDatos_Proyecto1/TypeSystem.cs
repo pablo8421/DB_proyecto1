@@ -2288,7 +2288,8 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 return true;
                             }
-                            else if(dia == 29 && ano % 4 == 0){
+                            else if (dia == 29 && ano % 4 == 0 && (ano % 100 != 0 || (ano % 100 == 0 && ano % 400 == 0)))
+                            {
 
                             }
                         }
