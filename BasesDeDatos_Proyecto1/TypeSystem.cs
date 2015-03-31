@@ -1232,11 +1232,7 @@ namespace BasesDeDatos_Proyecto1
                             stack.Push(e);
                         }
                     }
-                    if (stack.Pop().Equals("TRUE "))
-                    {
-                        return true;
-                    }
-                    else
+                    if (stack.Pop().Equals("FALSE "))
                     {
                         errores += "Error en línea " + nLinea + ": Inserción en la tabla '" + datos.tabla.nombre + "' viola la revisión '" + restriccion.nombre + "'." + Environment.NewLine;
                         return false;
