@@ -1835,9 +1835,23 @@ namespace BasesDeDatos_Proyecto1
                 FilaTabla datos = new FilaTabla(tActual, BDenUso);
                 datos.cargar();
 
-                //Verificar restricciones
+                //Verificar restriccion de primary key
                 bool banderaR = verificarPrimaryKeyUpdate(datosUpdate, columnasUpdate, datos, context.start.Line);
-                
+
+                //Verificar restriccion de foreign key
+                foreach (List<Object> fila in datos.datos.elementos)
+                {
+                    string pk = "";
+                    if (esReferenciado(fila, tActual, masterTabla, out pk))
+                    {
+                        errores = "Error en línea " + context.start.Line +
+                                    ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
+                        return "Error";
+                    }
+                }
+
+                //Verificar restriccion de check
+
                 if (!banderaR) 
                     return "Error";
 
@@ -2864,87 +2878,6 @@ namespace BasesDeDatos_Proyecto1
                                 return true;
             }
                             
-                        }
-                    }
-                }
-            }
-            pk = "";
-            return false;
-        }
-
-        private bool restriccionForeignKeyUpdate(List<Object> row, Tabla tabla, MasterTabla mTablas, out String pk)
-        {
-            //Para cada tabla
-            foreach (Tabla otra in mTablas.tablas)
-            {
-                //Para cada restriccion
-                foreach (Restriccion restriccion in otra.restricciones)
-                {
-                    //La restriccion es llave foranea y hacia la tabla en cuestion
-                    if (restriccion.tipo.Equals("FK") && restriccion.tabla.Equals(tabla.nombre))
-                    {
-                        //Se cargan datos de la otra tabla
-                        FilaTabla datos = new FilaTabla(otra, BDenUso);
-                        datos.cargar();
-
-                        //Para cada fila en la otra tabla
-                        foreach (List<Object> rowOtra in datos.datos.elementos)
-                        {
-                            //Se verifica que toda la llave sea igual en ambas tablas
-                            bool esReferenciada = true;
-                            for (int i = 0; i < restriccion.columnasForaneas.Count; i++)
-                            {
-                                //Indices de columnas en cada tabla
-                                int indicePropio = tabla.columnas.IndexOf(restriccion.columnasForaneas[i]);
-                                int indiceOtro = tabla.columnas.IndexOf(restriccion.columnasPropias[i]);
-
-                                //Cada caso segun el tipo que es
-                                if (tabla.tipos_columnas[indicePropio].Equals("INT"))
-                                {
-                                    //Obtener valores
-                                    Int32 valorPropio = ((MsgPack.MessagePackObject)row[indicePropio]).AsInt32();
-                                    Int32 valorOtro = ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).AsInt32();
-
-                                    //Si es distinto, no es referenciada
-                                    if (!valorPropio.Equals(valorOtro))
-                                    {
-                                        esReferenciada = false;
-                                        break;
-                                    }
-                                }
-                                else if (tabla.tipos_columnas[indicePropio].Equals("FLOAT"))
-                                {
-                                    //Obtener valores
-                                    Single valorPropio = ((MsgPack.MessagePackObject)row[indicePropio]).AsSingle();
-                                    Single valorOtro = ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).AsSingle();
-
-                                    //Si es distinto, no es referenciada
-                                    if (!valorPropio.Equals(valorOtro))
-                                    {
-                                        esReferenciada = false;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    //Obtener valores
-                                    String valorPropio = ((MsgPack.MessagePackObject)row[indicePropio]).AsString();
-                                    String valorOtro = ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).AsString();
-
-                                    //Si es distinto, no es referenciada
-                                    if (!valorPropio.Equals(valorOtro))
-                                    {
-                                        esReferenciada = false;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (esReferenciada)
-                            {
-                                pk = "'" + restriccion.nombre + "'" + "de la tabla '" + otra.nombre + "'";
-                                return true;
-                            }
-
                         }
                     }
                 }
