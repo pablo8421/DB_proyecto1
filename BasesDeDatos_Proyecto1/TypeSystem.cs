@@ -1455,8 +1455,19 @@ namespace BasesDeDatos_Proyecto1
                 {
                     return "Error";
                 }
-                String[] listaColumnas = columnasSelectas.Replace(tabla.nombre+".","").Split(','); 
-
+                String[] listaColumnas = columnasSelectas.Replace(tabla.nombre+".","").Split(',');
+                
+                var hashset = new HashSet<string>();
+                foreach (var elemento in listaColumnas)
+                {
+                    if (!hashset.Add(elemento))
+                    {
+                        errores = "Error en línea " + context.start.Line +
+                                  ": se repitio la columna '" + elemento +
+                                  "' mas de una vez en las columnas selectas." + Environment.NewLine;
+                        return "Error";
+                    }
+                }
                 //Obtener valores a insertar 
                 String[] valores = Regex.Split(Visit(context.GetChild(8)), ",(?=(?:[^']*'[^']*')*[^']*$)"); ;
                 if (valores.Length != listaColumnas.Length)
