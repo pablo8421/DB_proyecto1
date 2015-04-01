@@ -531,6 +531,20 @@ namespace BasesDeDatos_Proyecto1
                 }
             }
             //TODO orderBy
+            String columnasAOrdenar = Visit(context.GetChild(5));
+            if (columnasAOrdenar.StartsWith("ERROR"))
+            {
+                return "Error";
+            }
+            //Se ordenan
+            if(!columnasAOrdenar.Equals("")){
+                List<String> listaAOrdenar = new List<String>(columnasAOrdenar.Split(','));
+                int index = listaAOrdenar.Count - 1;
+                while (index >= 0)
+                {
+                    //Do Stuff
+                }
+            }
 
             return "void";
         }
