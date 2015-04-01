@@ -509,7 +509,7 @@ namespace BasesDeDatos_Proyecto1
             //TODO orderBy
 
             //TODO mostrar datos, hacer select
-            String columnasAMostrar = context.GetChild(1).GetText();
+            String columnasAMostrar = Visit(context.GetChild(1));
             resultados.RowCount = resultado.datos.elementos.Count + 1;
             resultados.ColumnCount = resultado.tabla.columnas.Count;
             for (int i = 0; i < resultados.ColumnCount; i++)
