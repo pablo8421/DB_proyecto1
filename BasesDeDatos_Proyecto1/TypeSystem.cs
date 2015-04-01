@@ -493,20 +493,22 @@ namespace BasesDeDatos_Proyecto1
             //Tabla de resultados
             FilaTabla resultado = juntarTablas(ListaTablas);
 
-            List<List<Object>> datosFiltrados = new List<List<Object>>();
-            //Se evalua cada fila de la tabla de resultados
-            foreach (List<Object> fila in resultado.datos.elementos)
+            if (!postfix.Equals(""))
             {
-                //Si cumple la condicion, se agrega a la lista de datos
-                if (cumpleCondicion(fila, resultado.tabla, postfix))
+                List<List<Object>> datosFiltrados = new List<List<Object>>();
+                //Se evalua cada fila de la tabla de resultados
+                foreach (List<Object> fila in resultado.datos.elementos)
                 {
-                    datosFiltrados.Add(fila);
+                    //Si cumple la condicion, se agrega a la lista de datos
+                    if (cumpleCondicion(fila, resultado.tabla, postfix))
+                    {
+                        datosFiltrados.Add(fila);
+                    }
                 }
+                //Se reasigna los datos de la tabla
+                resultado.datos.elementos = datosFiltrados;
             }
-            //Se reasigna los datos de la tabla
-            resultado.datos.elementos = datosFiltrados;
-            
-            //TODO orderBy
+
 
             //TODO mostrar datos, hacer select
             String columnasAMostrar = Visit(context.GetChild(1));
@@ -526,6 +528,8 @@ namespace BasesDeDatos_Proyecto1
                         resultados.Columns[i].Visible = false;
                 }
             }
+            //TODO orderBy
+
             return "void";
         }
 
