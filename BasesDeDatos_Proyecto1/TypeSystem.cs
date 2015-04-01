@@ -2948,7 +2948,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                 }
                 //Cantidad de datos a borrar
-                int cantidad = paraBorrar.Count;
+                int cantidad = paraUpdate.Count;
 
                 //Verificar restriccion de primary key
                 bool banderaR = verificarPrimaryKeyUpdate(datosUpdate, columnasUpdate, datos, context.start.Line);
