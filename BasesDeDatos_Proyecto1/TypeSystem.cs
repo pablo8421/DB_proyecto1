@@ -4781,7 +4781,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 if (tabla == null)
                 {
-                    errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe." + Environment.NewLine;
+                    errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe existe en este contexto." + Environment.NewLine;
                     return "ERRORerr";
                 }
             }
