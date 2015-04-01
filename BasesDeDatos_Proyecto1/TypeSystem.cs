@@ -493,25 +493,25 @@ namespace BasesDeDatos_Proyecto1
             //Tabla de resultados
             FilaTabla resultado = juntarTablas(ListaTablas);
 
-            if (!postfix.Equals(""))
+            List<List<Object>> datosFiltrados = new List<List<Object>>();
+            //Se evalua cada fila de la tabla de resultados
+            foreach (List<Object> fila in resultado.datos.elementos)
             {
-                List<List<Object>> datosFiltrados = new List<List<Object>>();
-                //Se evalua cada fila de la tabla de resultados
-                foreach (List<Object> fila in resultado.datos.elementos)
+                //Si cumple la condicion, se agrega a la lista de datos
+                if (cumpleCondicion(fila, resultado.tabla, postfix))
                 {
-                    //Si cumple la condicion, se agrega a la lista de datos
-                    if (cumpleCondicion(fila, resultado.tabla, postfix))
-                    {
-                        datosFiltrados.Add(fila);
-                    }
+                    datosFiltrados.Add(fila);
                 }
-                //Se reasigna los datos de la tabla
-                resultado.datos.elementos = datosFiltrados;
             }
-
+            //Se reasigna los datos de la tabla
+            resultado.datos.elementos = datosFiltrados;
+            
+            //TODO orderBy
 
             //TODO mostrar datos, hacer select
-            String columnasAMostrar = Visit(context.GetChild(1));
+            String columnasAMostrar = context.GetChild(1).GetText();
+            if (!columnasAMostrar.Equals("*"))
+                columnasAMostrar = Visit(context.GetChild(1));
             resultados.RowCount = resultado.datos.elementos.Count + 1;
             resultados.ColumnCount = resultado.tabla.columnas.Count;
             for (int i = 0; i < resultados.ColumnCount; i++)
@@ -528,8 +528,6 @@ namespace BasesDeDatos_Proyecto1
                         resultados.Columns[i].Visible = false;
                 }
             }
-            //TODO orderBy
-
             return "void";
         }
 
