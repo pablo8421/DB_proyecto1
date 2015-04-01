@@ -323,7 +323,23 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitSelect_where(SqlParser.Select_whereContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 0)
+            {
+                return "";
+            }
+            else
+            {
+                String exp = Visit(context.GetChild(1));
+                if(exp.StartsWith("BOOL")){
+                    return exp.Substring(5);
+                }
+                else
+                {
+                    errores += "Error en línea " + context.start.Line +
+                               ": El resutado de la expresion no es booleana." + Environment.NewLine;
+                    return "Error";
+                }
+            }
         }
 
         override
@@ -382,14 +398,120 @@ namespace BasesDeDatos_Proyecto1
             throw new NotImplementedException();
         }
 
+        private FilaTabla juntarTablas(List<Tabla> listaTablas)
+        {
+            //Cargar los datos a usar
+            List<FilaTabla> datosTabla = new List<FilaTabla>();
+            foreach (Tabla tabla in listaTablas)
+            {
+                FilaTabla nueva = new FilaTabla(tabla, BDenUso);
+                nueva.cargar();
+                datosTabla.Add(nueva);
+            }
+
+            //Inicializar listas a usar
+            List<String> columnas = new List<String>();
+            List<String> tipos_columnas = new List<String>();
+
+            //Obtener columnas y tipos para la tabla de resultados
+            foreach (Tabla tabla in listaTablas)
+            {
+                foreach (String col in tabla.columnas)
+                {
+                    columnas.Add(tabla.nombre+"."+col);
+                }
+                foreach (String tipo in tabla.tipos_columnas)
+                {
+                    tipos_columnas.Add(tabla.nombre + "." + tipo);
+                }
+            }
+            //Crear tabla
+            Tabla tResultado = new Tabla("Resultados", 0, columnas, tipos_columnas, null);
+
+            FilaTabla fResultado = new FilaTabla(tResultado, "");
+
+            //Primera tabla
+            foreach(List<Object> fila in datosTabla[0].datos.elementos){
+                fResultado.datos.elementos.Add(fila);
+            }
+
+            //Para cada tabla a partir de la segunda
+            for (int i = 1; i < datosTabla.Count; i++ )
+            {
+                //Nueva lista de filas que sera el resultado final de este
+                //producto cartesiano
+                List<List<Object>> nuevaLista = new List<List<Object>>();
+                //Obtener datos sobre los cuales hacer el producto cartesiano
+                FilaTabla filasActuales = datosTabla[i];
+                //Para cada fila
+                foreach (List<Object> fila in fResultado.datos.elementos)
+                {
+                    //Nueva fila, con los datos ya cargados
+                    List<Object> nuevo = new List<Object>(fila);
+
+                    //Para cada fila en la tabla que se esta trabajando
+                    foreach (List<Object> filaActual in filasActuales.datos.elementos)
+                    {
+                        //Se agrega cada elemento a una fila nueva
+                        foreach (Object elemento in filaActual)
+                        {
+                            nuevo.Add(filaActual);
+                        }
+                        //Se agrega la fila nueva al resultado
+                        nuevaLista.Add(nuevo);
+                    }
+                }
+                //Se asigna el resultado
+                fResultado.datos.elementos = nuevaLista;
+            }
+
+            return fResultado;
+        }
+
         override
         public string VisitSelect(SqlParser.SelectContext context)
         {
+            //Verificar si hay base de datos en uso
+            if (BDenUso.Equals(""))
+            {
+                errores += "Error en línea " + context.start.Line + ": No hay base de datos en uso por lo que no se puede alterar la tabla.";
+                return "Error";
+            }
+
+            //Obtener tablas sobre las cuales se va a trabajar
             ListaTablas = new List<Tabla>();
             if(Visit(context.GetChild(3)).Equals("Error"))
             {
                 return "Error";
             }
+            
+            //Obtener expresion del where
+            String postfix = Visit(context.GetChild(4));
+            if (postfix.Equals("Error"))
+            {
+                return "Error";
+            }
+
+            //Tabla de resultados
+            FilaTabla resultado = juntarTablas(ListaTablas);
+
+            List<List<Object>> datosFiltrados = new List<List<Object>>();
+            //Se evalua cada fila de la tabla de resultados
+            foreach (List<Object> fila in resultado.datos.elementos)
+            {
+                //Si cumple la condicion, se agrega a la lista de datos
+                if (cumpleCondicion(fila, resultado.tabla, postfix))
+                {
+                    datosFiltrados.Add(fila);
+                }
+            }
+            //Se reasigna los datos de la tabla
+            resultado.datos.elementos = datosFiltrados;
+            
+            //TODO orderBy
+
+            //TODO mostrar datos, hacer select
+
             throw new NotImplementedException();
         }
 
@@ -5633,27 +5755,5 @@ namespace BasesDeDatos_Proyecto1
             reader.Close();
             return mTabla;
         }
-
-        /*
-        public string Visit(Antlr4.Runtime.Tree.IParseTree tree)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string VisitChildren(Antlr4.Runtime.Tree.IRuleNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string VisitErrorNode(Antlr4.Runtime.Tree.IErrorNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string VisitTerminal(Antlr4.Runtime.Tree.ITerminalNode node)
-        {
-            throw new NotImplementedException();
-        }
-        */
     }
 }
