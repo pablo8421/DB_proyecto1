@@ -1874,7 +1874,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno==-1)
-                                    datoUno = row[indexUno];
+                                    if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject) row[indexUno]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                                    }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
                             }
@@ -1904,7 +1915,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    datoDos = row[indexDos];
+                                    if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                                    }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
                             }
@@ -2002,7 +2024,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    datoUno = row[indexUno];
+                                    if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                                    }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
                             }
@@ -2032,7 +2065,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    datoDos = row[indexDos];
+                                    if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                                    }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
                             }
@@ -2130,7 +2174,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    datoUno = row[indexUno];
+                                    if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                                    }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
                             }
@@ -2160,7 +2215,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    datoDos = row[indexDos];
+                                    if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                                    }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
                             }
@@ -2272,7 +2338,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    datoUno = row[indexUno];
+                                    if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                                    }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
                             }
@@ -2302,7 +2379,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    datoDos = row[indexDos];
+                                    if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                                    }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
                             }
@@ -2414,7 +2502,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    datoUno = row[indexUno];
+                                    if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                                    }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
                             }
@@ -2444,7 +2543,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    datoDos = row[indexDos];
+                                    if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                                    }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
                             }
@@ -2556,7 +2666,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    datoUno = row[indexUno];
+                                    if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                                    }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
                             }
@@ -2586,7 +2707,18 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    datoDos = row[indexDos];
+                                    if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                                    }
+                                    else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                                    }
+                                    else
+                                    {
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                                    }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
                             }
@@ -2730,7 +2862,8 @@ namespace BasesDeDatos_Proyecto1
                 errores = "Error en línea " + context.start.Line + ": La tabla '" + nTabla + "' no existe en la base de datos '" + BDenUso + "'." + Environment.NewLine;
                 return "Error";
             }
-            ListaTablas[0] = tActual;
+            ListaTablas = new List<Tabla>();
+            ListaTablas.Add(tActual);
             datosUpdate = new List<Object>();
             columnasUpdate = new List<String>();
             if (Visit(context.GetChild(3)).Equals("Error")) //Verifica que exista la columna y no se repita, y obtiene los datos
