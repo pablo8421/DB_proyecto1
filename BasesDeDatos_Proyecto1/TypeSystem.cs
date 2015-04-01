@@ -5143,13 +5143,302 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitId_completo_orderVarios(SqlParser.Id_completo_orderVariosContext context)
         {
-            throw new NotImplementedException();
+            String retornoOtro = Visit(context.GetChild(0));
+            if (retornoOtro.StartsWith("ERROR"))
+            {
+                return "Error";
+            }
+            String retornoPropio;
+            if (context.ChildCount == 3)
+            {
+                String nombreT, columna;
+                Tabla tabla = null;
+                int indiceTabla, indiceColumna;
+                if (context.GetChild(2).GetText().Contains('.'))
+                {
+                    String[] split = context.GetChild(2).GetText().Split('.');
+                    nombreT = split[0];
+                    columna = split[1];
+
+                    tabla = null;
+
+                    foreach (Tabla t in ListaTablas)
+                    {
+                        if (t.nombre.Equals(nombreT))
+                        {
+                            tabla = t;
+                            indiceTabla = ListaTablas.IndexOf(t);
+                        }
+                    }
+                    if (tabla == null)
+                    {
+                        errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe existe en este contexto." + Environment.NewLine;
+                        return "ERRORerr";
+                    }
+                }
+                else
+                {
+                    columna = context.GetChild(2).GetText();
+                    List<String> nombresPosibles = getTablasOrigen(columna);
+                    if (nombresPosibles.Count == 1)
+                    {
+                        foreach (Tabla t in ListaTablas)
+                        {
+                            if (t.nombre.Equals(nombresPosibles[0]))
+                            {
+                                tabla = t;
+                                indiceTabla = ListaTablas.IndexOf(t);
+                                nombreT = nombresPosibles[0];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (nombresPosibles.Count == 0)
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no pertenece a ninguna tabla." + Environment.NewLine;
+                        }
+                        else
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
+                        }
+
+                        return "ERRORerr";
+                    }
+                }
+
+                indiceColumna = tabla.columnas.IndexOf(columna);
+                if (indiceColumna == -1)
+                {
+                    errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no existe en la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                    return "ERRORerr";
+                }
+
+                retornoPropio = "ASC" + tabla.nombre + "." + tabla.columnas[indiceColumna];
+            }
+            else
+            {
+                String nombreT, columna;
+                Tabla tabla = null;
+                int indiceTabla, indiceColumna;
+                if (context.GetChild(2).GetText().Contains('.'))
+                {
+                    String[] split = context.GetChild(2).GetText().Split('.');
+                    nombreT = split[0];
+                    columna = split[1];
+
+                    tabla = null;
+
+                    foreach (Tabla t in ListaTablas)
+                    {
+                        if (t.nombre.Equals(nombreT))
+                        {
+                            tabla = t;
+                            indiceTabla = ListaTablas.IndexOf(t);
+                        }
+                    }
+                    if (tabla == null)
+                    {
+                        errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe existe en este contexto." + Environment.NewLine;
+                        return "ERRORerr";
+                    }
+                }
+                else
+                {
+                    columna = context.GetChild(2).GetText();
+                    List<String> nombresPosibles = getTablasOrigen(columna);
+                    if (nombresPosibles.Count == 1)
+                    {
+                        foreach (Tabla t in ListaTablas)
+                        {
+                            if (t.nombre.Equals(nombresPosibles[0]))
+                            {
+                                tabla = t;
+                                indiceTabla = ListaTablas.IndexOf(t);
+                                nombreT = nombresPosibles[0];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (nombresPosibles.Count == 0)
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no pertenece a ninguna tabla." + Environment.NewLine;
+                        }
+                        else
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
+                        }
+
+                        return "ERRORerr";
+                    }
+                }
+
+                indiceColumna = tabla.columnas.IndexOf(columna);
+                if (indiceColumna == -1)
+                {
+                    errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no existe en la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                    return "ERRORerr";
+                }
+                String orden;
+                if (context.GetChild(3).Equals("ASC"))
+                {
+                    orden = "ASC";
+                }
+                else
+                {
+                    orden = "DES";
+                }
+                retornoPropio = orden + tabla.nombre + "." + tabla.columnas[indiceColumna];
+            }
+            return retornoOtro + "," + retornoPropio;
         }
 
         override
         public string VisitId_completo_orderSolo(SqlParser.Id_completo_orderSoloContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 1)
+            {
+                String nombreT, columna;
+                Tabla tabla = null;
+                int indiceTabla, indiceColumna;
+                if (context.GetText().Contains('.'))
+                {
+                    String[] split = context.GetText().Split('.');
+                    nombreT = split[0];
+                    columna = split[1];
+
+                    tabla = null;
+
+                    foreach (Tabla t in ListaTablas)
+                    {
+                        if (t.nombre.Equals(nombreT))
+                        {
+                            tabla = t;
+                            indiceTabla = ListaTablas.IndexOf(t);
+                        }
+                    }
+                    if (tabla == null)
+                    {
+                        errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe existe en este contexto." + Environment.NewLine;
+                        return "ERRORerr";
+                    }
+                }
+                else
+                {
+                    columna = context.GetText();
+                    List<String> nombresPosibles = getTablasOrigen(columna);
+                    if (nombresPosibles.Count == 1)
+                    {
+                        foreach (Tabla t in ListaTablas)
+                        {
+                            if (t.nombre.Equals(nombresPosibles[0]))
+                            {
+                                tabla = t;
+                                indiceTabla = ListaTablas.IndexOf(t);
+                                nombreT = nombresPosibles[0];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (nombresPosibles.Count == 0)
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no pertenece a ninguna tabla." + Environment.NewLine;
+                        }
+                        else
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
+                        }
+
+                        return "ERRORerr";
+                    }
+                }
+
+                indiceColumna = tabla.columnas.IndexOf(columna);
+                if (indiceColumna == -1)
+                {
+                    errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no existe en la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                    return "ERRORerr";
+                }
+
+                return "ASC"+ tabla.nombre + "." + tabla.columnas[indiceColumna];
+            }
+            else
+            {
+                String nombreT, columna;
+                Tabla tabla = null;
+                int indiceTabla, indiceColumna;
+                if (context.GetChild(0).GetText().Contains('.'))
+                {
+                    String[] split = context.GetChild(0).GetText().Split('.');
+                    nombreT = split[0];
+                    columna = split[1];
+
+                    tabla = null;
+
+                    foreach (Tabla t in ListaTablas)
+                    {
+                        if (t.nombre.Equals(nombreT))
+                        {
+                            tabla = t;
+                            indiceTabla = ListaTablas.IndexOf(t);
+                        }
+                    }
+                    if (tabla == null)
+                    {
+                        errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe existe en este contexto." + Environment.NewLine;
+                        return "ERRORerr";
+                    }
+                }
+                else
+                {
+                    columna = context.GetChild(0).GetText();
+                    List<String> nombresPosibles = getTablasOrigen(columna);
+                    if (nombresPosibles.Count == 1)
+                    {
+                        foreach (Tabla t in ListaTablas)
+                        {
+                            if (t.nombre.Equals(nombresPosibles[0]))
+                            {
+                                tabla = t;
+                                indiceTabla = ListaTablas.IndexOf(t);
+                                nombreT = nombresPosibles[0];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (nombresPosibles.Count == 0)
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no pertenece a ninguna tabla." + Environment.NewLine;
+                        }
+                        else
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
+                        }
+
+                        return "ERRORerr";
+                    }
+                }
+
+                indiceColumna = tabla.columnas.IndexOf(columna);
+                if (indiceColumna == -1)
+                {
+                    errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no existe en la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                    return "ERRORerr";
+                }
+                String orden;
+                if (context.GetChild(1).Equals("ASC"))
+                {
+                    orden = "ASC";
+                }
+                else
+                {
+                    orden = "DES";
+                }
+                return orden + tabla.nombre + "." + tabla.columnas[indiceColumna];
+            }
         }
         
         override
