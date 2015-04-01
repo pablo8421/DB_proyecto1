@@ -374,6 +374,11 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitSelect(SqlParser.SelectContext context)
         {
+            ListaTablas = new List<Tabla>();
+            if(Visit(context.GetChild(3)).Equals("Error"))
+            {
+                return "Error";
+            }
             throw new NotImplementedException();
         }
 
@@ -631,7 +636,7 @@ namespace BasesDeDatos_Proyecto1
                 else if (restriccion.tipo.Equals("CH"))
                 {
                     Stack<String> stack = new Stack<String>();
-                    List<String> expresiones = new List<String>(Regex.Split(restriccion.restriccionCheck, ",(?=(?:[^']*'[^']*')*[^']*$)"));
+                    List<String> expresiones = new List<String>(Regex.Split(restriccion.restriccionCheck, " (?=(?:[^']*'[^']*')*[^']*$)"));
                     foreach (String e in expresiones)
                     {
                         if (e.Equals("OR"))
@@ -1876,7 +1881,7 @@ namespace BasesDeDatos_Proyecto1
                 if (restriccion.tipo.Equals("CH"))
                 {
                     Stack<String> stack = new Stack<String>();
-                    List<String> expresiones = new List<String>(Regex.Split(restriccion.restriccionCheck, ",(?=(?:[^']*'[^']*')*[^']*$)"));
+                    List<String> expresiones = new List<String>(Regex.Split(restriccion.restriccionCheck, " (?=(?:[^']*'[^']*')*[^']*$)"));
                     foreach (String e in expresiones)
                     {
                         if (e.Equals("OR"))
@@ -3117,7 +3122,7 @@ namespace BasesDeDatos_Proyecto1
         private bool cumpleCondicion(List<Object> row, Tabla tabla, String postfix)
         {
             Stack<String> stack = new Stack<String>();
-            List<String> expresiones = new List<String>(Regex.Split(postfix, ",(?=(?:[^']*'[^']*')*[^']*$)"));
+            List<String> expresiones = new List<String>(Regex.Split(postfix, " (?=(?:[^']*'[^']*')*[^']*$)"));
             foreach (String e in expresiones)
             {
                 if (e.Equals("OR"))
