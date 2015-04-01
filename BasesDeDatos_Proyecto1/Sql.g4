@@ -174,7 +174,7 @@ select_where: (WHERE multi_exp)?;
 
 select_orderBy: (ORDER BY id_completo_order)?;
 
-id_completo_order : id_completo_order ',' (IDENTIFICADOR | ID)  (ASC|DESC)?
-				 | (IDENTIFICADOR | ID) (ASC|DESC)?;
+id_completo_order : id_completo_order ',' (IDENTIFICADOR | ID)  (ASC|DESC)? #id_completo_orderVarios
+				 | (IDENTIFICADOR | ID) (ASC|DESC)?							#id_completo_orderSolo;
 
 WS : [ \t\r\n]+ -> skip ;

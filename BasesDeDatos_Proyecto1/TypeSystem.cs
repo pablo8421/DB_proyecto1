@@ -5141,11 +5141,17 @@ namespace BasesDeDatos_Proyecto1
         }
 
         override
-        public string VisitId_completo_order(SqlParser.Id_completo_orderContext context)
+        public string VisitId_completo_orderVarios(SqlParser.Id_completo_orderVariosContext context)
         {
             throw new NotImplementedException();
         }
 
+        override
+        public string VisitId_completo_orderSolo(SqlParser.Id_completo_orderSoloContext context)
+        {
+            throw new NotImplementedException();
+        }
+        
         override
         public string VisitConstrain_check(SqlParser.Constrain_checkContext context)
         {
