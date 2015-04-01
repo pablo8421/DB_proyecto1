@@ -2973,7 +2973,18 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        datoUno = row[indexUno];
+                        if (tabla.tipos_columnas[indexUno].Equals("INT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                        }
+                        else
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                        }
                     }
                     else
                     {
@@ -2999,7 +3010,18 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        datoDos = row[indexDos];
+                        if (tabla.tipos_columnas[indexDos].Equals("INT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                        }
+                        else
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                        }
                     }
                     else
                     {
@@ -3235,7 +3257,18 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        datoUno = row[indexUno];
+                        if (tabla.tipos_columnas[indexUno].Equals("INT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                        }
+                        else
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                        }
                     }
                     else
                     {
@@ -3261,7 +3294,18 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        datoDos = row[indexDos];
+                        if (tabla.tipos_columnas[indexDos].Equals("INT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                        }
+                        else
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                        }
                     }
                     else
                     {
@@ -3369,7 +3413,18 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        datoUno = row[indexUno];
+                        if (tabla.tipos_columnas[indexUno].Equals("INT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                        }
+                        else
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                        }
                     }
                     else
                     {
@@ -3395,7 +3450,18 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        datoDos = row[indexDos];
+                        if (tabla.tipos_columnas[indexDos].Equals("INT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                        }
+                        else
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                        }
                     }
                     else
                     {
@@ -3503,7 +3569,18 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        datoUno = row[indexUno];
+                        if (tabla.tipos_columnas[indexUno].Equals("INT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                        }
+                        else
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                        }
                     }
                     else
                     {
@@ -3529,7 +3606,18 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        datoDos = row[indexDos];
+                        if (tabla.tipos_columnas[indexDos].Equals("INT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                        }
+                        else
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                        }
                     }
                     else
                     {
@@ -3637,7 +3725,18 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        datoUno = row[indexUno];
+                        if (tabla.tipos_columnas[indexUno].Equals("INT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                        }
+                        else
+                        {
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                        }
                     }
                     else
                     {
@@ -3663,7 +3762,18 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        datoDos = row[indexDos];
+                        if (tabla.tipos_columnas[indexDos].Equals("INT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                        }
+                        else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                        }
+                        else
+                        {
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                        }
                     }
                     else
                     {
