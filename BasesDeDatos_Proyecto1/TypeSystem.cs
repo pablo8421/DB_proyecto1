@@ -2932,7 +2932,7 @@ namespace BasesDeDatos_Proyecto1
                     string pk = "";
                     if (esReferenciado(fila, tActual, masterTabla, out pk))
                     {
-                        errores = "Error en línea " + context.start.Line +
+                        errores += "Error en línea " + context.start.Line +
                                     ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
                         return "Error";
                     }
@@ -2958,6 +2958,7 @@ namespace BasesDeDatos_Proyecto1
                         e[indicesC[i]] = datosUpdate[i];
                 }
                 datos.guardar();
+                mensajes += "Se han actualizado " + datos.datos.elementos.Count + " registros con éxito." + Environment.NewLine;
             }
             else { //Si tiene WHERE
                 
@@ -2965,7 +2966,7 @@ namespace BasesDeDatos_Proyecto1
                 
                 ListaTablas = new List<Tabla>();
                 ListaTablas.Add(tActual);
-                String postfix = Visit(context.GetChild(4));
+                String postfix = Visit(context.GetChild(5));
                 postfix = postfix.Replace(tActual.nombre + ".", "");
                 if (postfix.StartsWith("BOOL "))
                 {
@@ -2973,7 +2974,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else
                 {
-                    errores = "Error en línea " + context.start.Line +
+                    errores += "Error en línea " + context.start.Line +
                               ": La condicion del where no regresa un valor booleano." + Environment.NewLine;
                     return "Error";
                 }
@@ -2986,36 +2987,34 @@ namespace BasesDeDatos_Proyecto1
                 {
                     //Llena la lista de los elementos que seran borrados
                     if (cumpleCondicion(fila, tActual, postfix))
-                    {
                         paraUpdate.Add(fila);
-                        string pk = "";
-                    }
                 }
-                //Cantidad de datos a borrar
-                int cantidad = paraUpdate.Count;
+
+                FilaTabla nuevosDatos = new FilaTabla(tActual, BDenUso);
+                nuevosDatos.datos.elementos = paraUpdate;
 
                 //Verificar restriccion de primary key
-                bool banderaR = verificarPrimaryKeyUpdate(datosUpdate, columnasUpdate, datos, context.start.Line);
+                bool banderaR = verificarPrimaryKeyUpdate(datosUpdate, columnasUpdate, nuevosDatos, context.start.Line);
 
                 if (!banderaR)
                     return "Error";
 
                 //Verificar restriccion de foreign key
-                foreach (List<Object> fila in datos.datos.elementos)
+                foreach (List<Object> fila in nuevosDatos.datos.elementos)
                 {
                     string pk = "";
                     if (esReferenciado(fila, tActual, masterTabla, out pk))
                     {
-                        errores = "Error en línea " + context.start.Line +
+                        errores += "Error en línea " + context.start.Line +
                                     ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
                         return "Error";
                     }
                 }
                 //Verificar restriccion de check
                 List<List<Object>> datosPosiblesACambiar = new List<List<Object>>();
-                foreach (List<Object> e in datos.datos.elementos)
+                foreach (List<Object> e in nuevosDatos.datos.elementos)
                 {
-                    bool banderaCheck = verificarCheckUpdate(datosUpdate, e, columnasUpdate, datos, context.start.Line);
+                    bool banderaCheck = verificarCheckUpdate(datosUpdate, e, columnasUpdate, nuevosDatos, context.start.Line);
                     if (banderaCheck)
                         datosPosiblesACambiar.Add(e);
                     else
@@ -3025,10 +3024,16 @@ namespace BasesDeDatos_Proyecto1
                 //Hacer update
                 List<int> indicesC = new List<int>();
                 foreach (String nombreC in columnasUpdate)
-                    indicesC.Add(datos.tabla.columnas.IndexOf(nombreC));
-
+                    indicesC.Add(nuevosDatos.tabla.columnas.IndexOf(nombreC));
+                
+                foreach (List<Object> e in datosPosiblesACambiar)
+                {
+                    for (int i = 0; i < datosUpdate.Count; i++)
+                        e[indicesC[i]] = datosUpdate[i];
+                }
+                datos.guardar();
+                mensajes += "Se han actualizado " + nuevosDatos.datos.elementos.Count + " registros con éxito." + Environment.NewLine;
             }
-
             return "void";
         }
 
