@@ -148,7 +148,7 @@ namespace BasesDeDatos_Proyecto1
                     || (tipoValor.Equals("FLOAT") && tipoColumna.Equals("INT"))
                     || (tipoValor.StartsWith("CHAR") && tipoColumna.StartsWith("CHAR"))))
                 {
-                    errores = "Error en línea " + context.start.Line +
+                    errores += "Error en línea " + context.start.Line +
                                 ": El tipo del valor '" + tipoValor +
                                 "' no concuerda con el tipo de la columna '" + tipoColumna +
                                 "' (" + tipoValor +
@@ -230,7 +230,7 @@ namespace BasesDeDatos_Proyecto1
                     || (tipoValor.Equals("FLOAT") && tipoColumna.Equals("INT"))
                     || (tipoValor.StartsWith("CHAR") && tipoColumna.StartsWith("CHAR"))))
                 {
-                    errores = "Error en línea " + context.start.Line +
+                    errores += "Error en línea " + context.start.Line +
                                 ": El tipo del valor '" + tipoValor +
                                 "' no concuerda con el tipo de la columna '" + tipoColumna +
                                 "' (" + tipoValor +
@@ -318,7 +318,51 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitId_tablas(SqlParser.Id_tablasContext context)
         {
-            throw new NotImplementedException();
+            MasterTabla mTabla = deserializarMasterTabla();
+
+            if (context.ChildCount == 1)
+            {
+                Tabla tabla = mTabla.getTable(context.GetChild(0).GetText());
+                if (tabla != null)
+                {
+                    ListaTablas.Add(tabla);
+                    return "void";
+                }
+                else
+                {
+                    errores += "Error en línea " + context.start.Line +
+                               ": No se encontro la tabla '" + context.GetChild(0).GetText() +
+                               "'." + Environment.NewLine;
+                    return "Error";
+                }
+            }
+            else
+            {
+                String resto = Visit(context.GetChild(0));
+                String propio;
+                Tabla tabla = mTabla.getTable(context.GetChild(2).GetText());
+
+                if (tabla != null)
+                {
+                    ListaTablas.Add(tabla);
+                    propio = "void";
+                }
+                else
+                {
+                    errores += "Error en línea " + context.start.Line +
+                               ": No se encontro la tabla '" + context.GetChild(2).GetText() +
+                               "'." + Environment.NewLine;
+                    propio = "Error";
+                }
+                if (propio.Equals("void") && resto.Equals("void"))
+                {
+                    return "void";
+                }
+                else
+                {
+                    return "Error";
+                }
+            }
         }
 
         override
@@ -477,7 +521,7 @@ namespace BasesDeDatos_Proyecto1
             }
             else
             {
-                errores = "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' no existe en el DBMS.\r\n";
+                errores += "Error en línea " + context.start.Line + ": La base de datos '" + nombre + "' no existe en el DBMS.\r\n";
                 return "Error";
             }
         }
@@ -1459,7 +1503,7 @@ namespace BasesDeDatos_Proyecto1
                 //Verificar que exista la tabla
                 if (tabla == null)
                 {
-                    errores = "Error en línea " + context.start.Line +
+                    errores += "Error en línea " + context.start.Line +
                               ": La tabla '" + nombre + 
                               "' no existe en la base de datos '" + BDenUso + 
                               "'." + Environment.NewLine;
@@ -1470,7 +1514,7 @@ namespace BasesDeDatos_Proyecto1
                 List<String> valores= new List<String>(Regex.Split(Visit(context.GetChild(5)), ",(?=(?:[^']*'[^']*')*[^']*$)"));
                 if (valores.Count > tabla.columnas.Count)
                 {
-                    errores = "Error en línea " + context.start.Line +
+                    errores += "Error en línea " + context.start.Line +
                               ": La cantidad de columnas en la tabla '" + tabla.nombre +
                               "' no concuerda con la cantidad de valores ingresados  (" + valores.Count + 
                               "," + tabla.columnas.Count +
@@ -1520,12 +1564,12 @@ namespace BasesDeDatos_Proyecto1
                       || (listaTipos[i].Equals("FLOAT") && tabla.tipos_columnas[i].Equals("INT"))
                       || (listaTipos[i].StartsWith("CHAR") && tabla.tipos_columnas[i].StartsWith("CHAR"))))
                     {
-                        errores = "Error en línea " + context.start.Line +
-                                  ": El tipo del valor '" + listaValores[i] +
-                                  "' no concuerda con el tipo de la columna '" + tabla.tipos_columnas[i] + 
-                                  "' (" + listaTipos[i] +
-                                  "," + tabla.tipos_columnas[i] +
-                                  ")." + Environment.NewLine;
+                        errores += "Error en línea " + context.start.Line +
+                                   ": El tipo del valor '" + listaValores[i] +
+                                   "' no concuerda con el tipo de la columna '" + tabla.tipos_columnas[i] + 
+                                   "' (" + listaTipos[i] +
+                                   "," + tabla.tipos_columnas[i] +
+                                   ")." + Environment.NewLine;
                         return "Error";
 
                     }
@@ -1620,10 +1664,10 @@ namespace BasesDeDatos_Proyecto1
                 //Verificar que exista la tabla
                 if (tabla == null)
                 {
-                    errores = "Error en línea " + context.start.Line +
-                              ": La tabla '" + nombre +
-                              "' no existe en la base de datos '" + BDenUso +
-                              "'." + Environment.NewLine;
+                    errores += "Error en línea " + context.start.Line +
+                               ": La tabla '" + nombre +
+                               "' no existe en la base de datos '" + BDenUso +
+                               "'." + Environment.NewLine;
                     return "Error";
                 }
                 //Obtener las columnas a las cuales insertar
@@ -1641,9 +1685,9 @@ namespace BasesDeDatos_Proyecto1
                 {
                     if (!hashset.Add(elemento))
                     {
-                        errores = "Error en línea " + context.start.Line +
-                                  ": se repitio la columna '" + elemento +
-                                  "' mas de una vez en las columnas selectas." + Environment.NewLine;
+                        errores += "Error en línea " + context.start.Line +
+                                   ": se repitio la columna '" + elemento +
+                                   "' mas de una vez en las columnas selectas." + Environment.NewLine;
                         return "Error";
                     }
                 }
@@ -1651,11 +1695,11 @@ namespace BasesDeDatos_Proyecto1
                 String[] valores = Regex.Split(Visit(context.GetChild(8)), ",(?=(?:[^']*'[^']*')*[^']*$)"); ;
                 if (valores.Length != listaColumnas.Length)
                 {
-                    errores = "Error en línea " + context.start.Line +
-                              ": La cantidad de columnas selectas en la tabla '" + tabla.nombre +
-                              "' no concuerda con la cantidad de valores ingresados  (" + valores.Length +
-                              "," + listaColumnas.Length +
-                              ")." + Environment.NewLine;
+                    errores += "Error en línea " + context.start.Line +
+                               ": La cantidad de columnas selectas en la tabla '" + tabla.nombre +
+                               "' no concuerda con la cantidad de valores ingresados  (" + valores.Length +
+                               "," + listaColumnas.Length +
+                               ")." + Environment.NewLine;
                     return "Error";
                 }
                 //Separar los tipos y valores en listas
@@ -1679,12 +1723,12 @@ namespace BasesDeDatos_Proyecto1
                       || (listaTipos[i].Equals("FLOAT") && tabla.tipos_columnas[indice].Equals("INT"))
                       || (listaTipos[i].StartsWith("CHAR") && tabla.tipos_columnas[indice].StartsWith("CHAR"))))
                     {
-                        errores = "Error en línea " + context.start.Line +
-                                  ": El tipo del valor '" + listaValores[i] +
-                                  "' no concuerda con el tipo de la columna '" + tabla.tipos_columnas[indice] +
-                                  "' (" + listaTipos[i] +
-                                  "," + tabla.tipos_columnas[indice] +
-                                  ")." + Environment.NewLine;
+                        errores += "Error en línea " + context.start.Line +
+                                   ": El tipo del valor '" + listaValores[i] +
+                                   "' no concuerda con el tipo de la columna '" + tabla.tipos_columnas[indice] +
+                                   "' (" + listaTipos[i] +
+                                   "," + tabla.tipos_columnas[indice] +
+                                   ")." + Environment.NewLine;
                         return "Error";
                     }
                     if (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[indice].StartsWith("CHAR"))
