@@ -4792,7 +4792,15 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else
                 {
-                    errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
+                    if (nombresPosibles.Count == 0)
+                    {
+                        errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no pertenece a ninguna tabla." + Environment.NewLine;
+                    }
+                    else
+                    {
+                        errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
+                    }
+
                     return "ERRORerr";
                 }
             }
