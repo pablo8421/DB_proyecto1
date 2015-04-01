@@ -518,7 +518,7 @@ namespace BasesDeDatos_Proyecto1
             resultados.ColumnCount = resultado.tabla.columnas.Count;
             for (int i = 0; i < resultados.ColumnCount; i++)
                 resultados.Rows[0].Cells[i].Value = resultado.tabla.columnas[i];
-            for (int i = 0; i < resultados.RowCount; i++)
+            for (int i = 0; i < resultados.RowCount-1; i++)
                 for (int j = 0; j < resultados.ColumnCount; j++)
                     resultados.Rows[i].Cells[j].Value = resultado.getRowElement(i, j);
             if (!columnasAMostrar.Equals("*"))
