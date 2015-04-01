@@ -521,6 +521,8 @@ namespace BasesDeDatos_Proyecto1
             String columnasAMostrar = context.GetChild(1).GetText();
             if (!columnasAMostrar.Equals("*"))
                 columnasAMostrar = Visit(context.GetChild(1));
+            if (columnasAMostrar.Equals("Error"))
+                return "Error";
             resultados.RowCount = resultado.datos.elementos.Count + 1;
             resultados.ColumnCount = resultado.tabla.columnas.Count;
             for (int i = 0; i < resultados.ColumnCount; i++)
@@ -5803,7 +5805,7 @@ namespace BasesDeDatos_Proyecto1
                     if (tabla == null)
                     {
                         errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe existe en este contexto." + Environment.NewLine;
-                        return "ERRORerr";
+                        return "Error";
                     }
                 }
                 else
@@ -5833,7 +5835,7 @@ namespace BasesDeDatos_Proyecto1
                             errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
                         }
 
-                        return "ERRORerr";
+                        return "Error";
                     }
                 }
 
@@ -5841,7 +5843,7 @@ namespace BasesDeDatos_Proyecto1
                 if (indiceColumna == -1)
                 {
                     errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no existe en la tabla '" + nombreT + "'." + Environment.NewLine;
-                    return "ERRORerr";
+                    return "Error";
                 }
 
                 if (tabla.tipos_columnas[indiceColumna].Equals("INT"))
@@ -5863,7 +5865,7 @@ namespace BasesDeDatos_Proyecto1
                 else
                 {
                     errores += "Error en línea " + context.start.Line + ": Error desconocido." + Environment.NewLine;
-                    return "ERRORerr";
+                    return "Error";
                 }
             }
             else
@@ -5886,7 +5888,7 @@ namespace BasesDeDatos_Proyecto1
                     if (tabla == null)
                     {
                         errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe existe en este contexto." + Environment.NewLine;
-                        return "ERRORerr";
+                        return "Error";
                     }
                 }
                 else
@@ -5916,7 +5918,7 @@ namespace BasesDeDatos_Proyecto1
                             errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
                         }
 
-                        return "ERRORerr";
+                        return "Error";
                     }
                 }
 
@@ -5924,7 +5926,7 @@ namespace BasesDeDatos_Proyecto1
                 if (indiceColumna == -1)
                 {
                     errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no existe en la tabla '" + nombreT + "'." + Environment.NewLine;
-                    return "ERRORerr";
+                    return "Error";
                 }
 
                 if (tabla.tipos_columnas[indiceColumna].Equals("INT"))
@@ -5946,7 +5948,7 @@ namespace BasesDeDatos_Proyecto1
                 else
                 {
                     errores += "Error en línea " + context.start.Line + ": Error desconocido." + Environment.NewLine;
-                    return "ERRORerr";
+                    return "Error";
                 }
             }
         }
