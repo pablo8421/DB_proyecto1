@@ -453,10 +453,8 @@ namespace BasesDeDatos_Proyecto1
                     foreach (List<Object> filaActual in filasActuales.datos.elementos)
                     {
                         //Se agrega cada elemento a una fila nueva
-                        foreach (Object elemento in filaActual)
-                        {
-                            nuevo.Add(filaActual);
-                        }
+                        nuevo.AddRange(filaActual);
+
                         //Se agrega la fila nueva al resultado
                         nuevaLista.Add(nuevo);
                     }
