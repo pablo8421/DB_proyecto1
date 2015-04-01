@@ -422,7 +422,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 foreach (String tipo in tabla.tipos_columnas)
                 {
-                    tipos_columnas.Add(tabla.nombre + "." + tipo);
+                    tipos_columnas.Add(tipo);
                 }
             }
             //Crear tabla
