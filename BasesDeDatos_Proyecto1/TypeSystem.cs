@@ -2908,7 +2908,7 @@ namespace BasesDeDatos_Proyecto1
             Tabla tActual = masterTabla.getTable(nTabla);
             if (tActual == null)
             { //No existe la tabla
-                errores = "Error en línea " + context.start.Line + ": La tabla '" + nTabla + "' no existe en la base de datos '" + BDenUso + "'." + Environment.NewLine;
+                errores += "Error en línea " + context.start.Line + ": La tabla '" + nTabla + "' no existe en la base de datos '" + BDenUso + "'." + Environment.NewLine;
                 return "Error";
             }
             ListaTablas = new List<Tabla>();
