@@ -2712,7 +2712,8 @@ namespace BasesDeDatos_Proyecto1
                 errores = "Error en línea " + context.start.Line + ": La tabla '" + nTabla + "' no existe en la base de datos '" + BDenUso + "'." + Environment.NewLine;
                 return "Error";
             }
-            ListaTablas[0] = tActual;
+            ListaTablas = new List<Tabla>();
+            ListaTablas.Add(tActual);
             datosUpdate = new List<Object>();
             columnasUpdate = new List<String>();
             if (Visit(context.GetChild(3)).Equals("Error")) //Verifica que exista la columna y no se repita, y obtiene los datos
