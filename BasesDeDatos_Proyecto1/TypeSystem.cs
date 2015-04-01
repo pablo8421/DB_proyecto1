@@ -529,7 +529,7 @@ namespace BasesDeDatos_Proyecto1
                 resultados.Rows[0].Cells[i].Value = resultado.tabla.columnas[i];
             for (int i = 0; i < resultados.RowCount-1; i++)
                 for (int j = 0; j < resultados.ColumnCount; j++)
-                    resultados.Rows[i].Cells[j].Value = resultado.getRowElement(i, j);
+                    resultados.Rows[i+1].Cells[j].Value = resultado.getRowElement(i, j);
             if (!columnasAMostrar.Equals("*"))
             {
                 List<String> colMostrar = new List<string>(columnasAMostrar.Split(','));
