@@ -1717,7 +1717,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (tabla.tipos_columnas[i].Equals("DATE"))
                     {
                         DateTime myDateTime = DateTime.Now;
-                        valores.Add("'" + "DATE " + myDateTime.ToString("yyyy-MM-dd") + "'");
+                        valores.Add("DATE " + "'" + myDateTime.ToString("yyyy-MM-dd") + "'");
                     }
                     else if (tabla.tipos_columnas[i].StartsWith("CHAR"))
                     {
