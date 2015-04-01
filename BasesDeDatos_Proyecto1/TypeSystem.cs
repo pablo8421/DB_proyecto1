@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -551,7 +552,18 @@ namespace BasesDeDatos_Proyecto1
                 int index = listaAOrdenar.Count - 1;
                 while (index >= 0)
                 {
-                    //Do Stuff
+                    String tipo = listaAOrdenar[index].Substring(0, 3);
+                    String col = listaAOrdenar[index].Substring(3);
+                    int i = resultado.tabla.columnas.IndexOf(col);
+                    if (tipo.Equals("ASC"))
+                    {
+                        resultados.Sort(resultados.Columns[i], ListSortDirection.Ascending);
+
+                    }
+                    else
+                    {
+                        resultados.Sort(resultados.Columns[i], ListSortDirection.Descending);
+                    }
                 }
             }
 
