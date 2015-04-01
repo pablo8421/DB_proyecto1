@@ -5446,7 +5446,177 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitIdentificador_completo(SqlParser.Identificador_completoContext context)
         {
-            throw new NotImplementedException();
+            String nombreT = "", columna;
+            int indiceTabla = -1;
+            int indiceColumna = -1;
+
+            Tabla tabla = null;
+
+            if (context.ChildCount == 1)
+            {
+                if (context.GetText().Contains('.'))
+                {
+                    String[] split = context.GetText().Split('.');
+                    nombreT = split[0];
+                    columna = split[1];
+
+                    foreach (Tabla t in ListaTablas)
+                    {
+                        if (t.nombre.Equals(nombreT))
+                        {
+                            tabla = t;
+                            indiceTabla = ListaTablas.IndexOf(t);
+                        }
+                    }
+                    if (tabla == null)
+                    {
+                        errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe existe en este contexto." + Environment.NewLine;
+                        return "ERRORerr";
+                    }
+                }
+                else
+                {
+                    columna = context.GetText();
+                    List<String> nombresPosibles = getTablasOrigen(columna);
+                    if (nombresPosibles.Count == 1)
+                    {
+                        foreach (Tabla t in ListaTablas)
+                        {
+                            if (t.nombre.Equals(nombresPosibles[0]))
+                            {
+                                tabla = t;
+                                indiceTabla = ListaTablas.IndexOf(t);
+                                nombreT = nombresPosibles[0];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (nombresPosibles.Count == 0)
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no pertenece a ninguna tabla." + Environment.NewLine;
+                        }
+                        else
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
+                        }
+
+                        return "ERRORerr";
+                    }
+                }
+
+                indiceColumna = tabla.columnas.IndexOf(columna);
+                if (indiceColumna == -1)
+                {
+                    errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no existe en la tabla '" + nombreT + "'." + Environment.NewLine;
+                    return "ERRORerr";
+                }
+
+                if (tabla.tipos_columnas[indiceColumna].Equals("INT"))
+                {
+                    return nombreT + "." + columna;
+                }
+                else if (tabla.tipos_columnas[indiceColumna].Equals("FLOAT"))
+                {
+                    return nombreT + "." + columna;
+                }
+                else if (tabla.tipos_columnas[indiceColumna].Equals("DATE"))
+                {
+                    return nombreT + "." + columna;
+                }
+                else if (tabla.tipos_columnas[indiceColumna].StartsWith("CHAR"))
+                {
+                    return nombreT + "." + columna;
+                }
+                else
+                {
+                    errores += "Error en línea " + context.start.Line + ": Error desconocido." + Environment.NewLine;
+                    return "ERRORerr";
+                }
+            }
+            else
+            {
+                String res = Visit(context.GetChild(0))+",";
+                if (context.GetChild(2).GetText().Contains('.'))
+                {
+                    String[] split = context.GetChild(2).GetText().Split('.');
+                    nombreT = split[0];
+                    columna = split[1];
+
+                    foreach (Tabla t in ListaTablas)
+                    {
+                        if (t.nombre.Equals(nombreT))
+                        {
+                            tabla = t;
+                            indiceTabla = ListaTablas.IndexOf(t);
+                        }
+                    }
+                    if (tabla == null)
+                    {
+                        errores += "Error en línea " + context.start.Line + ": La tabla '" + nombreT + "' no existe existe en este contexto." + Environment.NewLine;
+                        return "ERRORerr";
+                    }
+                }
+                else
+                {
+                    columna = context.GetChild(2).GetText();
+                    List<String> nombresPosibles = getTablasOrigen(columna);
+                    if (nombresPosibles.Count == 1)
+                    {
+                        foreach (Tabla t in ListaTablas)
+                        {
+                            if (t.nombre.Equals(nombresPosibles[0]))
+                            {
+                                tabla = t;
+                                indiceTabla = ListaTablas.IndexOf(t);
+                                nombreT = nombresPosibles[0];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (nombresPosibles.Count == 0)
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no pertenece a ninguna tabla." + Environment.NewLine;
+                        }
+                        else
+                        {
+                            errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' puede pertenecer a varias tablas." + Environment.NewLine;
+                        }
+
+                        return "ERRORerr";
+                    }
+                }
+
+                indiceColumna = tabla.columnas.IndexOf(columna);
+                if (indiceColumna == -1)
+                {
+                    errores += "Error en línea " + context.start.Line + ": La columna '" + columna + "' no existe en la tabla '" + nombreT + "'." + Environment.NewLine;
+                    return "ERRORerr";
+                }
+
+                if (tabla.tipos_columnas[indiceColumna].Equals("INT"))
+                {
+                    return res+nombreT + "." + columna;
+                }
+                else if (tabla.tipos_columnas[indiceColumna].Equals("FLOAT"))
+                {
+                    return res+nombreT + "." + columna;
+                }
+                else if (tabla.tipos_columnas[indiceColumna].Equals("DATE"))
+                {
+                    return res+nombreT + "." + columna;
+                }
+                else if (tabla.tipos_columnas[indiceColumna].StartsWith("CHAR"))
+                {
+                    return res+nombreT + "." + columna;
+                }
+                else
+                {
+                    errores += "Error en línea " + context.start.Line + ": Error desconocido." + Environment.NewLine;
+                    return "ERRORerr";
+                }
+            }
         }
 
         override
