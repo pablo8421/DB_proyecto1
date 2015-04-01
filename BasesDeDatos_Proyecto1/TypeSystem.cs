@@ -587,7 +587,7 @@ namespace BasesDeDatos_Proyecto1
                 else if (restriccion.tipo.Equals("CH"))
                 {
                     Stack<String> stack = new Stack<String>();
-                    List<String> expresiones = new List<String>(restriccion.restriccionCheck.Split(' '));
+                    List<String> expresiones = new List<String>(Regex.Split(restriccion.restriccionCheck, ",(?=(?:[^']*'[^']*')*[^']*$)"));
                     foreach (String e in expresiones)
                     {
                         if (e.Equals("OR"))
@@ -1832,7 +1832,7 @@ namespace BasesDeDatos_Proyecto1
                 if (restriccion.tipo.Equals("CH"))
                 {
                     Stack<String> stack = new Stack<String>();
-                    List<String> expresiones = new List<String>(restriccion.restriccionCheck.Split(' '));
+                    List<String> expresiones = new List<String>(Regex.Split(restriccion.restriccionCheck, ",(?=(?:[^']*'[^']*')*[^']*$)"));
                     foreach (String e in expresiones)
                     {
                         if (e.Equals("OR"))
@@ -3073,7 +3073,7 @@ namespace BasesDeDatos_Proyecto1
         private bool cumpleCondicion(List<Object> row, Tabla tabla, String postfix)
         {
             Stack<String> stack = new Stack<String>();
-            List<String> expresiones = new List<String>(postfix.Split(' '));
+            List<String> expresiones = new List<String>(Regex.Split(postfix, ",(?=(?:[^']*'[^']*')*[^']*$)"));
             foreach (String e in expresiones)
             {
                 if (e.Equals("OR"))
