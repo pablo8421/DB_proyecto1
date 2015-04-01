@@ -2712,8 +2712,7 @@ namespace BasesDeDatos_Proyecto1
                 errores = "Error en línea " + context.start.Line + ": La tabla '" + nTabla + "' no existe en la base de datos '" + BDenUso + "'." + Environment.NewLine;
                 return "Error";
             }
-            ListaTablas = new List<Tabla>();
-            ListaTablas.Add(tActual);
+            ListaTablas[0] = tActual;
             datosUpdate = new List<Object>();
             columnasUpdate = new List<String>();
             if (Visit(context.GetChild(3)).Equals("Error")) //Verifica que exista la columna y no se repita, y obtiene los datos
@@ -2766,6 +2765,48 @@ namespace BasesDeDatos_Proyecto1
                 datos.guardar();
             }
             else { //Si tiene WHERE
+                //Obtener expresion postfix
+                /*ListaTablas = new List<Tabla>();
+                ListaTablas.Add(tabla);
+                String postfix = Visit(context.GetChild(4));
+                postfix = postfix.Replace(tabla.nombre + ".", "");
+                if (postfix.StartsWith("BOOL "))
+                {
+                    postfix = postfix.Substring(5);
+                }
+                else
+                {
+                    errores = "Error en línea " + context.start.Line +
+                              ": La condicion del where no regresa un valor booleano." + Environment.NewLine;
+                    return "Error";
+                }
+
+                //Lista de elementos a borrar
+                List<List<Object>> paraBorrar = new List<List<Object>>();
+
+                //Cargar los datos en si
+                FilaTabla datos = new FilaTabla(tabla, BDenUso);
+                datos.cargar();
+
+                //Verificar si existe alguna referencia hacia la tabla
+                foreach (List<Object> fila in datos.datos.elementos)
+                {
+                    //Llena la lista de los elementos que seran borrados
+                    if (cumpleCondicion(fila, tabla, postfix))
+                    {
+                        paraBorrar.Add(fila);
+                        string pk = "";
+                        if (esReferenciado(fila, tabla, mTabla, out pk))
+                        {
+                            errores = "Error en línea " + context.start.Line +
+                                      ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
+                            return "Error";
+                        }
+                    }
+                }
+                //Cantidad de datos a borrar
+                int cantidad = paraBorrar.Count;
+                */
 
                 //Verificar la condicion del WHERE
 
