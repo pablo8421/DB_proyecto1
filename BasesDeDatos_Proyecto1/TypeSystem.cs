@@ -4194,7 +4194,7 @@ namespace BasesDeDatos_Proyecto1
             //Verificar que exista la tabla
             if (tabla == null)
             {
-                errores = "Error en línea " + context.start.Line +
+                errores += "Error en línea " + context.start.Line +
                             ": La tabla '" + nombre +
                             "' no existe en la base de datos '" + BDenUso +
                             "'." + Environment.NewLine;
@@ -4213,7 +4213,7 @@ namespace BasesDeDatos_Proyecto1
                     string pk = "";
                     if (esReferenciado(fila, tabla, mTabla, out pk))
                     {
-                        errores = "Error en línea " + context.start.Line +
+                        errores += "Error en línea " + context.start.Line +
                                     ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
                         return "Error";
                     }
@@ -4259,7 +4259,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else
                 {
-                    errores = "Error en línea " + context.start.Line +
+                    errores += "Error en línea " + context.start.Line +
                               ": La condicion del where no regresa un valor booleano." + Environment.NewLine;
                     return "Error";
                 }
@@ -4281,7 +4281,7 @@ namespace BasesDeDatos_Proyecto1
                         string pk = "";
                         if (esReferenciado(fila, tabla, mTabla, out pk))
                         {
-                            errores = "Error en línea " + context.start.Line +
+                            errores += "Error en línea " + context.start.Line +
                                       ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
                             return "Error";
                         }
