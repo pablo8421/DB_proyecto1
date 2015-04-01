@@ -2916,11 +2916,13 @@ namespace BasesDeDatos_Proyecto1
                 datos.guardar();
             }
             else { //Si tiene WHERE
+                
                 //Obtener expresion postfix
-                /*ListaTablas = new List<Tabla>();
-                ListaTablas.Add(tabla);
+                
+                ListaTablas = new List<Tabla>();
+                ListaTablas.Add(tActual);
                 String postfix = Visit(context.GetChild(4));
-                postfix = postfix.Replace(tabla.nombre + ".", "");
+                postfix = postfix.Replace(tActual.nombre + ".", "");
                 if (postfix.StartsWith("BOOL "))
                 {
                     postfix = postfix.Substring(5);
@@ -2933,33 +2935,20 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 //Lista de elementos a borrar
-                List<List<Object>> paraBorrar = new List<List<Object>>();
-
-                //Cargar los datos en si
-                FilaTabla datos = new FilaTabla(tabla, BDenUso);
-                datos.cargar();
+                List<List<Object>> paraUpdate = new List<List<Object>>();
 
                 //Verificar si existe alguna referencia hacia la tabla
                 foreach (List<Object> fila in datos.datos.elementos)
                 {
                     //Llena la lista de los elementos que seran borrados
-                    if (cumpleCondicion(fila, tabla, postfix))
+                    if (cumpleCondicion(fila, tActual, postfix))
                     {
-                        paraBorrar.Add(fila);
+                        paraUpdate.Add(fila);
                         string pk = "";
-                        if (esReferenciado(fila, tabla, mTabla, out pk))
-                        {
-                            errores = "Error en línea " + context.start.Line +
-                                      ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
-                            return "Error";
-                        }
                     }
                 }
                 //Cantidad de datos a borrar
                 int cantidad = paraBorrar.Count;
-                */
-
-                //Verificar la condicion del WHERE
 
                 //Verificar restriccion de primary key
                 bool banderaR = verificarPrimaryKeyUpdate(datosUpdate, columnasUpdate, datos, context.start.Line);
