@@ -310,6 +310,24 @@ namespace BasesDeDatos_Proyecto1
         }
 
         override
+        public string VisitSelect_where(SqlParser.Select_whereContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        override
+        public string VisitId_tablas(SqlParser.Id_tablasContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        override
+        public string VisitSelect_orderBy(SqlParser.Select_orderByContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        override
         public string VisitSelect(SqlParser.SelectContext context)
         {
             throw new NotImplementedException();

@@ -164,8 +164,11 @@ delete : DELETE FROM ID (WHERE multi_exp)?;
 identificador_completo : identificador_completo ',' (IDENTIFICADOR | ID)
 				 | (IDENTIFICADOR | ID);
 
+id_tablas: id_tablas ',' ID
+		 | ID; 
+
 select :  SELECT ('*' | identificador_completo) 
-		  FROM id_completo select_where select_orderBy;
+		  FROM id_tablas select_where select_orderBy;
 
 select_where: (WHERE multi_exp)?;
 
