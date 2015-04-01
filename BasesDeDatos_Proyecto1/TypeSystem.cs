@@ -526,9 +526,7 @@ namespace BasesDeDatos_Proyecto1
                         resultados.Columns[i].Visible = false;
                 }
             }
-
-
-            throw new NotImplementedException();
+            return "void";
         }
 
         override
