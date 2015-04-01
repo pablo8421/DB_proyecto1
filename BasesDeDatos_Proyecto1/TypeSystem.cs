@@ -169,14 +169,19 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 if (tipoColumna.StartsWith("CHAR"))
+                {
+                    valor = valor.Substring(1, valor.Length - 2);
                     datosUpdate.Add((String)valor);
+                }
                 else if (tipoColumna.StartsWith("INT"))
                     datosUpdate.Add(Convert.ToInt32(valor));
                 else if (tipoColumna.StartsWith("FLOAT"))
                     datosUpdate.Add(Convert.ToSingle(valor));
                 else
+                {
+                    valor = valor.Substring(1, valor.Length - 2);
                     datosUpdate.Add((String)valor);
-                
+                }
                 columnasUpdate.Add(nColumna);
                 return "void";
             }
@@ -251,13 +256,19 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
                 if (tipoColumna.StartsWith("CHAR"))
+                {
+                    valor = valor.Substring(1, valor.Length - 2);
                     datosUpdate.Add((String)valor);
+                }
                 else if (tipoColumna.StartsWith("INT"))
                     datosUpdate.Add(Convert.ToInt32(valor));
                 else if (tipoColumna.StartsWith("FLOAT"))
                     datosUpdate.Add(Convert.ToSingle(valor));
                 else
+                {
+                    valor = valor.Substring(1, valor.Length - 2);
                     datosUpdate.Add((String)valor);
+                }
                 columnasUpdate.Add(nColumna);
                 return "void";
             }
