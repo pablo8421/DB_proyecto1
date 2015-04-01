@@ -395,7 +395,14 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitSelect_orderBy(SqlParser.Select_orderByContext context)
         {
-            throw new NotImplementedException();
+            if (context.ChildCount == 3)
+            {
+                return Visit(context.GetChild(2));
+            }
+            else
+            {
+                return "";
+            }
         }
 
         private FilaTabla juntarTablas(List<Tabla> listaTablas)
