@@ -509,6 +509,24 @@ namespace BasesDeDatos_Proyecto1
             //TODO orderBy
 
             //TODO mostrar datos, hacer select
+            String columnasAMostrar = context.GetChild(1).GetText();
+            resultados.RowCount = resultado.datos.elementos.Count + 1;
+            resultados.ColumnCount = resultado.tabla.columnas.Count;
+            for (int i = 0; i < resultados.ColumnCount; i++)
+                resultados.Rows[0].Cells[i].Value = resultado.tabla.columnas[i];
+            for (int i = 0; i < resultados.RowCount; i++)
+                for (int j = 0; j < resultados.ColumnCount; j++)
+                    resultados.Rows[i].Cells[j].Value = resultado.getRowElement(i, j);
+            if (!columnasAMostrar.Equals("*"))
+            {
+                List<String> colMostrar = new List<string>(columnasAMostrar.Split(','));
+                for (int i = 0; i<resultado.tabla.columnas.Count; i++){
+                    String c = resultado.tabla.columnas[i];
+                    if (colMostrar.Contains(c))
+                        resultados.Columns[i].Visible = false;
+                }
+            }
+
 
             throw new NotImplementedException();
         }
