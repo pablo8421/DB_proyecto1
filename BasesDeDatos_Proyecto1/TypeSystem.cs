@@ -511,7 +511,9 @@ namespace BasesDeDatos_Proyecto1
 
 
             //TODO mostrar datos, hacer select
-            String columnasAMostrar = Visit(context.GetChild(1));
+            String columnasAMostrar = context.GetChild(1).GetText();
+            if (!columnasAMostrar.Equals("*"))
+                columnasAMostrar = Visit(context.GetChild(1));
             resultados.RowCount = resultado.datos.elementos.Count + 1;
             resultados.ColumnCount = resultado.tabla.columnas.Count;
             for (int i = 0; i < resultados.ColumnCount; i++)
@@ -528,7 +530,7 @@ namespace BasesDeDatos_Proyecto1
                         resultados.Columns[i].Visible = false;
                 }
             }
-                        //TODO orderBy
+            //TODO orderBy
 
             return "void";
         }
