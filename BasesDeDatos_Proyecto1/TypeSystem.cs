@@ -564,6 +564,7 @@ namespace BasesDeDatos_Proyecto1
                     {
                         resultados.Sort(resultados.Columns[i], ListSortDirection.Descending);
                     }
+                    index = index - 1;
                 }
             }
 
