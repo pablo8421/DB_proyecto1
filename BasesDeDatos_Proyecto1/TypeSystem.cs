@@ -5347,7 +5347,7 @@ namespace BasesDeDatos_Proyecto1
                     return "ERRORerr";
                 }
                 String orden;
-                if (context.GetChild(3).Equals("ASC"))
+                if (context.GetChild(3).GetText().Equals("ASC"))
                 {
                     orden = "ASC";
                 }
@@ -5495,7 +5495,7 @@ namespace BasesDeDatos_Proyecto1
                     return "ERRORerr";
                 }
                 String orden;
-                if (context.GetChild(1).Equals("ASC"))
+                if (context.GetChild(1).GetText().Equals("ASC"))
                 {
                     orden = "ASC";
                 }
