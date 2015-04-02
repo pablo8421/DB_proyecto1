@@ -568,16 +568,13 @@ namespace BasesDeDatos_Proyecto1
             }
 
 
-            resultados.RowCount = rAux.RowCount + 1;
+            resultados.RowCount = rAux.RowCount;
             resultados.ColumnCount = rAux.ColumnCount;
             for (int i = 0; i < resultados.ColumnCount; i++)
                 resultados.Rows[0].Cells[i].Value = resultado.tabla.columnas[i];
-            for (int i = 0; i < resultados.RowCount - 1; i++)
+            for (int i = 0; i < resultados.RowCount-1; i++)
                 for (int j = 0; j < resultados.ColumnCount; j++) {
-                    if (i == resultados.RowCount - 2)
-                        resultados.Rows[i + 1].Cells[j].Value = "";
-                    else
-                        resultados.Rows[i + 1].Cells[j].Value = rAux.Rows[i].Cells[j].Value;        
+                    resultados.Rows[i+1].Cells[j].Value = rAux.Rows[i].Cells[j].Value;        
                 }
             return "void";
         }
