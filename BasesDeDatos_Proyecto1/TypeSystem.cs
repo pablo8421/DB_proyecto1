@@ -454,12 +454,12 @@ namespace BasesDeDatos_Proyecto1
                 //Para cada fila
                 foreach (List<Object> fila in fResultado.datos.elementos)
                 {
-                    //Nueva fila, con los datos ya cargados
-                    List<Object> nuevo = new List<Object>(fila);
-
                     //Para cada fila en la tabla que se esta trabajando
                     foreach (List<Object> filaActual in filasActuales.datos.elementos)
                     {
+                        //Nueva fila, con los datos ya cargados
+                        List<Object> nuevo = new List<Object>(fila);
+
                         //Se agrega cada elemento a una fila nueva
                         nuevo.AddRange(filaActual);
 
@@ -577,7 +577,9 @@ namespace BasesDeDatos_Proyecto1
             }
             for (int i = 0; i < resultados.RowCount-1; i++)
                 for (int j = 0; j < resultados.ColumnCount; j++) 
-                    resultados.Rows[i+1].Cells[j].Value = rAux.Rows[i].Cells[j].Value;        
+                    resultados.Rows[i+1].Cells[j].Value = rAux.Rows[i].Cells[j].Value;
+
+            mensajes += "Se ha realizado Select con exito, retorno " + (resultados.RowCount - 1) + " valores."+ Environment.NewLine; 
             return "void";
         }
 
