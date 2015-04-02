@@ -23,6 +23,17 @@ namespace BasesDeDatos_Proyecto1
 
         public void guardar()
         {
+            String path = "Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat";
+            System.IO.File.Delete(path);
+
+            //Crear el archivo vacio de la tabla
+            path = System.IO.Path.Combine(Path.GetFullPath("Databases"), BDenUso);
+
+            string fileName = tabla.nombre + ".dat";
+            path = System.IO.Path.Combine(path, fileName);
+            System.IO.FileStream fs = System.IO.File.Create(path);
+            fs.Close();
+
             // Creates serializer.
             var serializer = SerializationContext.Default.GetSerializer<Filas>();
             // Pack obj to stream.
