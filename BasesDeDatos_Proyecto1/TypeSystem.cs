@@ -525,9 +525,9 @@ namespace BasesDeDatos_Proyecto1
             if (columnasAMostrar.Equals("Error"))
                 return "Error";
             DataGridView rAux = new DataGridView();
-            rAux.RowCount = resultado.datos.elementos.Count;
+            rAux.RowCount = resultado.datos.elementos.Count+1;
             rAux.ColumnCount = resultado.tabla.columnas.Count;
-            for (int i = 0; i < rAux.RowCount; i++)
+            for (int i = 0; i < rAux.RowCount-1; i++)
                 for (int j = 0; j < rAux.ColumnCount; j++)
                     rAux.Rows[i].Cells[j].Value = resultado.getRowElement(i, j);
             if (!columnasAMostrar.Equals("*"))
@@ -573,9 +573,12 @@ namespace BasesDeDatos_Proyecto1
             for (int i = 0; i < resultados.ColumnCount; i++)
                 resultados.Rows[0].Cells[i].Value = resultado.tabla.columnas[i];
             for (int i = 0; i < resultados.RowCount - 1; i++)
-                for (int j = 0; j < resultados.ColumnCount; j++)
-                    resultados.Rows[i+1].Cells[j].Value = rAux.Rows[i].Cells[j].Value;
-            
+                for (int j = 0; j < resultados.ColumnCount; j++) {
+                    if (i == resultados.RowCount - 2)
+                        resultados.Rows[i + 1].Cells[j].Value = "";
+                    else
+                        resultados.Rows[i + 1].Cells[j].Value = rAux.Rows[i].Cells[j].Value;        
+                }
             return "void";
         }
 
