@@ -535,7 +535,7 @@ namespace BasesDeDatos_Proyecto1
                 List<String> colMostrar = new List<string>(columnasAMostrar.Split(','));
                 for (int i = 0; i<resultado.tabla.columnas.Count; i++){
                     String c = resultado.tabla.columnas[i];
-                    if (colMostrar.Contains(c))
+                    if (!colMostrar.Contains(c))
                         rAux.Columns[i].Visible = false;
                 }
             }
@@ -571,11 +571,13 @@ namespace BasesDeDatos_Proyecto1
             resultados.RowCount = rAux.RowCount;
             resultados.ColumnCount = rAux.ColumnCount;
             for (int i = 0; i < resultados.ColumnCount; i++)
+            {
                 resultados.Rows[0].Cells[i].Value = resultado.tabla.columnas[i];
+                resultados.Columns[i].Visible = rAux.Columns[i].Visible;
+            }
             for (int i = 0; i < resultados.RowCount-1; i++)
-                for (int j = 0; j < resultados.ColumnCount; j++) {
+                for (int j = 0; j < resultados.ColumnCount; j++) 
                     resultados.Rows[i+1].Cells[j].Value = rAux.Rows[i].Cells[j].Value;        
-                }
             return "void";
         }
 
@@ -1829,7 +1831,6 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 //Agregar los elementos
-                datos.mostrarTablaEnConsola();
                 datos.agregarFila(row);                
                 datos.guardar();
                 
@@ -2019,7 +2020,6 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
                 //Agregar los elementos
-                datos.mostrarTablaEnConsola();
                 datos.agregarFila(row);
                 datos.guardar();
 
