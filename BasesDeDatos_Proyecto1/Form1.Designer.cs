@@ -162,6 +162,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.queryText.Location = new System.Drawing.Point(3, 3);
+            this.queryText.MaxLength = 2147483647;
             this.queryText.Multiline = true;
             this.queryText.Name = "queryText";
             this.queryText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
