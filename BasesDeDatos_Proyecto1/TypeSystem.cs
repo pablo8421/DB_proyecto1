@@ -524,20 +524,19 @@ namespace BasesDeDatos_Proyecto1
                 columnasAMostrar = Visit(context.GetChild(1));
             if (columnasAMostrar.Equals("Error"))
                 return "Error";
-            resultados.RowCount = resultado.datos.elementos.Count + 1;
-            resultados.ColumnCount = resultado.tabla.columnas.Count;
-            for (int i = 0; i < resultados.ColumnCount; i++)
-                resultados.Rows[0].Cells[i].Value = resultado.tabla.columnas[i];
-            for (int i = 0; i < resultados.RowCount-1; i++)
-                for (int j = 0; j < resultados.ColumnCount; j++)
-                    resultados.Rows[i+1].Cells[j].Value = resultado.getRowElement(i, j);
+            DataGridView rAux = new DataGridView();
+            rAux.RowCount = resultado.datos.elementos.Count;
+            rAux.ColumnCount = resultado.tabla.columnas.Count;
+            for (int i = 0; i < rAux.RowCount; i++)
+                for (int j = 0; j < rAux.ColumnCount; j++)
+                    rAux.Rows[i].Cells[j].Value = resultado.getRowElement(i, j);
             if (!columnasAMostrar.Equals("*"))
             {
                 List<String> colMostrar = new List<string>(columnasAMostrar.Split(','));
                 for (int i = 0; i<resultado.tabla.columnas.Count; i++){
                     String c = resultado.tabla.columnas[i];
                     if (colMostrar.Contains(c))
-                        resultados.Columns[i].Visible = false;
+                        rAux.Columns[i].Visible = false;
                 }
             }
             //TODO orderBy
@@ -557,17 +556,26 @@ namespace BasesDeDatos_Proyecto1
                     int i = resultado.tabla.columnas.IndexOf(col);
                     if (tipo.Equals("ASC"))
                     {
-                        resultados.Sort(resultados.Columns[i], ListSortDirection.Ascending);
+                        rAux.Sort(rAux.Columns[i], ListSortDirection.Ascending);
 
                     }
                     else
                     {
-                        resultados.Sort(resultados.Columns[i], ListSortDirection.Descending);
+                        rAux.Sort(rAux.Columns[i], ListSortDirection.Descending);
                     }
                     index = index - 1;
                 }
             }
 
+
+            resultados.RowCount = rAux.RowCount + 1;
+            resultados.ColumnCount = rAux.ColumnCount;
+            for (int i = 0; i < resultados.ColumnCount; i++)
+                resultados.Rows[0].Cells[i].Value = resultado.tabla.columnas[i];
+            for (int i = 0; i < resultados.RowCount - 1; i++)
+                for (int j = 0; j < resultados.ColumnCount; j++)
+                    resultados.Rows[i+1].Cells[j].Value = rAux.Rows[i].Cells[j].Value;
+            
             return "void";
         }
 
