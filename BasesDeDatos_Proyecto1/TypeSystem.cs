@@ -4420,7 +4420,13 @@ namespace BasesDeDatos_Proyecto1
                 int cantidad = datos.datos.elementos.Count;
                 
                 //Borrar los datos y guardar los cambios
-                datos.datos.elementos.Clear();
+                //Crear el archivo vacio de la tabla
+                string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), BDenUso);
+                //No se si deberia de ser un xml
+                string fileName = tabla.nombre + ".dat";
+                path = System.IO.Path.Combine(path, fileName);
+                System.IO.FileStream fs = System.IO.File.Create(path);
+                fs.Close();
                 datos.guardar();
 
                 //Actualizar cantidad de registros
