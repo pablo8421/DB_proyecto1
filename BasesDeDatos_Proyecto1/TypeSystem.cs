@@ -1829,7 +1829,7 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 //Agregar los elementos
-                datos.mostrarTablaEnConsola();
+                //datos.mostrarTablaEnConsola();
                 datos.agregarFila(row);                
                 datos.guardar();
                 
@@ -2019,7 +2019,7 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
                 //Agregar los elementos
-                datos.mostrarTablaEnConsola();
+                //datos.mostrarTablaEnConsola();
                 datos.agregarFila(row);
                 datos.guardar();
 
