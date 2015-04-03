@@ -60,6 +60,7 @@ namespace BasesDeDatos_Proyecto1
 
         private String arreglarCaseSensitive(String input)
         {
+            //Lista de palabras reservadas para cambiarlas a mayusculas
             String[] palabrasReservadas = { "CREATE", "DATABASE", "DATABASES", "ALTER", "RENAME", "TO", "DROP",
                                             "SHOW", "USE", "TABLE", "CONSTRAINT", "PRIMARY", "FOREIGN", "KEY",
                                             "REFERENCES", "ADD", "COLUMN", "COLUMNS", "TABLES", "FROM", "INSERT", "INTO", 
