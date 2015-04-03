@@ -592,7 +592,7 @@ namespace BasesDeDatos_Proyecto1
             }
 
             //Se agregan los datos al datagridview
-            resultados.RowCount = rAux.RowCount;
+            resultados.RowCount = rAux.RowCount-1;
             resultados.ColumnCount = rAux.ColumnCount;
 
             for (int i = 0; i < resultados.ColumnCount; i++)
@@ -601,7 +601,7 @@ namespace BasesDeDatos_Proyecto1
                 resultados.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
                 resultados.Columns[i].Visible = rAux.Columns[i].Visible;
             }
-            for (int i = 0; i < resultados.RowCount-1; i++)
+            for (int i = 0; i < resultados.RowCount; i++)
                 for (int j = 0; j < resultados.ColumnCount; j++) 
                     resultados.Rows[i].Cells[j].Value = rAux.Rows[i].Cells[j].Value;
 
