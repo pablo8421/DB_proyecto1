@@ -371,11 +371,9 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitId_tablas(SqlParser.Id_tablasContext context)
         {
-            MasterTabla mTabla = deserializarMasterTabla();
-
             if (context.ChildCount == 1)
             {
-                Tabla tabla = mTabla.getTable(context.GetChild(0).GetText());
+                Tabla tabla = masterTabla.getTable(context.GetChild(0).GetText());
                 if (tabla != null)
                 {
                     ListaTablas.Add(tabla);
@@ -393,7 +391,7 @@ namespace BasesDeDatos_Proyecto1
             {
                 String resto = Visit(context.GetChild(0));
                 String propio;
-                Tabla tabla = mTabla.getTable(context.GetChild(2).GetText());
+                Tabla tabla = masterTabla.getTable(context.GetChild(2).GetText());
 
                 if (tabla != null)
                 {
