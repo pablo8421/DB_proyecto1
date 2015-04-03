@@ -6112,6 +6112,7 @@ namespace BasesDeDatos_Proyecto1
             else
             {
                 //Manejar las constraint
+                ListaTablas = new List<Tabla>();
                 ListaTablas.Add(nueva);
                 if(Visit(context.GetChild(5)).Equals("Error")){
                     return "Error";
