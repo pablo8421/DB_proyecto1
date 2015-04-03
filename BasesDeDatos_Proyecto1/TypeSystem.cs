@@ -509,6 +509,7 @@ namespace BasesDeDatos_Proyecto1
 
             //Obtener tablas sobre las cuales se va a trabajar
             ListaTablas = new List<Tabla>();
+            //El Visit llena ListaTablas
             if(Visit(context.GetChild(3)).Equals("Error"))
             {
                 return "Error";
@@ -562,13 +563,13 @@ namespace BasesDeDatos_Proyecto1
                         rAux.Columns[i].Visible = false;
                 }
             }
-            //TODO orderBy
+            //Obtener el orderBy
             String columnasAOrdenar = Visit(context.GetChild(5));
             if (columnasAOrdenar.StartsWith("ERROR"))
             {
                 return "Error";
             }
-            //Se ordenan
+            //Se ordenan, si se pidio que se ordenara
             if(!columnasAOrdenar.Equals("")){
                 List<String> listaAOrdenar = new List<String>(columnasAOrdenar.Split(','));
                 int index = listaAOrdenar.Count - 1;
@@ -590,7 +591,7 @@ namespace BasesDeDatos_Proyecto1
                 }
             }
 
-
+            //Se agregan los datos al datagridview
             resultados.RowCount = rAux.RowCount;
             resultados.ColumnCount = rAux.ColumnCount;
             for (int i = 0; i < resultados.ColumnCount; i++)
