@@ -80,12 +80,19 @@ namespace BasesDeDatos_Proyecto1
                         }
                         else
                         {
-                            String tablas = "("+retorno.Replace("."+col,"")+","+tabla.nombre+")";
+                            String tablas = "(" + retorno.Replace("." + col, "") + "," + tabla.nombre + ")";
                             errores += "Error en línea " + context.start.Line +
                                        ": Existe mas de una posible referencia a la columna '" + col +
-                                       " "+ tablas +"'." + Environment.NewLine;
+                                       " " + tablas + "'." + Environment.NewLine;
                             return "";
                         }
+                    }
+                    else
+                    {
+                        errores += "Error en línea " + context.start.Line +
+                                       ": No existe la columna '" + col +
+                                       "' en la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                        return "";
                     }
                 }
                 return retorno;
@@ -119,6 +126,13 @@ namespace BasesDeDatos_Proyecto1
                                        " " + tablas + "'." + Environment.NewLine;
                             return "";
                         }
+                    }
+                    else
+                    {
+                        errores += "Error en línea " + context.start.Line +
+                                       ": No existe la columna '" + col +
+                                       "' en la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                        return "";
                     }
                 }
                 return retornoHijo + "," + retornoID;
@@ -610,7 +624,7 @@ namespace BasesDeDatos_Proyecto1
             for (int i = 0; i < resultados.RowCount; i++)
                 for (int j = 0; j < resultados.ColumnCount; j++) 
                     resultados.Rows[i].Cells[j].Value = rAux.Rows[i].Cells[j].Value;
-            int cant = resultados.RowCount - 1;
+            int cant = rAux.RowCount-1;
             if (cant < 0)
                 cant = 0;
             mensajes += "Se ha realizado select con exito, retornó " + cant + " valores."+ Environment.NewLine; 
@@ -4544,10 +4558,10 @@ namespace BasesDeDatos_Proyecto1
                 errores += "Error en línea " + context.start.Line + ": No hay ninguna base de datos en uso.\r\n";
                 return "Error";
             }
-
             if (masterTabla.containsTable(nTabla))
             {
                 Tabla t = masterTabla.getTable(nTabla);
+                resultados.ColumnCount = 3;
                 if (t.columnas.Count == 0)
                     resultados.RowCount = 1;
                 else
@@ -4567,21 +4581,21 @@ namespace BasesDeDatos_Proyecto1
                                 }
                                 resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).ToString();
 
-                                if (t.restricciones.ElementAt(j).columnasForaneas.Count != 0)
-                                {
-                                    resultados.Rows[i].Cells[2].Value += "(";
-                                    for (int k = 0; k < t.restricciones.ElementAt(j).columnasForaneas.Count; k++)
-                                        if (k == 0)
-                                            resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k);
-                                        else
-                                            resultados.Rows[i].Cells[2].Value += ", " + t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k);
-                                    resultados.Rows[i].Cells[2].Value += ")\"";
-                                }
+                                if (t.restricciones.ElementAt(j).columnasForaneas != null)
+                                    if (t.restricciones.ElementAt(j).columnasForaneas.Count != 0)
+                                    {
+                                        resultados.Rows[i].Cells[2].Value += "(";
+                                        for (int k = 0; k < t.restricciones.ElementAt(j).columnasForaneas.Count; k++)
+                                            if (k == 0)
+                                                resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k);
+                                            else
+                                                resultados.Rows[i].Cells[2].Value += ", " + t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k);
+                                        resultados.Rows[i].Cells[2].Value += ")\"";
+                                    }
                             }
                         }
                     }
                 }
-                resultados.ColumnCount = 3;
                 resultados.Columns[0].HeaderText = "Columna";
                 resultados.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
                 resultados.Columns[1].HeaderText = "Tipo";
@@ -5674,6 +5688,7 @@ namespace BasesDeDatos_Proyecto1
                 errores += "Error en línea "+context.start.Line+": No se encuentra en uso ninguna base de datos.\r\n";
                 return "Error";
             }
+            resultados.ColumnCount = 2;
             if (masterTabla.tablas.Count == 0)
                 resultados.RowCount = 1;
             else
@@ -5685,7 +5700,6 @@ namespace BasesDeDatos_Proyecto1
                     resultados.Rows[i].Cells[1].Value = masterTabla.tablas.ElementAt(i).cantidad_registros;
                 }
             }
-            resultados.ColumnCount = 2;
             resultados.Columns[0].HeaderText = "Nombre";
             resultados.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
             resultados.Columns[1].HeaderText = "Cant. de registros";
