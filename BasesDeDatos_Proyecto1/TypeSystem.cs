@@ -4542,9 +4542,12 @@ namespace BasesDeDatos_Proyecto1
                 Tabla t = masterTabla.getTable(nTabla);
                 resultados.RowCount = t.columnas.Count + 1;
                 resultados.ColumnCount = 3;
-                resultados.Rows[0].Cells[0].Value = "Columna";
-                resultados.Rows[0].Cells[1].Value = "Tipo";
-                resultados.Rows[0].Cells[2].Value = "Restricciones";
+                resultados.Columns[0].HeaderText = "Columna";
+                resultados.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+                resultados.Columns[1].HeaderText = "Tipo";
+                resultados.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                resultados.Columns[2].HeaderText = "Restricciones";
+                resultados.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
                 for (int i = 1; i < resultados.RowCount; i++)
                 {
                     resultados.Rows[i].Cells[0].Value = t.columnas.ElementAt(i - 1);
@@ -5021,14 +5024,16 @@ namespace BasesDeDatos_Proyecto1
         public string VisitMostrar_BD(SqlParser.Mostrar_BDContext context)
         {
             resultados.ColumnCount = 2;
-            resultados.RowCount = masterBD.basesDeDatos.Count+1;
+            resultados.RowCount = masterBD.basesDeDatos.Count;
 
-            resultados.Rows[0].Cells[0].Value = "Nombre";
-            resultados.Rows[0].Cells[1].Value = "Cantidad de tablas";
-            for (int i = 1; i < resultados.RowCount; i++)
+            resultados.Columns[0].HeaderText = "Nombre";
+            resultados.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+            resultados.Columns[1].HeaderText = "Cantidad de tablas";
+            resultados.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+            for (int i = 0; i < resultados.RowCount; i++)
             {
-                resultados.Rows[i].Cells[0].Value = masterBD.basesDeDatos.ElementAt(i - 1).nombre;
-                resultados.Rows[i].Cells[1].Value = masterBD.basesDeDatos.ElementAt(i - 1).cantidad_tablas + "";
+                resultados.Rows[i].Cells[0].Value = masterBD.basesDeDatos.ElementAt(i).nombre;
+                resultados.Rows[i].Cells[1].Value = masterBD.basesDeDatos.ElementAt(i).cantidad_tablas + "";
             }
             resultados.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
             return "void";
