@@ -5567,15 +5567,10 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitFull_query(SqlParser.Full_queryContext context)
         {
-            foreach(SqlParser.QueryContext query in context._queries){
-                if(Visit(query).Equals("void")){
-                    //Seguir iterando?
-                }
-                else
-                {
+            foreach(SqlParser.QueryContext query in context._queries)
+                if(!Visit(query).Equals("void"))
                     return "Error";
-                }
-            }
+            
             //Serealizar masterBD
             serializarMasterBD();
             if (!BDenUso.Equals(""))
