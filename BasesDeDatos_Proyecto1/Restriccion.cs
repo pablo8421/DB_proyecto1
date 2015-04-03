@@ -32,6 +32,7 @@ namespace BasesDeDatos_Proyecto1
             columnasForaneas = new List<String>();
         }
 
+        //Constructor segun tipo de restriccion
         public Restriccion(String tipo)
         {
             nombre = "";
