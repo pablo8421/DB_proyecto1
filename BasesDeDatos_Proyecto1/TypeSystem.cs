@@ -1855,7 +1855,7 @@ namespace BasesDeDatos_Proyecto1
                                "'." + Environment.NewLine;
                     return "Error";
                 }
-                //Obtener las columnas a las cuales insertar
+                //Obtener las columnas a las cuales insertar 
                 ListaTablas = new List<Tabla>();
                 ListaTablas.Add(tabla);
                 String columnasSelectas = Visit(context.GetChild(4));
