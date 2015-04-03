@@ -702,10 +702,7 @@ namespace BasesDeDatos_Proyecto1
                 }   
             }
 
-            XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-            StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-            mySerializer.Serialize(myWriter, masterTabla);
-            myWriter.Close();
+            //Aqui se serializaba masterTabla
 
             mensajes += "Se ha renombrado la tabla '" + nombre + "' a '" + nuevoNombre + "' con éxito.\r\n";
 
@@ -717,27 +714,18 @@ namespace BasesDeDatos_Proyecto1
         {
             String nombre = context.GetChild(2).GetText();
 
-            MasterBD bdatos;
-            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
-            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
-            bdatos = (MasterBD)serializer.Deserialize(reader);
-            reader.Close();
-
-            if (bdatos.containsBD(nombre)) 
+            if (masterBD.containsBD(nombre)) 
             {
-                DialogResult resultado = MessageBox.Show("Seguro que desea botar "+nombre+ " con "+bdatos.getRegistros(nombre)+ " registros","Confirmación", MessageBoxButtons.YesNo);
+                DialogResult resultado = MessageBox.Show("Seguro que desea botar " + nombre + " con " + masterBD.getRegistros(nombre) + " registros", "Confirmación", MessageBoxButtons.YesNo);
 
                 if (resultado == DialogResult.Yes)
                 {
-                    bdatos.borrarBD(nombre);
+                    masterBD.borrarBD(nombre);
 
                     if (nombre.Equals(BDenUso))
                         BDenUso = "";
 
-                    XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
-                    StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                    mySerializer.Serialize(myWriter, bdatos);
-                    myWriter.Close();
+                    //Aqui se serializaba masterBD
 
                     String path = "Databases\\" + nombre;
                     System.IO.Directory.Delete(path, true);
@@ -1707,28 +1695,13 @@ namespace BasesDeDatos_Proyecto1
                 errores += "Error en línea " + context.start.Line + ": No hay base de datos en uso por lo que no se puede alterar la tabla.";
                 return "Error";
             }
-
-            //Deserealizar el archivo maestro de tablas
-            MasterTabla mTabla;
-            XmlSerializer serializer = new XmlSerializer(typeof(MasterTabla));
-            StreamReader reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-            try
-            {
-                mTabla = (MasterTabla)serializer.Deserialize(reader);
-                masterTabla = mTabla;
-            }
-            catch (Exception e)
-            {
-                mTabla = new MasterTabla();
-            }
-            reader.Close();
             
             //Obtener el nombre de la tabla que se desea
             String nombre = context.GetChild(2).GetText();
             //Si id_completo de columnas
             if (context.ChildCount == 7)
             {
-                Tabla tabla = mTabla.getTable(nombre);
+                Tabla tabla = masterTabla.getTable(nombre);
 
                 //Verificar que exista la tabla
                 if (tabla == null)
@@ -1860,27 +1833,8 @@ namespace BasesDeDatos_Proyecto1
                 datos.agregarFila(row);                
                 datos.guardar();
                 
-                //Serializar masterTabla
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                mySerializer.Serialize(myWriter, mTabla);
-                myWriter.Close();
-                
-                //Deserealizar masterBD
-                MasterBD bdatos;
-                serializer = new XmlSerializer(typeof(MasterBD));
-                reader = new StreamReader("Databases\\masterBDs.xml");
-                bdatos = (MasterBD)serializer.Deserialize(reader);
-                reader.Close();
-
                 //Actualizar cantidad de registros
-                bdatos.getBD(BDenUso).registros++;
-
-                //Serializar masterBD
-                mySerializer = new XmlSerializer(typeof(MasterBD));
-                myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                mySerializer.Serialize(myWriter, bdatos);
-                myWriter.Close();
+                masterBD.getBD(BDenUso).registros++;
 
                 mensajes += "Se han insertado los datos(" + row.Count + ") en la tabla '" + tabla.nombre + "' exitosamente."+ Environment.NewLine;
                 return "void";
@@ -1888,7 +1842,7 @@ namespace BasesDeDatos_Proyecto1
             //Con id_completo de columnas
             else
             {
-                Tabla tabla = mTabla.getTable(nombre);
+                Tabla tabla = masterTabla.getTable(nombre);
 
                 //Verificar que exista la tabla
                 if (tabla == null)
@@ -2049,27 +2003,10 @@ namespace BasesDeDatos_Proyecto1
                 datos.agregarFila(row);
                 datos.guardar();
 
-                //Serializar masterTabla
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                mySerializer.Serialize(myWriter, mTabla);
-                myWriter.Close();
-
-                //Deserealizar masterBD
-                MasterBD bdatos;
-                serializer = new XmlSerializer(typeof(MasterBD));
-                reader = new StreamReader("Databases\\masterBDs.xml");
-                bdatos = (MasterBD)serializer.Deserialize(reader);
-                reader.Close();
 
                 //Actualizar cantidad de registros
-                bdatos.getBD(BDenUso).registros++;
+                masterBD.getBD(BDenUso).registros++;
 
-                //Serializar masterBD
-                mySerializer = new XmlSerializer(typeof(MasterBD));
-                myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                mySerializer.Serialize(myWriter, bdatos);
-                myWriter.Close();
 
                 mensajes += "Se han insertado los datos(" + row.Count + ") en la tabla '" + tabla.nombre + "' exitosamente." + Environment.NewLine;
                 return "void";
@@ -3126,8 +3063,6 @@ namespace BasesDeDatos_Proyecto1
                 errores += "Error en línea "+context.start.Line+": No se encuentra ninguna base de datos en uso." + Environment.NewLine;
                 return "Error";
             }
-
-            masterTabla = deserializarMasterTabla();
             Tabla tActual = masterTabla.getTable(nTabla);
             if (tActual == null)
             { //No existe la tabla
@@ -3274,29 +3209,14 @@ namespace BasesDeDatos_Proyecto1
                 return "Error";
             }
 
-            //Deserealizar el archivo maestro de tablas
-            MasterTabla mTabla;
-            XmlSerializer serializer = new XmlSerializer(typeof(MasterTabla));
-            StreamReader reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-            try
-            {
-                mTabla = (MasterTabla)serializer.Deserialize(reader);
-            }
-            catch (Exception e)
-            {
-                mTabla = new MasterTabla();
-            }
-            reader.Close();
-
             //Verificar si la tabla existe
-            if (!mTabla.containsTable(nTabla))
+            if (!masterTabla.containsTable(nTabla))
             {
                 errores += "Error en linea " + context.start.Line + ": La base de datos " + BDenUso + " no contiene una tabla " + nTabla + "." + Environment.NewLine;
                 return "Error";
             }
 
             //Mandar datos
-            masterTabla = mTabla;
             ListaTablas = new List<Tabla>();
             ListaTablas.Add(masterTabla.getTable(nTabla));
 
@@ -3339,10 +3259,7 @@ namespace BasesDeDatos_Proyecto1
             int ind = tActual.columnas.IndexOf(cBorrar);
             tActual.columnas.Remove(cBorrar);
             tActual.tipos_columnas.RemoveAt(ind);
-            XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-            StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-            mySerializer.Serialize(myWriter, masterTabla);
-            myWriter.Close();
+
             mensajes += "Se ha removido la columna '" + cBorrar + "' de la tabla '" + tActual.nombre + "' con éxito.\r\n";
             return "void";
         }
@@ -4406,13 +4323,10 @@ namespace BasesDeDatos_Proyecto1
                 errores += "Error en línea " + context.start.Line + ": No hay base de datos en uso por lo que no se puede alterar la tabla.";
                 return "Error";
             }
-
-            //Deserealizar el archivo maestro de tablas
-            MasterTabla mTabla = deserializarMasterTabla();
             
             //Obtener el nombre de la tabla que se desea
             String nombre = context.GetChild(2).GetText();
-            Tabla tabla = mTabla.getTable(nombre);
+            Tabla tabla = masterTabla.getTable(nombre);
 
             //Verificar que exista la tabla
             if (tabla == null)
@@ -4434,7 +4348,7 @@ namespace BasesDeDatos_Proyecto1
                 foreach (List<Object> fila in datos.datos.elementos)
                 {
                     string pk = "";
-                    if (esReferenciado(fila, tabla, mTabla, out pk))
+                    if (esReferenciado(fila, tabla, masterTabla, out pk))
                     {
                         errores += "Error en línea " + context.start.Line +
                                     ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
@@ -4451,21 +4365,8 @@ namespace BasesDeDatos_Proyecto1
 
                 //Actualizar cantidad de registros
                 tabla.cantidad_registros = tabla.cantidad_registros - cantidad;
-                MasterBD mBD = deserializarMasterBD();
-                mBD.getBD(BDenUso).registros -= cantidad;
-
-                //Serializar masterTabla
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                mySerializer.Serialize(myWriter, mTabla);
-                myWriter.Close();
+                masterBD.getBD(BDenUso).registros -= cantidad;
                 
-                //Serializar masterBD
-                mySerializer = new XmlSerializer(typeof(MasterBD));
-                myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                mySerializer.Serialize(myWriter, mBD);
-                myWriter.Close();
-
                 mensajes += "Se ha vaciado la tabla '" + tabla.nombre+ "'." + Environment.NewLine; 
                 return "void";
             }
@@ -4502,7 +4403,7 @@ namespace BasesDeDatos_Proyecto1
                     {
                         paraBorrar.Add(fila);
                         string pk = "";
-                        if (esReferenciado(fila, tabla, mTabla, out pk))
+                        if (esReferenciado(fila, tabla, masterTabla, out pk))
                         {
                             errores += "Error en línea " + context.start.Line +
                                       ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
@@ -4523,20 +4424,7 @@ namespace BasesDeDatos_Proyecto1
 
                 //Actualizar cantidad de registros
                 tabla.cantidad_registros = tabla.cantidad_registros - cantidad;
-                MasterBD mBD = deserializarMasterBD();
-                mBD.getBD(BDenUso).registros -= cantidad;
-
-                //Serializar masterTabla
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                mySerializer.Serialize(myWriter, mTabla);
-                myWriter.Close();
-
-                //Serializar masterBD
-                mySerializer = new XmlSerializer(typeof(MasterBD));
-                myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                mySerializer.Serialize(myWriter, mBD);
-                myWriter.Close();
+                masterBD.getBD(BDenUso).registros -= cantidad;
 
                 mensajes += "Se han removido " + cantidad + " registros de la tabla '" + tabla.nombre + "'." + Environment.NewLine;
                 return "void";
@@ -4556,15 +4444,9 @@ namespace BasesDeDatos_Proyecto1
                 BDenUso = nuevoNombre;
             }
 
-            MasterBD bdatos;
-            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
-            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
-            bdatos = (MasterBD)serializer.Deserialize(reader);
-            reader.Close();
-
-            if (bdatos.containsBD(nombre))
+            if (masterBD.containsBD(nombre))
             {
-                foreach (BaseDatos bd in bdatos.basesDeDatos)
+                foreach (BaseDatos bd in masterBD.basesDeDatos)
                 {
                     if (bd.nombre.Equals(nombre))
                     {
@@ -4577,11 +4459,6 @@ namespace BasesDeDatos_Proyecto1
                         pathViejo = "Databases\\" + nombre;
                         pathNuevo = "Databases\\" + nuevoNombre;
                         Directory.Move(pathViejo, pathNuevo);
-
-                        XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
-                        StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                        mySerializer.Serialize(myWriter, bdatos);
-                        myWriter.Close();
 
                         break;
                     }
@@ -4599,7 +4476,6 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitBotar_table(SqlParser.Botar_tableContext context)
         {
-            masterTabla = deserializarMasterTabla();
             Tabla tabla = masterTabla.getTable(context.GetChild(2).GetText());
             if (tabla == null)
             {
@@ -4639,20 +4515,9 @@ namespace BasesDeDatos_Proyecto1
                 String path = "Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat";
                 System.IO.File.Delete(path);
 
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                mySerializer.Serialize(myWriter, masterTabla);
-                myWriter.Close();
-
-                MasterBD masterDB = deserializarMasterBD();
-                BaseDatos bd = masterDB.getBD(BDenUso);
+                BaseDatos bd = masterBD.getBD(BDenUso);
                 bd.cantidad_tablas--;
                 bd.registros = bd.registros - tabla.cantidad_registros;
-
-                mySerializer = new XmlSerializer(typeof(MasterBD));
-                myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                mySerializer.Serialize(myWriter, masterDB);
-                myWriter.Close();
 
                 mensajes += "Se ha eliminado la tabla '" + tabla.nombre + "' de la base de datos '" + BDenUso + "' con éxito.\r\n";
 
@@ -4669,11 +4534,10 @@ namespace BasesDeDatos_Proyecto1
                 errores += "Error en línea " + context.start.Line + ": No hay ninguna base de datos en uso.\r\n";
                 return "Error";
             }
-            MasterTabla mTabla;
-            mTabla = deserializarMasterTabla();
-            if (mTabla.containsTable(nTabla))
+
+            if (masterTabla.containsTable(nTabla))
             {
-                Tabla t = mTabla.getTable(nTabla);
+                Tabla t = masterTabla.getTable(nTabla);
                 resultados.RowCount = t.columnas.Count + 1;
                 resultados.ColumnCount = 3;
                 resultados.Rows[0].Cells[0].Value = "Columna";
@@ -4871,11 +4735,6 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 contenido.guardar();
-
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                mySerializer.Serialize(myWriter, masterTabla);
-                myWriter.Close();
 
                 mensajes += "Se ha agregado la columna '" + columna + "' en la tabla '" + tabla.nombre + "' con éxito." + Environment.NewLine;
                 return "void";
@@ -5159,27 +5018,15 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitMostrar_BD(SqlParser.Mostrar_BDContext context)
         {
-            MasterBD basesdatos;
-            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
-            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
-            try
-            {
-                basesdatos = (MasterBD)serializer.Deserialize(reader);
-            }
-            catch (Exception e)
-            {
-                basesdatos = new MasterBD();
-            }
-            reader.Close();
             resultados.ColumnCount = 2;
-            resultados.RowCount = basesdatos.basesDeDatos.Count+1;
+            resultados.RowCount = masterBD.basesDeDatos.Count+1;
 
             resultados.Rows[0].Cells[0].Value = "Nombre";
             resultados.Rows[0].Cells[1].Value = "Cantidad de tablas";
             for (int i = 1; i < resultados.RowCount; i++)
             {
-                resultados.Rows[i].Cells[0].Value = basesdatos.basesDeDatos.ElementAt(i-1).nombre;
-                resultados.Rows[i].Cells[1].Value = basesdatos.basesDeDatos.ElementAt(i-1).cantidad_tablas+"";
+                resultados.Rows[i].Cells[0].Value = masterBD.basesDeDatos.ElementAt(i - 1).nombre;
+                resultados.Rows[i].Cells[1].Value = masterBD.basesDeDatos.ElementAt(i - 1).cantidad_tablas + "";
             }
             resultados.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
             return "void";
@@ -5631,10 +5478,6 @@ namespace BasesDeDatos_Proyecto1
                 Restriccion rAux = tablaA.restricciones.ElementAt(i);
                 if (rAux.nombre.Equals(nRestriccion)) {
                     tablaA.restricciones.RemoveAt(i);
-                    XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                    StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                    mySerializer.Serialize(myWriter, masterTabla);
-                    myWriter.Close();
                     mensajes += "Se ha eliminado la restricción '" + nRestriccion + "' de la tabla '" + tablaA.nombre + "' con éxito.\r\n";
                     return "void";
                 }
@@ -6058,31 +5901,15 @@ namespace BasesDeDatos_Proyecto1
                 return "Error";
             }
 
-            //Deserealizar el archivo maestro de tablas
-            MasterTabla mTabla;
-            XmlSerializer serializer = new XmlSerializer(typeof(MasterTabla));
-            StreamReader reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-            try
-            {
-                mTabla = (MasterTabla)serializer.Deserialize(reader);
-            }
-            catch (Exception e)
-            {
-                mTabla = new MasterTabla();
-            }
-            reader.Close();
-
-            masterTabla = mTabla;
-
             //Verificar si la tabla ya exite
-            if (mTabla.containsTable(nueva.nombre))
+            if (masterTabla.containsTable(nueva.nombre))
             {
                 errores += "Error en linea " + context.start.Line + ": La base de datos "+BDenUso+" ya contiene una tabla " + nueva.nombre + "." + Environment.NewLine;
                 return "Error";
             }
             else
             {
-                mTabla.agregarTabla(nueva);
+                masterTabla.agregarTabla(nueva);
             }
 
             //En caso que no haya constraints
@@ -6096,39 +5923,8 @@ namespace BasesDeDatos_Proyecto1
                 System.IO.FileStream fs = System.IO.File.Create(path);
                 fs.Close();
 
-                //Serializar el objeto de la base de datos
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                mySerializer.Serialize(myWriter, mTabla);
-                myWriter.Close();
 
-                //Actualizar masterBDs
-                MasterBD masterBD;
-                serializer = new XmlSerializer(typeof(MasterBD));
-                reader = new StreamReader("Databases\\masterBDs.xml");
-                try
-                {
-                    //Deserealizar y actualizar datos
-                    masterBD = (MasterBD)serializer.Deserialize(reader);
-                    reader.Close();
-
-                    masterBD.actualizarCantidadEnBD(BDenUso, mTabla.tablas.Count);
-                    
-
-                    //Serealizar el archivo maestros
-                    mySerializer = new XmlSerializer(typeof(MasterBD));
-                    myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                    mySerializer.Serialize(myWriter, masterBD);
-                    myWriter.Close();
-                    mensajes += "Se ha creado la tabla '"+nueva.nombre+"' en '"+BDenUso+"' con éxito.\r\n";
-                }
-                catch (Exception e)
-                {
-                    //Nada? No deberia pasar
-                    reader.Close();
-                }
-                
-
+                mensajes += "Se ha creado la tabla '" + nueva.nombre + "' en '" + BDenUso + "' con éxito.\r\n";
                 return "void";
             }
             //Caso en que si hay constraints
@@ -6148,40 +5944,8 @@ namespace BasesDeDatos_Proyecto1
                 path = System.IO.Path.Combine(path, fileName);
                 System.IO.FileStream fs = System.IO.File.Create(path);
                 fs.Close();
-                
-                //Serializar el objeto de la base de datos
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                mySerializer.Serialize(myWriter, mTabla);
-                myWriter.Close();
 
-                //Actualizar masterBDs
-                MasterBD masterBD;
-                serializer = new XmlSerializer(typeof(MasterBD));
-                reader = new StreamReader("Databases\\masterBDs.xml");
-                try
-                {
-                    //Deserealizar y actualizar datos
-                    masterBD = (MasterBD)serializer.Deserialize(reader);
-                    reader.Close();
-
-                    masterBD.actualizarCantidadEnBD(BDenUso, mTabla.tablas.Count);
-
-
-                    //Serealizar el archivo maestros
-                    mySerializer = new XmlSerializer(typeof(MasterBD));
-                    myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                    mySerializer.Serialize(myWriter, masterBD);
-                    myWriter.Close();
-                    mensajes += "Se ha creado la tabla '" + nueva.nombre + "' en '" + BDenUso + "' con éxito.\r\n";
-                }
-                catch (Exception e)
-                {
-                    //Nada? No deberia pasar
-                    reader.Close();
-                }
-
-
+                mensajes += "Se ha creado la tabla '" + nueva.nombre + "' en '" + BDenUso + "' con éxito.\r\n";
                 return "void";
             }
         }
@@ -6191,27 +5955,12 @@ namespace BasesDeDatos_Proyecto1
         {
             String nombre;
             nombre = context.GetChild(2).GetText();
-                
-            MasterBD bdatos;
-            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
-            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
-            try
-            {
-                bdatos = (MasterBD)serializer.Deserialize(reader);
-            }
-            catch (Exception e) {
-                bdatos = new MasterBD();
-            }
-            reader.Close();
 
-            if (!bdatos.containsBD(nombre))
+            if (!masterBD.containsBD(nombre))
             {
                 BaseDatos nBaseDatos = new BaseDatos(nombre);
-                bdatos.agregarBD(nBaseDatos);
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
-                StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
-                mySerializer.Serialize(myWriter, bdatos);
-                myWriter.Close();
+                masterBD.agregarBD(nBaseDatos);
+
                 string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), nombre);
                 System.IO.Directory.CreateDirectory(path);
                 string fileName = nombre + ".xml";
@@ -6276,13 +6025,12 @@ namespace BasesDeDatos_Proyecto1
         {
             if (Visit(context.GetChild(1)).Equals("void"))
             {
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                mySerializer.Serialize(myWriter, masterTabla);
-                myWriter.Close();
                 return "void";
             }
-            return "Error";
+            else
+            {
+                return "Error";
+            }
         }
 
         private MasterBD deserializarMasterBD() {
