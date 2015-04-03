@@ -55,17 +55,17 @@ IDENTIFICADOR: ID '.' ID;
 
 full_query: (queries+= query ';')*;
 
-query: crear_BD			//CHECK
-	 | renombrar_BD		//CHECK
-	 | botar_BD			//CHECK
-	 | mostrar_BD		//CHECK
-	 | usar_BD			//CHECK
-	 | crear_tabla		//CHECK
-	 | alter_table		//CHECK
-	 | botar_table		//CHECK
-	 | show_tables		//CHECK
-	 | show_columns		//CHECK
-	 | insert			//CHECK
+query: crear_BD			
+	 | renombrar_BD		
+	 | botar_BD			
+	 | mostrar_BD		
+	 | usar_BD			
+	 | crear_tabla		
+	 | alter_table		
+	 | botar_table		
+	 | show_tables		
+	 | show_columns		
+	 | insert			
 	 | update			
 	 | delete			
 	 | select;			
