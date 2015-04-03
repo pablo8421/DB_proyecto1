@@ -594,14 +594,16 @@ namespace BasesDeDatos_Proyecto1
             //Se agregan los datos al datagridview
             resultados.RowCount = rAux.RowCount;
             resultados.ColumnCount = rAux.ColumnCount;
+
             for (int i = 0; i < resultados.ColumnCount; i++)
             {
-                resultados.Rows[0].Cells[i].Value = resultado.tabla.columnas[i];
+                resultados.Columns[i].HeaderText = resultado.tabla.columnas[i].Substring(0, resultado.tabla.columnas[i].IndexOf(".")) + " (" + resultado.tabla.columnas[i].Substring(resultado.tabla.columnas[i].IndexOf(".") + 1) + ")" + " ["+resultado.tabla.tipos_columnas[i]+"]";
+                resultados.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
                 resultados.Columns[i].Visible = rAux.Columns[i].Visible;
             }
             for (int i = 0; i < resultados.RowCount-1; i++)
                 for (int j = 0; j < resultados.ColumnCount; j++) 
-                    resultados.Rows[i+1].Cells[j].Value = rAux.Rows[i].Cells[j].Value;
+                    resultados.Rows[i].Cells[j].Value = rAux.Rows[i].Cells[j].Value;
 
             mensajes += "Se ha realizado Select con exito, retorno " + (resultados.RowCount - 1) + " valores."+ Environment.NewLine; 
             return "void";
@@ -5446,6 +5448,7 @@ namespace BasesDeDatos_Proyecto1
             if (bdatos.containsBD(nombre))
             {
                 BDenUso = nombre;
+                masterTabla = deserializarMasterTabla();
                 mensajes += "La base de datos que usará a partir de este momento será '" + nombre + "'.\r\n";
                 return "void";
             }
