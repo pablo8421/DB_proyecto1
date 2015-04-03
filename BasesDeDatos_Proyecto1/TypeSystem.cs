@@ -4496,12 +4496,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         esReferenciada = true;
                         referencia = t.nombre;
-                        goto End;
+                        break;
                         
                     }
                 }
+                if (esReferenciada)
+                {
+                    break;
+                }
             }
-            End:
             if (esReferenciada)
             {
                 errores += "Error en línea " + context.start.Line +
