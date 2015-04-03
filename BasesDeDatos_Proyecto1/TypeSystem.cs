@@ -21,6 +21,7 @@ namespace BasesDeDatos_Proyecto1
         public DataGridView resultados;
         public String BDenUso;
         private MasterTabla masterTabla;
+        private MasterBD masterBD;
         private List<Tabla> ListaTablas;
         private List<Object> datosUpdate;
         private List<String> columnasUpdate;
@@ -34,6 +35,27 @@ namespace BasesDeDatos_Proyecto1
             ListaTablas = new List<Tabla>();
             datosUpdate = null;
             columnasUpdate = null;
+        }
+
+        public TypeSystem(String BDenUso)
+        {
+            if (BDenUso == null)
+            {
+                BDenUso = "";
+            }
+            errores = "";
+            mensajes = "";
+            this.BDenUso = BDenUso;
+            resultados = new DataGridView();
+            masterTabla = new MasterTabla();
+            ListaTablas = new List<Tabla>();
+            datosUpdate = null;
+            columnasUpdate = null;
+            if (!BDenUso.Equals(""))
+            {
+                //Deserealizar masterTabla
+                //Deserealizar masterBD
+            }
         }
 
         override
