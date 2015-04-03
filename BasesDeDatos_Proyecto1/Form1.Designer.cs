@@ -81,9 +81,9 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Location = new System.Drawing.Point(549, 9);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(111, 17);
+            this.checkBox1.Size = new System.Drawing.Size(65, 17);
             this.checkBox1.TabIndex = 8;
-            this.checkBox1.Text = "Multiples Archivos";
+            this.checkBox1.Text = "Verbose";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // boton_ejecutar
