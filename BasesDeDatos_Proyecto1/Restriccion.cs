@@ -32,7 +32,6 @@ namespace BasesDeDatos_Proyecto1
             columnasForaneas = new List<String>();
         }
 
-        //Constructor segun tipo de restriccion
         public Restriccion(String tipo)
         {
             nombre = "";
@@ -67,8 +66,11 @@ namespace BasesDeDatos_Proyecto1
                     descripcion += "FOREIGN KEY";
                 if (tipo.Equals("CH"))
                     descripcion += "CHECK("+restriccionCheck+")";
-                if (!tabla.Equals(""))
-                    descripcion += " REFERENCES " + tabla;
+                if (tabla!=null)
+                    if (!tabla.Equals(""))
+                        descripcion += " REFERENCES " + tabla;
+                    else
+                        descripcion += "\"";
                 else
                     descripcion += "\"";
             }
