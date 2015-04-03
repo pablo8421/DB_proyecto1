@@ -5591,23 +5591,14 @@ namespace BasesDeDatos_Proyecto1
         public string VisitUsar_BD(SqlParser.Usar_BDContext context)
         {
             if (!BDenUso.Equals("")) {
-                serializarMasterBD();
-                serializarMasterTabla();    
+                serializarMasterTabla(); 
+                serializarMasterBD();    
             }
             
             String nombre;
             nombre = context.GetChild(2).GetText();
             MasterBD bdatos;
-            XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
-            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
-            try
-            {
-                bdatos = (MasterBD)serializer.Deserialize(reader);
-            }
-            catch (Exception e) {
-                bdatos = new MasterBD();
-            }
-            reader.Close();
+            bdatos = deserializarMasterBD();
 
             if (bdatos.containsBD(nombre))
             {
@@ -6302,7 +6293,14 @@ namespace BasesDeDatos_Proyecto1
             MasterBD bdatos;
             XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
             StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
-            bdatos = (MasterBD)serializer.Deserialize(reader);
+            try
+            {
+                bdatos = (MasterBD)serializer.Deserialize(reader);
+            }
+            catch (Exception e)
+            {
+                bdatos = new MasterBD();
+            }
             reader.Close();
             return bdatos;
         }
