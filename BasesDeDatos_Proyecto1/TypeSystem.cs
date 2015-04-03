@@ -20,11 +20,14 @@ namespace BasesDeDatos_Proyecto1
         public String mensajes;
         public DataGridView resultados;
         public String BDenUso;
+        
         private MasterTabla masterTabla;
         private MasterBD masterBD;
+
         private List<Tabla> ListaTablas;
         private List<Object> datosUpdate;
         private List<String> columnasUpdate;
+        private List<FilaTabla> datosTablas;
 
         public TypeSystem() {
             errores = "";
@@ -58,6 +61,7 @@ namespace BasesDeDatos_Proyecto1
             {
                 //Deserealizar masterTabla
                 masterTabla = deserializarMasterTabla();
+                cargarDatosTablas();
             }
         }
 
@@ -449,8 +453,7 @@ namespace BasesDeDatos_Proyecto1
             List<FilaTabla> datosTabla = new List<FilaTabla>();
             foreach (Tabla tabla in listaTablas)
             {
-                FilaTabla nueva = new FilaTabla(tabla, BDenUso);
-                nueva.cargar();
+                FilaTabla nueva = getFilaTabla(tabla);
                 datosTabla.Add(nueva);
             }
 
@@ -847,8 +850,7 @@ namespace BasesDeDatos_Proyecto1
                         errores += "Error en línea " + nLinea + ": La tabla '" + restriccion.tabla + "' no existe en la base de datos '" + BDenUso + "'.\r\n";
                         return false;
                     }
-                    FilaTabla fTabla = new FilaTabla(tForanea, BDenUso);
-                    fTabla.cargar();
+                    FilaTabla fTabla = getFilaTabla(tForanea);
 
                     for(int cindex = 0; cindex<restriccion.columnasPropias.Count;cindex++){
                         bool banderaExiste = false;
@@ -1843,8 +1845,7 @@ namespace BasesDeDatos_Proyecto1
                 }
  
                 //Cargar la tabla
-                FilaTabla datos = new FilaTabla(tabla, BDenUso);
-                datos.cargar();
+                FilaTabla datos = getFilaTabla(tabla);
 
                 //Verificar las restricciones
                 bool aceptado = verificarRestricciones(datos, row, context.start.Line);
@@ -1855,7 +1856,7 @@ namespace BasesDeDatos_Proyecto1
 
                 //Agregar los elementos
                 datos.agregarFila(row);                
-                datos.guardar();
+                //datos.guardar();
                 
                 //Actualizar cantidad de registros
                 masterBD.getBD(BDenUso).registros++;
@@ -2014,8 +2015,7 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 //Cargar la tabla
-                FilaTabla datos = new FilaTabla(tabla, BDenUso);
-                datos.cargar();
+                FilaTabla datos = getFilaTabla(tabla);
 
                 //Verificar las restricciones
                 bool aceptado = verificarRestricciones(datos, row, context.start.Line);
@@ -2025,7 +2025,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 //Agregar los elementos
                 datos.agregarFila(row);
-                datos.guardar();
+                //datos.guardar();
 
 
                 //Actualizar cantidad de registros
@@ -3102,8 +3102,7 @@ namespace BasesDeDatos_Proyecto1
                 //Mensaje de error
                 return "Error";
             }
-            FilaTabla datos = new FilaTabla(tActual, BDenUso);
-            datos.cargar();
+            FilaTabla datos = getFilaTabla(tActual);
 
             if (context.ChildCount == 4) //No tiene WHERE
             {
@@ -3144,7 +3143,7 @@ namespace BasesDeDatos_Proyecto1
                     for (int i = 0; i < datosUpdate.Count; i++)
                         e[indicesC[i]] = datosUpdate[i];
                 }
-                datos.guardar();
+                //datos.guardar();
                 mensajes += "Se han actualizado " + datos.datos.elementos.Count + " registros con éxito." + Environment.NewLine;
             }
             else { //Si tiene WHERE
@@ -3218,7 +3217,7 @@ namespace BasesDeDatos_Proyecto1
                     for (int i = 0; i < datosUpdate.Count; i++)
                         e[indicesC[i]] = datosUpdate[i];
                 }
-                datos.guardar();
+                //datos.guardar();
                 mensajes += "Se han actualizado " + nuevosDatos.datos.elementos.Count + " registros con éxito." + Environment.NewLine;
             }
             return "void";
@@ -4269,8 +4268,7 @@ namespace BasesDeDatos_Proyecto1
                     if (restriccion.tipo.Equals("FK") && restriccion.tabla.Equals(tabla.nombre))
                     {
                         //Se cargan datos de la otra tabla
-                        FilaTabla datos = new FilaTabla(otra, BDenUso);
-                        datos.cargar();
+                        FilaTabla datos = getFilaTabla(otra);
 
                         //Para cada fila en la otra tabla
                         foreach (List<Object> rowOtra in datos.datos.elementos)
@@ -4365,8 +4363,7 @@ namespace BasesDeDatos_Proyecto1
             if (context.ChildCount == 3)
             {
                 //Cargar los datos en si
-                FilaTabla datos = new FilaTabla(tabla, BDenUso);
-                datos.cargar();
+                FilaTabla datos = getFilaTabla(tabla);
 
                 //Verificar si existe alguna referencia hacia la tabla
                 foreach (List<Object> fila in datos.datos.elementos)
@@ -4385,7 +4382,7 @@ namespace BasesDeDatos_Proyecto1
                 
                 //Borrar los datos y guardar los cambios
                 datos.datos.elementos.Clear();
-                datos.guardar();
+                //datos.guardar();
 
                 //Actualizar cantidad de registros
                 tabla.cantidad_registros = tabla.cantidad_registros - cantidad;
@@ -4416,8 +4413,7 @@ namespace BasesDeDatos_Proyecto1
                 List<List<Object>> paraBorrar = new List<List<Object>>();
 
                 //Cargar los datos en si
-                FilaTabla datos = new FilaTabla(tabla, BDenUso);
-                datos.cargar();
+                FilaTabla datos = getFilaTabla(tabla);
 
                 //Verificar si existe alguna referencia hacia la tabla
                 foreach(List<Object> fila in datos.datos.elementos)
@@ -4444,7 +4440,7 @@ namespace BasesDeDatos_Proyecto1
                     datos.datos.elementos.Remove(fila);
                 }
                 //Guardar cambios
-                datos.guardar();
+                //datos.guardar();
 
                 //Actualizar cantidad de registros
                 tabla.cantidad_registros = tabla.cantidad_registros - cantidad;
@@ -4739,8 +4735,7 @@ namespace BasesDeDatos_Proyecto1
                 tabla.tipos_columnas.Add(tipo);
                 
                 //Agregar la columna a los datos
-                FilaTabla contenido = new FilaTabla(tabla, BDenUso);
-                contenido.cargar();
+                FilaTabla contenido = getFilaTabla(tabla);
 
                 for (int i = 0; i < contenido.getTamanio(); i++ )
                 {
@@ -4766,7 +4761,7 @@ namespace BasesDeDatos_Proyecto1
                     
                 }
 
-                contenido.guardar();
+                //contenido.guardar();
 
                 mensajes += "Se ha agregado la columna '" + columna + "' en la tabla '" + tabla.nombre + "' con éxito." + Environment.NewLine;
                 return "void";
@@ -4805,8 +4800,7 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 //Agregar la columna a los datos
-                FilaTabla contenido = new FilaTabla(tabla, BDenUso);
-                contenido.cargar();
+                FilaTabla contenido = getFilaTabla(tabla);
 
                 for (int i = 0; i < contenido.getTamanio(); i++)
                 {
@@ -4832,7 +4826,7 @@ namespace BasesDeDatos_Proyecto1
 
                 }
 
-                contenido.guardar();
+                //contenido.guardar();
 
                 XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
                 StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
@@ -5462,7 +5456,9 @@ namespace BasesDeDatos_Proyecto1
             if (!BDenUso.Equals(""))
             {
                 //Serealizar masterTabla
-                serializarMasterTabla();                
+                serializarMasterTabla();
+                //Guardar los datos de la tabla
+                guardarDatosTablas();
             }
             
             return "void";
@@ -5473,7 +5469,8 @@ namespace BasesDeDatos_Proyecto1
         {
             if (!BDenUso.Equals("")) {
                 serializarMasterTabla(); 
-                serializarMasterBD();    
+                serializarMasterBD();
+                guardarDatosTablas();
             }
             
             String nombre;
@@ -5485,6 +5482,7 @@ namespace BasesDeDatos_Proyecto1
             {
                 BDenUso = nombre;
                 masterTabla = deserializarMasterTabla();
+                cargarDatosTablas();
                 mensajes += "La base de datos que usará a partir de este momento será '" + nombre + "'.\r\n";
                 return "void";
             }
@@ -6122,6 +6120,37 @@ namespace BasesDeDatos_Proyecto1
             StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
             mySerializer.Serialize(myWriter, masterTabla);
             myWriter.Close();
+        }
+
+        private void cargarDatosTablas()
+        {
+            datosTablas = new List<FilaTabla>();
+            foreach (Tabla tabla in masterTabla.tablas)
+            {
+                FilaTabla datos = new FilaTabla(tabla, BDenUso);
+                datos.cargar();
+                datosTablas.Add(datos);
+            }
+        }
+
+        private void guardarDatosTablas()
+        {
+            foreach (FilaTabla filaTabla in datosTablas)
+            {
+                filaTabla.guardar();
+            }
+        }
+
+        private FilaTabla getFilaTabla(Tabla tabla)
+        {
+            foreach (FilaTabla filaTabla in datosTablas)
+            {
+                if (tabla.nombre.Equals(filaTabla.tabla.nombre))
+                {
+                    return filaTabla;
+                }
+            }
+            return null;
         }
     }
 }
