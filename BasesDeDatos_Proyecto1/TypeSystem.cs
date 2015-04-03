@@ -80,12 +80,19 @@ namespace BasesDeDatos_Proyecto1
                         }
                         else
                         {
-                            String tablas = "("+retorno.Replace("."+col,"")+","+tabla.nombre+")";
+                            String tablas = "(" + retorno.Replace("." + col, "") + "," + tabla.nombre + ")";
                             errores += "Error en línea " + context.start.Line +
                                        ": Existe mas de una posible referencia a la columna '" + col +
-                                       " "+ tablas +"'." + Environment.NewLine;
+                                       " " + tablas + "'." + Environment.NewLine;
                             return "";
                         }
+                    }
+                    else
+                    {
+                        errores += "Error en línea " + context.start.Line +
+                                       ": No existe la columna '" + col +
+                                       "' en la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                        return "";
                     }
                 }
                 return retorno;
@@ -119,6 +126,13 @@ namespace BasesDeDatos_Proyecto1
                                        " " + tablas + "'." + Environment.NewLine;
                             return "";
                         }
+                    }
+                    else
+                    {
+                        errores += "Error en línea " + context.start.Line +
+                                       ": No existe la columna '" + col +
+                                       "' en la tabla '" + tabla.nombre + "'." + Environment.NewLine;
+                        return "";
                     }
                 }
                 return retornoHijo + "," + retornoID;
@@ -592,20 +606,28 @@ namespace BasesDeDatos_Proyecto1
             }
 
             //Se agregan los datos al datagridview
-            resultados.RowCount = rAux.RowCount-1;
-            resultados.ColumnCount = rAux.ColumnCount;
+            if (rAux.RowCount == 0 || rAux.RowCount==1)
+                resultados.RowCount = 1;
+            else
+                resultados.RowCount = rAux.RowCount-1;
+            if (rAux.ColumnCount == 1)
+                resultados.ColumnCount = 1;
+            else
+                resultados.ColumnCount = rAux.ColumnCount;
 
             for (int i = 0; i < resultados.ColumnCount; i++)
             {
-                resultados.Columns[i].HeaderText = resultado.tabla.columnas[i].Substring(0, resultado.tabla.columnas[i].IndexOf(".")) + " (" + resultado.tabla.columnas[i].Substring(resultado.tabla.columnas[i].IndexOf(".") + 1) + ")" + " ["+resultado.tabla.tipos_columnas[i]+"]";
+                resultados.Columns[i].HeaderText = resultado.tabla.columnas[i].Substring(resultado.tabla.columnas[i].IndexOf(".") + 1) + " (" + resultado.tabla.columnas[i].Substring(0, resultado.tabla.columnas[i].IndexOf(".")) + ")" + " [" + resultado.tabla.tipos_columnas[i] + "]";
                 resultados.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
                 resultados.Columns[i].Visible = rAux.Columns[i].Visible;
             }
             for (int i = 0; i < resultados.RowCount; i++)
                 for (int j = 0; j < resultados.ColumnCount; j++) 
                     resultados.Rows[i].Cells[j].Value = rAux.Rows[i].Cells[j].Value;
-
-            mensajes += "Se ha realizado Select con exito, retorno " + (resultados.RowCount - 1) + " valores."+ Environment.NewLine; 
+            int cant = rAux.RowCount-1;
+            if (cant < 0)
+                cant = 0;
+            mensajes += "Se ha realizado select con exito, retornó " + cant + " valores."+ Environment.NewLine; 
             return "void";
         }
 
@@ -1855,7 +1877,7 @@ namespace BasesDeDatos_Proyecto1
                                "'." + Environment.NewLine;
                     return "Error";
                 }
-                //Obtener las columnas a las cuales insertar 
+                //Obtener las columnas a las cuales insertar
                 ListaTablas = new List<Tabla>();
                 ListaTablas.Add(tabla);
                 String columnasSelectas = Visit(context.GetChild(4));
@@ -4496,15 +4518,12 @@ namespace BasesDeDatos_Proyecto1
                     {
                         esReferenciada = true;
                         referencia = t.nombre;
-                        break;
+                        goto End;
                         
                     }
                 }
-                if (esReferenciada)
-                {
-                    break;
-                }
             }
+            End:
             if (esReferenciada)
             {
                 errores += "Error en línea " + context.start.Line +
@@ -4539,46 +4558,51 @@ namespace BasesDeDatos_Proyecto1
                 errores += "Error en línea " + context.start.Line + ": No hay ninguna base de datos en uso.\r\n";
                 return "Error";
             }
-
             if (masterTabla.containsTable(nTabla))
             {
                 Tabla t = masterTabla.getTable(nTabla);
-                resultados.RowCount = t.columnas.Count + 1;
                 resultados.ColumnCount = 3;
+                if (t.columnas.Count == 0)
+                    resultados.RowCount = 1;
+                else
+                {
+                    resultados.RowCount = t.columnas.Count;
+                    for (int i = 0; i < resultados.RowCount; i++)
+                    {
+                        resultados.Rows[i].Cells[0].Value = t.columnas.ElementAt(i);
+                        resultados.Rows[i].Cells[1].Value = t.tipos_columnas.ElementAt(i);
+                        for (int j = 0; j < t.restricciones.Count; j++)
+                        {
+                            if (t.restricciones.ElementAt(j).columnasPropias.Contains(t.columnas.ElementAt(i)))
+                            {
+                                if (resultados.Rows[i].Cells[2].Value != null)
+                                {
+                                    resultados.Rows[i].Cells[2].Value += ", ";
+                                }
+                                resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).ToString();
+
+                                if (t.restricciones.ElementAt(j).columnasForaneas != null)
+                                    if (t.restricciones.ElementAt(j).columnasForaneas.Count != 0)
+                                    {
+                                        resultados.Rows[i].Cells[2].Value += "(";
+                                        for (int k = 0; k < t.restricciones.ElementAt(j).columnasForaneas.Count; k++)
+                                            if (k == 0)
+                                                resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k);
+                                            else
+                                                resultados.Rows[i].Cells[2].Value += ", " + t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k);
+                                        resultados.Rows[i].Cells[2].Value += ")\"";
+                                    }
+                            }
+                        }
+                    }
+                }
                 resultados.Columns[0].HeaderText = "Columna";
                 resultados.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
                 resultados.Columns[1].HeaderText = "Tipo";
                 resultados.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
                 resultados.Columns[2].HeaderText = "Restricciones";
                 resultados.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
-                for (int i = 1; i < resultados.RowCount; i++)
-                {
-                    resultados.Rows[i].Cells[0].Value = t.columnas.ElementAt(i - 1);
-                    resultados.Rows[i].Cells[1].Value = t.tipos_columnas.ElementAt(i - 1);
-                    for (int j = 0; j < t.restricciones.Count; j++)
-                    {
-                        if (t.restricciones.ElementAt(j).columnasPropias.Contains(t.columnas.ElementAt(i - 1)))
-                        {
-                            if (resultados.Rows[i].Cells[2].Value != null)
-                            {
-                                resultados.Rows[i].Cells[2].Value += ", ";
-                            }                       
-                            resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).ToString();
-
-                            if (t.restricciones.ElementAt(j).columnasForaneas.Count != 0)
-                            {
-                                resultados.Rows[i].Cells[2].Value += "(";
-                                for (int k = 0; k < t.restricciones.ElementAt(j).columnasForaneas.Count; k++)
-                                    if (k == 0)
-                                        resultados.Rows[i].Cells[2].Value += t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k);
-                                    else
-                                        resultados.Rows[i].Cells[2].Value += ", " + t.restricciones.ElementAt(j).columnasForaneas.ElementAt(k);
-                                resultados.Rows[i].Cells[2].Value += ")\"";
-                            }
-                        }
-                    }
-                }
-                resultados.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
+                
                 return "void";
             }
             else
@@ -5027,18 +5051,22 @@ namespace BasesDeDatos_Proyecto1
         public string VisitMostrar_BD(SqlParser.Mostrar_BDContext context)
         {
             resultados.ColumnCount = 2;
-            resultados.RowCount = masterBD.basesDeDatos.Count;
-
+            if (masterBD.basesDeDatos.Count == 0)
+                resultados.RowCount = 1;
+            else
+            {
+                resultados.RowCount = masterBD.basesDeDatos.Count;
+                for (int i = 0; i < resultados.RowCount; i++)
+                {
+                    resultados.Rows[i].Cells[0].Value = masterBD.basesDeDatos.ElementAt(i).nombre;
+                    resultados.Rows[i].Cells[1].Value = masterBD.basesDeDatos.ElementAt(i).cantidad_tablas + "";
+                }
+            }
             resultados.Columns[0].HeaderText = "Nombre";
             resultados.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
             resultados.Columns[1].HeaderText = "Cantidad de tablas";
             resultados.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
-            for (int i = 0; i < resultados.RowCount; i++)
-            {
-                resultados.Rows[i].Cells[0].Value = masterBD.basesDeDatos.ElementAt(i).nombre;
-                resultados.Rows[i].Cells[1].Value = masterBD.basesDeDatos.ElementAt(i).cantidad_tablas + "";
-            }
-            resultados.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
+            
             return "void";
         }
 
@@ -5656,24 +5684,28 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitShow_tables(SqlParser.Show_tablesContext context)
         {
-            MasterTabla mTabla;
             if (BDenUso.Equals("")) {
                 errores += "Error en línea "+context.start.Line+": No se encuentra en uso ninguna base de datos.\r\n";
                 return "Error";
             }
-            mTabla = deserializarMasterTabla();
-            resultados.RowCount = mTabla.tablas.Count + 1;
             resultados.ColumnCount = 2;
-            resultados.Rows[0].Cells[0].Value = "Nombre";
-            resultados.Rows[0].Cells[1].Value = "Cant. de registros";
-
-            for (int i = 1; i < resultados.RowCount; i++ )
+            if (masterTabla.tablas.Count == 0)
+                resultados.RowCount = 1;
+            else
             {
-                resultados.Rows[i].Cells[0].Value = mTabla.tablas.ElementAt(i - 1).nombre;
-                resultados.Rows[i].Cells[1].Value = mTabla.tablas.ElementAt(i - 1).cantidad_registros;
+                resultados.RowCount = masterTabla.tablas.Count;
+                for (int i = 0; i < resultados.RowCount; i++)
+                {
+                    resultados.Rows[i].Cells[0].Value = masterTabla.tablas.ElementAt(i).nombre;
+                    resultados.Rows[i].Cells[1].Value = masterTabla.tablas.ElementAt(i).cantidad_registros;
+                }
             }
-            resultados.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
-            mensajes += "Se han mostrado todas las tablas ("+mTabla.tablas.Count+") que contiene '" + BDenUso + "' con éxito.\r\n";
+            resultados.Columns[0].HeaderText = "Nombre";
+            resultados.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+            resultados.Columns[1].HeaderText = "Cant. de registros";
+            resultados.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+            
+            mensajes += "Se han mostrado todas las tablas (" + masterTabla.tablas.Count + ") que contiene '" + BDenUso + "' con éxito.\r\n";
             return "void";
         }
 
@@ -5944,7 +5976,7 @@ namespace BasesDeDatos_Proyecto1
                 //Manejar las constraint
                 ListaTablas = new List<Tabla>();
                 ListaTablas.Add(nueva);
-                if(Visit(context.GetChild(5)).Equals("Error")){
+                if(Visit(context.GetChild(6)).Equals("Error")){
                     return "Error";
                 }
 
@@ -5978,6 +6010,7 @@ namespace BasesDeDatos_Proyecto1
                 path = System.IO.Path.Combine(path, fileName);
                 System.IO.FileStream fs = System.IO.File.Create(path);
                 fs.Close();
+                serializarMasterBD();
 
                 mensajes += "La base de datos '" + nombre + "' ha sido creada exitosamente.\r\n";
                 return "void";
