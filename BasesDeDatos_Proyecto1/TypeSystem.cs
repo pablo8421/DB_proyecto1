@@ -5578,6 +5578,14 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
             }
+            //Serealizar masterBD
+            serializarMasterBD();
+            if (!BDenUso.Equals(""))
+            {
+                //Serealizar masterTabla
+                serializarMasterTabla();                
+            }
+            
             return "void";
         }
 
