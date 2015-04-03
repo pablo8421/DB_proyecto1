@@ -5584,6 +5584,11 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitUsar_BD(SqlParser.Usar_BDContext context)
         {
+            if (!BDenUso.Equals("")) {
+                serializarMasterBD();
+                serializarMasterTabla();    
+            }
+            
             String nombre;
             nombre = context.GetChild(2).GetText();
             MasterBD bdatos;
@@ -6311,6 +6316,20 @@ namespace BasesDeDatos_Proyecto1
             }
             reader.Close();
             return mTabla;
+        }
+
+        private void serializarMasterBD() {
+            XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
+            StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
+            mySerializer.Serialize(myWriter, masterBD);
+            myWriter.Close();
+        }
+
+        private void serializarMasterTabla() {
+            XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
+            StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+            mySerializer.Serialize(myWriter, masterTabla);
+            myWriter.Close();
         }
     }
 }
