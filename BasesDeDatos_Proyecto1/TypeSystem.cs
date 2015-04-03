@@ -5976,7 +5976,7 @@ namespace BasesDeDatos_Proyecto1
                 //Manejar las constraint
                 ListaTablas = new List<Tabla>();
                 ListaTablas.Add(nueva);
-                if(Visit(context.GetChild(5)).Equals("Error")){
+                if(Visit(context.GetChild(6)).Equals("Error")){
                     return "Error";
                 }
 
@@ -6010,6 +6010,7 @@ namespace BasesDeDatos_Proyecto1
                 path = System.IO.Path.Combine(path, fileName);
                 System.IO.FileStream fs = System.IO.File.Create(path);
                 fs.Close();
+                serializarMasterBD();
 
                 mensajes += "La base de datos '" + nombre + "' ha sido creada exitosamente.\r\n";
                 return "void";
