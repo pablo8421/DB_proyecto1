@@ -47,14 +47,17 @@ namespace BasesDeDatos_Proyecto1
             mensajes = "";
             this.BDenUso = BDenUso;
             resultados = new DataGridView();
-            masterTabla = new MasterTabla();
             ListaTablas = new List<Tabla>();
             datosUpdate = null;
             columnasUpdate = null;
+
+            //Deserealizar masterBD
+            masterBD = deserializarMasterBD();
+
             if (!BDenUso.Equals(""))
             {
                 //Deserealizar masterTabla
-                //Deserealizar masterBD
+                masterTabla = deserializarMasterTabla();
             }
         }
 
