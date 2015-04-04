@@ -604,7 +604,6 @@ namespace BasesDeDatos_Proyecto1
             resultados.RowHeadersVisible = false;
             resultados.AllowUserToAddRows = false;
             DataView dataView = new DataView(dt);
-            
             //Hacer el binding de datos
             resultados.DataSource = dataView;
 
