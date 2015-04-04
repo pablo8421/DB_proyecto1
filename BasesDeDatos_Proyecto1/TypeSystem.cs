@@ -2123,18 +2123,18 @@ namespace BasesDeDatos_Proyecto1
                             if (indexUno >= 0)
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
-                                if (indexUpdateUno==-1)
+                                if (indexUpdateUno == -1)
                                     if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
                                     {
-                                        datoUno = (Int32) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                                     {
-                                        datoUno = (Single) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoUno = (String) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                                     }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
@@ -2167,15 +2167,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateDos == -1)
                                     if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
                                     {
-                                        datoDos = (Int32) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                                     {
-                                        datoDos = (Single) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoDos = (String) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                                     }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
@@ -2276,15 +2276,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateUno == -1)
                                     if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
                                     {
-                                        datoUno = (Int32) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                                     {
-                                        datoUno = (Single) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoUno = (String) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                                     }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
@@ -2317,15 +2317,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateDos == -1)
                                     if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
                                     {
-                                        datoDos = (Int32) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                                     {
-                                        datoDos = (Single) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoDos = (String) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                                     }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
@@ -2426,15 +2426,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateUno == -1)
                                     if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
                                     {
-                                        datoUno = (Int32) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                                     {
-                                        datoUno = (Single) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoUno = (String) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                                     }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
@@ -2467,15 +2467,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateDos == -1)
                                     if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
                                     {
-                                        datoDos = (Int32) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                                     {
-                                        datoDos = (Single) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoDos = (String) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                                     }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
@@ -2590,15 +2590,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateUno == -1)
                                     if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
                                     {
-                                        datoUno = (Int32) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                                     {
-                                        datoUno = (Single) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoUno = (String) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                                     }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
@@ -2631,15 +2631,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateDos == -1)
                                     if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
                                     {
-                                        datoDos = (Int32) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                                     {
-                                        datoDos = (Single) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoDos = (String) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                                     }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
@@ -2754,15 +2754,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateUno == -1)
                                     if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
                                     {
-                                        datoUno = (Int32) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                                     {
-                                        datoUno = (Single) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoUno = (String) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                                     }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
@@ -2795,15 +2795,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateDos == -1)
                                     if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
                                     {
-                                        datoDos = (Int32) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                                     {
-                                        datoDos = (Single) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoDos = (String) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                                     }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
@@ -2918,15 +2918,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateUno == -1)
                                     if (datos.tabla.tipos_columnas[indexUno].Equals("INT"))
                                     {
-                                        datoUno = (Int32) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                                     {
-                                        datoUno = (Single) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoUno = (String) row[indexUno];
+                                        datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                                     }
                                 else
                                     datoUno = rowUpdate[indexUpdateUno];
@@ -2959,15 +2959,15 @@ namespace BasesDeDatos_Proyecto1
                                 if (indexUpdateDos == -1)
                                     if (datos.tabla.tipos_columnas[indexDos].Equals("INT"))
                                     {
-                                        datoDos = (Int32) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                                     }
                                     else if (datos.tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                                     {
-                                        datoDos = (Single) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                                     }
                                     else
                                     {
-                                        datoDos = (String) row[indexDos];
+                                        datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                                     }
                                 else
                                     datoDos = rowUpdate[indexUpdateDos];
@@ -3100,8 +3100,9 @@ namespace BasesDeDatos_Proyecto1
         public string VisitUpdate(SqlParser.UpdateContext context)
         {
             String nTabla = context.GetChild(1).GetText();
-            if (BDenUso.Equals("")) { //No hay ninguna base de datos en uso
-                errores += "Error en línea "+context.start.Line+": No se encuentra ninguna base de datos en uso." + Environment.NewLine;
+            if (BDenUso.Equals(""))
+            { //No hay ninguna base de datos en uso
+                errores += "Error en línea " + context.start.Line + ": No se encuentra ninguna base de datos en uso." + Environment.NewLine;
                 return "Error";
             }
             Tabla tActual = masterTabla.getTable(nTabla);
@@ -3156,17 +3157,19 @@ namespace BasesDeDatos_Proyecto1
                 foreach (String nombreC in columnasUpdate)
                     indicesC.Add(datos.tabla.columnas.IndexOf(nombreC));
 
-                foreach (List<Object> e in datosPosiblesACambiar) {
+                foreach (List<Object> e in datosPosiblesACambiar)
+                {
                     for (int i = 0; i < datosUpdate.Count; i++)
                         e[indicesC[i]] = datosUpdate[i];
                 }
                 //datos.guardar();
                 mensajes += "Se han actualizado " + datos.datos.elementos.Count + " registros con éxito." + Environment.NewLine;
             }
-            else { //Si tiene WHERE
-                
+            else
+            { //Si tiene WHERE
+
                 //Obtener expresion postfix
-                
+
                 ListaTablas = new List<Tabla>();
                 ListaTablas.Add(tActual);
                 String postfix = Visit(context.GetChild(5));
@@ -3228,7 +3231,7 @@ namespace BasesDeDatos_Proyecto1
                 List<int> indicesC = new List<int>();
                 foreach (String nombreC in columnasUpdate)
                     indicesC.Add(nuevosDatos.tabla.columnas.IndexOf(nombreC));
-                
+
                 foreach (List<Object> e in datosPosiblesACambiar)
                 {
                     for (int i = 0; i < datosUpdate.Count; i++)
@@ -3244,8 +3247,9 @@ namespace BasesDeDatos_Proyecto1
         public string VisitAlter_table(SqlParser.Alter_tableContext context)
         {
             String nTabla = context.GetChild(2).GetText();
-            if (BDenUso.Equals("")) { 
-                errores += "Error en línea "+context.start.Line+": No hay base de datos en uso por lo que no se puede alterar la tabla.";
+            if (BDenUso.Equals(""))
+            {
+                errores += "Error en línea " + context.start.Line + ": No hay base de datos en uso por lo que no se puede alterar la tabla.";
                 return "Error";
             }
 
@@ -3268,13 +3272,16 @@ namespace BasesDeDatos_Proyecto1
         {
             Tabla tActual = ListaTablas[0];
             String cBorrar = context.GetChild(2).GetText();
-            if (!tActual.columnas.Contains(cBorrar)) { 
-                errores += "Error en la línea "+context.start.Line+": La tabla '"+tActual.nombre+"' no contiene la columna '"+cBorrar+"'.\r\n";
+            if (!tActual.columnas.Contains(cBorrar))
+            {
+                errores += "Error en la línea " + context.start.Line + ": La tabla '" + tActual.nombre + "' no contiene la columna '" + cBorrar + "'.\r\n";
                 return "Error";
             }
-            
-            foreach (Restriccion r in tActual.restricciones){
-                if (r.columnasPropias.Contains(cBorrar)) {
+
+            foreach (Restriccion r in tActual.restricciones)
+            {
+                if (r.columnasPropias.Contains(cBorrar))
+                {
                     errores += "Error en la línea " + context.start.Line + ": La columna '" + cBorrar + "' tiene una restricción por lo que no se puede borrar.\r\n";
                     return "Error";
                 }
@@ -3289,10 +3296,10 @@ namespace BasesDeDatos_Proyecto1
                         if (r.columnasForaneas.Contains(cBorrar))
                         {
                             int i = r.columnasForaneas.IndexOf(cBorrar);
-                            errores += "Error en la línea " + context.start.Line + ": La columna '" + cBorrar + "' es referenciada como llave foránea de la columna '"+r.columnasPropias.ElementAt(i)+"' de la tabla '"+t.nombre+"'.\r\n";
+                            errores += "Error en la línea " + context.start.Line + ": La columna '" + cBorrar + "' es referenciada como llave foránea de la columna '" + r.columnasPropias.ElementAt(i) + "' de la tabla '" + t.nombre + "'.\r\n";
                             return "Error";
                         }
-                    }    
+                    }
                 }
             }
 
@@ -3349,15 +3356,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = (Int32) row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = (Single)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                         }
                         else
                         {
-                            datoUno = (String)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                         }
                     }
                     else
@@ -3386,15 +3393,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = (Int32) row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = (Single) row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                         }
                         else
                         {
-                            datoDos = (String) row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                         }
                     }
                     else
@@ -3491,15 +3498,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = (Int32) row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = (Single)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                         }
                         else
                         {
-                            datoUno = (String)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                         }
                     }
                     else
@@ -3528,15 +3535,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = (Int32)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = (Single)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                         }
                         else
                         {
-                            datoDos = (String)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                         }
                     }
                     else
@@ -3633,15 +3640,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = (Int32)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = (Single)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                         }
                         else
                         {
-                            datoUno = (String)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                         }
                     }
                     else
@@ -3670,15 +3677,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = (Int32)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = (Single)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                         }
                         else
                         {
-                            datoDos = (String)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                         }
                     }
                     else
@@ -3789,15 +3796,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = (Int32)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = (Single)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                         }
                         else
                         {
-                            datoUno = (String)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                         }
                     }
                     else
@@ -3826,15 +3833,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = (Int32)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = (Single)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                         }
                         else
                         {
-                            datoDos = (String)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                         }
                     }
                     else
@@ -3945,15 +3952,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = (Int32)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = (Single)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                         }
                         else
                         {
-                            datoUno = (String)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                         }
                     }
                     else
@@ -3982,15 +3989,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = (Int32)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = (Single)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                         }
                         else
                         {
-                            datoDos = (String)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                         }
                     }
                     else
@@ -4101,15 +4108,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = (Int32)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = (Single)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
                         }
                         else
                         {
-                            datoUno = (String)row[indexUno];
+                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
                         }
                     }
                     else
@@ -4138,15 +4145,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = (Int32)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = (Single)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
                         }
                         else
                         {
-                            datoDos = (String)row[indexDos];
+                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
                         }
                     }
                     else
@@ -4292,31 +4299,31 @@ namespace BasesDeDatos_Proyecto1
                         {
                             //Se verifica que toda la llave sea igual en ambas tablas
                             bool esReferenciada = true;
-                        for (int i = 0; i < restriccion.columnasForaneas.Count; i++)
-                        {
+                            for (int i = 0; i < restriccion.columnasForaneas.Count; i++)
+                            {
                                 //Indices de columnas en cada tabla
                                 int indicePropio = tabla.columnas.IndexOf(restriccion.columnasForaneas[i]);
                                 int indiceOtro = otra.columnas.IndexOf(restriccion.columnasPropias[i]);
-                            
+
                                 //Cada caso segun el tipo que es
                                 if (tabla.tipos_columnas[indicePropio].Equals("INT"))
                                 {
                                     //Obtener valores
-                                    Int32 valorPropio = (Int32)row[indicePropio];
-                                    Int32 valorOtro = (Int32)rowOtra[indiceOtro];
+                                    Int32 valorPropio = ((MsgPack.MessagePackObject)row[indicePropio]).AsInt32();
+                                    Int32 valorOtro = ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).AsInt32();
 
                                     //Si es distinto, no es referenciada
                                     if (!valorPropio.Equals(valorOtro))
                                     {
                                         esReferenciada = false;
                                         break;
-                        }
-                    }
+                                    }
+                                }
                                 else if (tabla.tipos_columnas[indicePropio].Equals("FLOAT"))
                                 {
                                     //Obtener valores
-                                    Single valorPropio = (Single)row[indicePropio];
-                                    Single valorOtro = (Single)rowOtra[indiceOtro];
+                                    Single valorPropio = ((MsgPack.MessagePackObject)row[indicePropio]).AsSingle();
+                                    Single valorOtro = ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).AsSingle();
 
                                     //Si es distinto, no es referenciada
                                     if (!valorPropio.Equals(valorOtro))
@@ -4328,9 +4335,9 @@ namespace BasesDeDatos_Proyecto1
                                 else
                                 {
                                     //Obtener valores
-                                    String valorPropio = (String)row[indicePropio];
-                                    String valorOtro = (String)rowOtra[indiceOtro];
-                                    
+                                    String valorPropio = ((MsgPack.MessagePackObject)row[indicePropio]).AsString();
+                                    String valorOtro = ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).AsString();
+
                                     //Si es distinto, no es referenciada
                                     if (!valorPropio.Equals(valorOtro))
                                     {
@@ -4338,13 +4345,13 @@ namespace BasesDeDatos_Proyecto1
                                         break;
                                     }
                                 }
-                }
+                            }
                             if (esReferenciada)
                             {
                                 pk = "'" + restriccion.nombre + "'" + "de la tabla '" + otra.nombre + "'";
                                 return true;
-            }
-                            
+                            }
+
                         }
                     }
                 }
@@ -4352,6 +4359,7 @@ namespace BasesDeDatos_Proyecto1
             pk = "";
             return false;
         }
+
 
         override
         public string VisitDelete(SqlParser.DeleteContext context)
