@@ -809,11 +809,12 @@ namespace BasesDeDatos_Proyecto1
                         //El ciclo para cuando se analizan todos o se encuentra uno distinto
                         while (yaExistePK && i < indices.Count)
                         {
-                            MsgPack.MessagePackObject enTabla = (MsgPack.MessagePackObject) fila[indices[i]];
+                            Console.WriteLine(fila[indices[i]].GetType());
+                            Object enTabla = fila[indices[i]];
                             Object porAgregar = (Object) row[indices[i]];
                             if (datos.tabla.tipos_columnas[indices[i]].Equals("INT"))
                             {
-                                if (!(enTabla.AsInt32()
+                                if (!(((Int32) enTabla)
                              .Equals(((Int32)porAgregar))))
                                 {
                                     yaExistePK = false;
@@ -821,7 +822,7 @@ namespace BasesDeDatos_Proyecto1
                             }
                             else if (datos.tabla.tipos_columnas[indices[i]].Equals("FLOAT"))
                             {
-                                if (!(enTabla.AsSingle()
+                                if (!(((Single)enTabla)
                              .Equals(((Single)porAgregar))))
                                 {
                                     yaExistePK = false;
@@ -829,7 +830,7 @@ namespace BasesDeDatos_Proyecto1
                             }
                             else if (datos.tabla.tipos_columnas[indices[i]].Equals("DATE"))
                             {
-                                if (!(enTabla.AsString()
+                                if (!(((String)enTabla)
                              .Equals(((String)porAgregar))))
                                 {
                                     yaExistePK = false;
@@ -837,7 +838,7 @@ namespace BasesDeDatos_Proyecto1
                             }
                             else if (datos.tabla.tipos_columnas[indices[i]].StartsWith("CHAR"))
                             {
-                                if (!(enTabla.AsString()
+                                if (!(((String)enTabla)
                              .Equals(((String)porAgregar))))
                                 {
                                     yaExistePK = false;
@@ -3347,15 +3348,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                            datoUno = (Int32) row[indexUno];
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                            datoUno = (Single)row[indexUno];
                         }
                         else
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                            datoUno = (String)row[indexUno];
                         }
                     }
                     else
@@ -3384,15 +3385,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                            datoDos = (Int32) row[indexDos];
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                            datoDos = (Single) row[indexDos];
                         }
                         else
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                            datoDos = (String) row[indexDos];
                         }
                     }
                     else
@@ -3489,15 +3490,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject) row[indexUno]).AsInt32();
+                            datoUno = (Int32) row[indexUno];
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                            datoUno = (Single)row[indexUno];
                         }
                         else
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                            datoUno = (String)row[indexUno];
                         }
                     }
                     else
@@ -3526,15 +3527,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                            datoDos = (Int32)row[indexDos];
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                            datoDos = (Single)row[indexDos];
                         }
                         else
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                            datoDos = (String)row[indexDos];
                         }
                     }
                     else
@@ -3631,15 +3632,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                            datoUno = (Int32)row[indexUno];
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                            datoUno = (Single)row[indexUno];
                         }
                         else
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                            datoUno = (String)row[indexUno];
                         }
                     }
                     else
@@ -3668,15 +3669,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                            datoDos = (Int32)row[indexDos];
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                            datoDos = (Single)row[indexDos];
                         }
                         else
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                            datoDos = (String)row[indexDos];
                         }
                     }
                     else
@@ -3787,15 +3788,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                            datoUno = (Int32)row[indexUno];
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                            datoUno = (Single)row[indexUno];
                         }
                         else
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                            datoUno = (String)row[indexUno];
                         }
                     }
                     else
@@ -3824,15 +3825,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                            datoDos = (Int32)row[indexDos];
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                            datoDos = (Single)row[indexDos];
                         }
                         else
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                            datoDos = (String)row[indexDos];
                         }
                     }
                     else
@@ -3943,15 +3944,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                            datoUno = (Int32)row[indexUno];
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                            datoUno = (Single)row[indexUno];
                         }
                         else
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                            datoUno = (String)row[indexUno];
                         }
                     }
                     else
@@ -3980,15 +3981,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                            datoDos = (Int32)row[indexDos];
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                            datoDos = (Single)row[indexDos];
                         }
                         else
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                            datoDos = (String)row[indexDos];
                         }
                     }
                     else
@@ -4099,15 +4100,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
+                            datoUno = (Int32)row[indexUno];
                         }
                         else if (tabla.tipos_columnas[indexUno].Equals("FLOAT"))
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsSingle();
+                            datoUno = (Single)row[indexUno];
                         }
                         else
                         {
-                            datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsString();
+                            datoUno = (String)row[indexUno];
                         }
                     }
                     else
@@ -4136,15 +4137,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
+                            datoDos = (Int32)row[indexDos];
                         }
                         else if (tabla.tipos_columnas[indexDos].Equals("FLOAT"))
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsSingle();
+                            datoDos = (Single)row[indexDos];
                         }
                         else
                         {
-                            datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsString();
+                            datoDos = (String)row[indexDos];
                         }
                     }
                     else
@@ -4300,8 +4301,8 @@ namespace BasesDeDatos_Proyecto1
                                 if (tabla.tipos_columnas[indicePropio].Equals("INT"))
                                 {
                                     //Obtener valores
-                                    Int32 valorPropio = ((MsgPack.MessagePackObject)row[indicePropio]).AsInt32();
-                                    Int32 valorOtro = ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).AsInt32();
+                                    Int32 valorPropio = (Int32)row[indicePropio];
+                                    Int32 valorOtro = (Int32)rowOtra[indiceOtro];
 
                                     //Si es distinto, no es referenciada
                                     if (!valorPropio.Equals(valorOtro))
@@ -4313,8 +4314,8 @@ namespace BasesDeDatos_Proyecto1
                                 else if (tabla.tipos_columnas[indicePropio].Equals("FLOAT"))
                                 {
                                     //Obtener valores
-                                    Single valorPropio = ((MsgPack.MessagePackObject)row[indicePropio]).AsSingle();
-                                    Single valorOtro = ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).AsSingle();
+                                    Single valorPropio = (Single)row[indicePropio];
+                                    Single valorOtro = (Single)rowOtra[indiceOtro];
 
                                     //Si es distinto, no es referenciada
                                     if (!valorPropio.Equals(valorOtro))
@@ -4326,8 +4327,8 @@ namespace BasesDeDatos_Proyecto1
                                 else
                                 {
                                     //Obtener valores
-                                    String valorPropio = ((MsgPack.MessagePackObject)row[indicePropio]).AsString();
-                                    String valorOtro = ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).AsString();
+                                    String valorPropio = (String)row[indicePropio];
+                                    String valorOtro = (String)rowOtra[indiceOtro];
                                     
                                     //Si es distinto, no es referenciada
                                     if (!valorPropio.Equals(valorOtro))
