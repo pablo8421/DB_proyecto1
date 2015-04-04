@@ -49,7 +49,7 @@ FLOAT : '-'? NUMBER+ '.' NUMBER+;
 INT : '-'? NUMBER+;
 STRING: '\'' .*? '\'';
 
-ID : LETTER (LETTER|NUMBER|'_')*; 
+ID : LETTER (LETTER|NUMBER|'!'|[#-)]|'+'|'-'|';'|'='|'@'|'['|']'|[^-`]'{'|'}'|'~')*; 
 IDENTIFICADOR: ID '.' ID; 
 
 //--------------------------------------
