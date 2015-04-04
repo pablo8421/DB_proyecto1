@@ -597,17 +597,13 @@ namespace BasesDeDatos_Proyecto1
                 }
             }
             
-            //Meter los datos en el datagrid
-            //BindingSource dataSource = new BindingSource();
-            //dataSource.DataSource = dt;
-            //dataSource.RaiseListChangedEvents = false;
-
             //Preaprar el datagridview
             resultados.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            resultados.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             resultados.RowHeadersVisible = false;
             resultados.AllowUserToAddRows = false;
             DataView dataView = new DataView(dt);
-            //this.Grid.DataSource = dataView;
+            
             //Hacer el binding de datos
             resultados.DataSource = dataView;
 
@@ -5462,9 +5458,13 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitFull_query(SqlParser.Full_queryContext context)
         {
-            foreach(SqlParser.QueryContext query in context._queries)
-                if(!Visit(query).Equals("void"))
+            foreach (SqlParser.QueryContext query in context._queries)
+            {
+                resultados.DataSource = null;
+                resultados.DataBindings.Clear();
+                if (!Visit(query).Equals("void"))
                     return "Error";
+            }
             
             //Serealizar masterBD
             serializarMasterBD();
