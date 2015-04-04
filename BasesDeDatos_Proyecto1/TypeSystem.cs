@@ -598,6 +598,7 @@ namespace BasesDeDatos_Proyecto1
             }
             
             //Preaprar el datagridview
+            resultados.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.None);
             resultados.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             resultados.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             resultados.RowHeadersVisible = false;
@@ -607,6 +608,11 @@ namespace BasesDeDatos_Proyecto1
             //Hacer el binding de datos
             resultados.DataSource = dataView;
 
+            //Hacerlo notSortable
+            for (int i = 0; i < resultados.ColumnCount; i++)
+            {
+                resultados.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
 
             //Obtener el orderBy
             String columnasAOrdenar = Visit(context.GetChild(5));
@@ -640,7 +646,6 @@ namespace BasesDeDatos_Proyecto1
             if (cant < 0)
                 cant = 0;
             resultados.RowHeadersVisible = true;
-            //dataSource.RaiseListChangedEvents = true;
             mensajes += "Se ha realizado select con exito, retornó " + cant + " valores."+ Environment.NewLine; 
             return "void";
         }

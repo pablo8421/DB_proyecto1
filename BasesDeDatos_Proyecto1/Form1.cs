@@ -102,11 +102,7 @@ namespace BasesDeDatos_Proyecto1
                 else
                     consolaText.Text = sistemaTipos.mensajes + sistemaTipos.errores;
             }
-            //Hacer que las columnas no se puedan ordenar
-            for (int i = 0; i < dataGridView1.ColumnCount; i++)
-            {
-                dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
+
             databaseActual = sistemaTipos.BDenUso;
         }
     }
