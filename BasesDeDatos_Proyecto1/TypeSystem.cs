@@ -801,21 +801,24 @@ namespace BasesDeDatos_Proyecto1
                         indices.Add(datos.tabla.columnas.IndexOf(columna));
                     }
                     //Revisar para cada fila en la tabla
-                    foreach (List<Object> fila in datos.datos.elementos)
+                    for (int num = 0; num < datos.datos.elementos.Count; num++ )
                     {
+                        Object[] fila = datos.obtenerFila(num);
                         bool yaExistePK = true;
                         int i = 0;
                         //Mientras los datos sean los mismos, se siguen evaluando los datos
                         //El ciclo para cuando se analizan todos o se encuentra uno distinto
                         while (yaExistePK && i < indices.Count)
                         {
-                            Console.WriteLine(fila[indices[i]].GetType());
-                            Console.WriteLine(fila[indices[i]].GetType());
                             Object enTabla = fila[indices[i]];
-                            Object porAgregar = (Object) row[indices[i]];
+                            Object porAgregar = (Object)row[indices[i]];
+
+                            Console.WriteLine(enTabla.GetType());
+                            Console.WriteLine(porAgregar.GetType());
+
                             if (datos.tabla.tipos_columnas[indices[i]].Equals("INT"))
                             {
-                                if (!(((Int32) enTabla)
+                                if (!(((Int32)enTabla)
                              .Equals(((Int32)porAgregar))))
                                 {
                                     yaExistePK = false;
