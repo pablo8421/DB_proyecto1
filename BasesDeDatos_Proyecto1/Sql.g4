@@ -52,6 +52,7 @@ STRING: '\'' .*? '\'';
 ID : LETTER (LETTER|NUMBER|'_')*; 
 IDENTIFICADOR: ID '.' ID; 
 
+//--------------------------------------
 
 full_query: (queries+= query ';')*;
 
