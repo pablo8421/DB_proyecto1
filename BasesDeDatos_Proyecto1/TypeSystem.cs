@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -565,21 +566,52 @@ namespace BasesDeDatos_Proyecto1
                 columnasAMostrar = Visit(context.GetChild(1));
             if (columnasAMostrar.Equals("Error"))
                 return "Error";
-            DataGridView rAux = new DataGridView();
-            rAux.RowCount = resultado.datos.elementos.Count+1;
-            rAux.ColumnCount = resultado.tabla.columnas.Count;
-            for (int i = 0; i < rAux.RowCount-1; i++)
-                for (int j = 0; j < rAux.ColumnCount; j++)
-                    rAux.Rows[i].Cells[j].Value = resultado.getRowElement(i, j);
+
+            //Generar la data a linkear con el DataGridView
+            DataTable dt = new DataTable();
+
+            //Lennar las columnas
+            for (int i = 0; i < resultado.tabla.columnas.Count; i++)
+            {
+                dt.Columns.Add(resultado.tabla.columnas[i].Substring(0, resultado.tabla.columnas[i].IndexOf(".")) + " (" + resultado.tabla.columnas[i].Substring(resultado.tabla.columnas[i].IndexOf(".") + 1) + ")" + " [" + resultado.tabla.tipos_columnas[i] + "]");
+            }
+
+            //Llenar los datos
+            for (int i = 0; i < resultado.datos.elementos.Count; i++)
+            {
+                object[] fila = resultado.obtenerFila(i);
+                dt.Rows.Add();
+                dt.Rows[i].ItemArray = fila;
+            }
             if (!columnasAMostrar.Equals("*"))
             {
                 List<String> colMostrar = new List<string>(columnasAMostrar.Split(','));
-                for (int i = 0; i<resultado.tabla.columnas.Count; i++){
+                for (int i = 0; i < resultado.tabla.columnas.Count; i++)
+                {
                     String c = resultado.tabla.columnas[i];
-                    if (!colMostrar.Contains(c))
-                        rAux.Columns[i].Visible = false;
+                    if (!colMostrar.Contains(c)) 
+                    { 
+                        //Hacer algo para no mostrarla
+                        resultados.Columns[i].Visible =false;
+                    }
                 }
             }
+            
+            //Meter los datos en el datagrid
+            //BindingSource dataSource = new BindingSource();
+            //dataSource.DataSource = dt;
+            //dataSource.RaiseListChangedEvents = false;
+
+            //Preaprar el datagridview
+            resultados.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            resultados.RowHeadersVisible = false;
+            resultados.AllowUserToAddRows = false;
+            DataView dataView = new DataView(dt);
+            //this.Grid.DataSource = dataView;
+            //Hacer el binding de datos
+            resultados.DataSource = dataView;
+
+
             //Obtener el orderBy
             String columnasAOrdenar = Visit(context.GetChild(5));
             if (columnasAOrdenar.StartsWith("ERROR"))
@@ -597,39 +629,22 @@ namespace BasesDeDatos_Proyecto1
                     int i = resultado.tabla.columnas.IndexOf(col);
                     if (tipo.Equals("ASC"))
                     {
-                        rAux.Sort(rAux.Columns[i], ListSortDirection.Ascending);
+                        resultados.Sort(resultados.Columns[i], ListSortDirection.Ascending);
 
                     }
                     else
                     {
-                        rAux.Sort(rAux.Columns[i], ListSortDirection.Descending);
+                        resultados.Sort(resultados.Columns[i], ListSortDirection.Descending);
                     }
                     index = index - 1;
                 }
             }
-
-            //Se agregan los datos al datagridview
-            if (rAux.RowCount == 0 || rAux.RowCount==1)
-                resultados.RowCount = 1;
-            else
-                resultados.RowCount = rAux.RowCount-1;
-            if (rAux.ColumnCount == 1)
-                resultados.ColumnCount = 1;
-            else
-                resultados.ColumnCount = rAux.ColumnCount;
-
-            for (int i = 0; i < resultados.ColumnCount; i++)
-            {
-                resultados.Columns[i].HeaderText = resultado.tabla.columnas[i].Substring(resultado.tabla.columnas[i].IndexOf(".") + 1) + " (" + resultado.tabla.columnas[i].Substring(0, resultado.tabla.columnas[i].IndexOf(".")) + ")" + " [" + resultado.tabla.tipos_columnas[i] + "]";
-                resultados.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
-                resultados.Columns[i].Visible = rAux.Columns[i].Visible;
-            }
-            for (int i = 0; i < resultados.RowCount; i++)
-                for (int j = 0; j < resultados.ColumnCount; j++) 
-                    resultados.Rows[i].Cells[j].Value = rAux.Rows[i].Cells[j].Value;
-            int cant = rAux.RowCount-1;
+            
+            int cant = dt.Rows.Count;
             if (cant < 0)
                 cant = 0;
+            resultados.RowHeadersVisible = true;
+            //dataSource.RaiseListChangedEvents = true;
             mensajes += "Se ha realizado select con exito, retornó " + cant + " valores."+ Environment.NewLine; 
             return "void";
         }
