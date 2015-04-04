@@ -5462,6 +5462,7 @@ namespace BasesDeDatos_Proyecto1
             {
                 resultados.DataSource = null;
                 resultados.DataBindings.Clear();
+                resultados.ColumnCount = 0;
                 if (!Visit(query).Equals("void"))
                     return "Error";
             }
