@@ -5727,10 +5727,12 @@ namespace BasesDeDatos_Proyecto1
             propia.restricciones.Add(restriccion);
             restriccion.tabla = foranea.nombre;
 
+            bool fueVerificado = false;
             foreach (Restriccion res in foranea.restricciones)
             {
                 if (res.nombre.Equals("PK"))
                 {
+                    fueVerificado = true;
                     if(res.columnasPropias.Count == restriccion.columnasForaneas.Count){
                         //El tamaño concuerda
                         foreach(String nombreRestriccion in res.columnasPropias){
@@ -5756,6 +5758,16 @@ namespace BasesDeDatos_Proyecto1
                     }
                 }
             }
+            if (!fueVerificado)
+            {
+                //Error, la llave foranea no apunta a una llave primaria
+                errores += "Error en línea " + context.start.Line +
+                           ": La restriccion de llave foranea '" + restriccion.nombre +
+                           "' no apunta a una llave primaria de '" + foranea.nombre +
+                           "'." + Environment.NewLine;
+                return "Error";
+            }
+
 
             //Verificar que los datos de la tabla cumplan con la restriccion
             FilaTabla datos = getFilaTabla(propia);
