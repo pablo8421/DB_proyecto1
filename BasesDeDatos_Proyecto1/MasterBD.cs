@@ -1,7 +1,9 @@
 ﻿/*
- * Comentario
- */
-
+Pablo Sánchez, 12148
+César Guerra, 12593
+Sección 10
+Clase que maneja una coleccion de bases de datos
+*/
 using System;
 using System.Collections.Generic;
 using System.Linq;
