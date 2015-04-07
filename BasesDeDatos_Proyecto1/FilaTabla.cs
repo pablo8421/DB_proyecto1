@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+Pablo Sánchez, 12148
+César Guerra, 12593
+Sección 10
+Clase que maneja una tabla y los registros que esta contiene.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
