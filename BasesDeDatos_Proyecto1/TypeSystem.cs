@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+Pablo Sánchez, 12148
+César Guerra, 12593
+Sección 10
+Clase que realiza el análisis semántico e implementa las funcionalidades de cada instruccion.
+*/
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
