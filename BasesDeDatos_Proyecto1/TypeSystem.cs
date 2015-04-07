@@ -5539,6 +5539,7 @@ namespace BasesDeDatos_Proyecto1
                         //Remover la restriccion
                         propia.restricciones.Remove(restriccion);
                         //Mensaje de error
+                        errores = errores.Substring(0, errores.LastIndexOf("Error en línea "));
                         errores += "Error en línea " + context.start.Line +
                                    ": Los datos en la tabla '" + propia.nombre +
                                    "' no cumplen con la restriccion'" + restriccion.nombre +
@@ -5782,6 +5783,7 @@ namespace BasesDeDatos_Proyecto1
                         //Remover la restriccion
                         propia.restricciones.Remove(restriccion);
                         //Mensaje de error
+                        errores = errores.Substring(0, errores.LastIndexOf("Error en línea "));
                         errores += "Error en línea " + context.start.Line +
                                    ": Los datos en la tabla '" + propia.nombre +
                                    "' no cumplen con la restriccion'" + restriccion.nombre +
@@ -6244,6 +6246,7 @@ namespace BasesDeDatos_Proyecto1
                         //Remover la restriccion
                         tActual.restricciones.Remove(restriccion);
                         //Mensaje de error
+                        errores = errores.Substring(0, errores.LastIndexOf("Error en línea "));
                         errores += "Error en línea " + context.start.Line +
                                    ": Los datos en la tabla '" + tActual.nombre +
                                    "' no cumplen con la restriccion'" + restriccion.nombre +
