@@ -3105,6 +3105,53 @@ namespace BasesDeDatos_Proyecto1
             return true;
         }
 
+        private bool verificarForeignKeyUpdate(FilaTabla datos, List<Object> datosUpdate, List<String> columnasUpdate, int nLinea)
+        {
+            foreach (Restriccion restriccion in datos.tabla.restricciones)
+            {
+                if (restriccion.tipo.Equals("FK"))
+                {
+                    String nTablaF = restriccion.tabla;
+                    Tabla tForanea = masterTabla.getTable(nTablaF);
+                    if (tForanea == null)
+                    {
+                        errores += "Error en línea " + nLinea + ": La tabla '" + restriccion.tabla + "' no existe en la base de datos '" + BDenUso + "'.\r\n";
+                        return false;
+                    }
+                    FilaTabla fTabla = getFilaTabla(tForanea);
+
+                    for (int cindex = 0; cindex < restriccion.columnasPropias.Count; cindex++)
+                    {
+                        bool banderaExiste = false;
+                        String cP = restriccion.columnasPropias.ElementAt(cindex);
+                        String cF = restriccion.columnasForaneas.ElementAt(cindex);
+                        Object columnaUpdate;
+                        int iColUp = columnasUpdate.IndexOf(cP);
+                        if (iColUp != -1)
+                        {
+                            columnaUpdate = datosUpdate.ElementAt(iColUp);
+                            int index1 = fTabla.tabla.columnas.IndexOf(cF);
+                            //int index2 = datos.tabla.columnas.IndexOf(cP);
+                            for (int j = 0; j < fTabla.getTamanio(); j++)
+                            {
+                                if (fTabla.getRowElement(j, index1).Equals(columnaUpdate))
+                                {
+                                    banderaExiste = true;
+                                    break;
+                                }
+                            }
+                            if (!banderaExiste)
+                            {
+                                errores += "Error en línea " + nLinea + ": Update en la tabla '" + restriccion.tabla + "' viola la llave foránea '" + restriccion.nombre + "'.\r\n";
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         override
         public string VisitUpdate(SqlParser.UpdateContext context)
         {
@@ -3139,7 +3186,7 @@ namespace BasesDeDatos_Proyecto1
                 if (!banderaR)
                     return "Error";
 
-                //Verificar restriccion de foreign key
+                //Verificar restriccion de foreign key de es referenciada por otra tabla
                 foreach (List<Object> fila in datos.datos.elementos)
                 {
                     string pk = "";
@@ -3150,6 +3197,11 @@ namespace BasesDeDatos_Proyecto1
                         return "Error";
                     }
                 }
+
+                //Verificar restriccion de foreign key de hace referencia a un dato ya existente
+                if (!verificarForeignKeyUpdate(datos, datosUpdate, columnasUpdate, context.start.Line))
+                    return "Error";
+
                 //Verificar restriccion de check
                 List<List<Object>> datosPosiblesACambiar = new List<List<Object>>();
                 foreach (List<Object> e in datos.datos.elementos)
@@ -3171,7 +3223,6 @@ namespace BasesDeDatos_Proyecto1
                     for (int i = 0; i < datosUpdate.Count; i++)
                         e[indicesC[i]] = datosUpdate[i];
                 }
-                //datos.guardar();
                 mensajes += "Se han actualizado " + datos.datos.elementos.Count + " registros con éxito." + Environment.NewLine;
             }
             else
@@ -3225,6 +3276,11 @@ namespace BasesDeDatos_Proyecto1
                         return "Error";
                     }
                 }
+
+                //Verificar restriccion de foreign key de hace referencia a un dato ya existente
+                if (!verificarForeignKeyUpdate(datos, datosUpdate, columnasUpdate, context.start.Line))
+                    return "Error";
+
                 //Verificar restriccion de check
                 List<List<Object>> datosPosiblesACambiar = new List<List<Object>>();
                 foreach (List<Object> e in nuevosDatos.datos.elementos)

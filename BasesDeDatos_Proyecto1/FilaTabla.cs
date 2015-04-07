@@ -85,26 +85,29 @@ namespace BasesDeDatos_Proyecto1
             object[] resultado = new object[datos.elementos[num].Count];
             for (int i = 0; i < resultado.Length; i++ )
             {
-                if (tabla.tipos_columnas[i].Equals("INT"))
-                {
-                    resultado[i] = ((MsgPack.MessagePackObject)datos.elementos[num][i]).AsInt32();
-                }
-                else if (tabla.tipos_columnas[i].Equals("FLOAT"))
-                {
-                    resultado[i] = ((MsgPack.MessagePackObject)datos.elementos[num][i]).AsSingle();
-                }
-                else if (tabla.tipos_columnas[i].Equals("DATE"))
-                {
-                    resultado[i] = ((MsgPack.MessagePackObject)datos.elementos[num][i]).AsString();
-                }
-                else if (tabla.tipos_columnas[i].StartsWith("CHAR"))
-                {
-                    resultado[i] = ((MsgPack.MessagePackObject)datos.elementos[num][i]).AsString();
-                }
+                if (datos.elementos[num][i] is MsgPack.MessagePackObject)
+                    if (tabla.tipos_columnas[i].Equals("INT"))
+                    {
+                        resultado[i] = ((MsgPack.MessagePackObject)datos.elementos[num][i]).AsInt32();
+                    }
+                    else if (tabla.tipos_columnas[i].Equals("FLOAT"))
+                    {
+                        resultado[i] = ((MsgPack.MessagePackObject)datos.elementos[num][i]).AsSingle();
+                    }
+                    else if (tabla.tipos_columnas[i].Equals("DATE"))
+                    {
+                        resultado[i] = ((MsgPack.MessagePackObject)datos.elementos[num][i]).AsString();
+                    }
+                    else if (tabla.tipos_columnas[i].StartsWith("CHAR"))
+                    {
+                        resultado[i] = ((MsgPack.MessagePackObject)datos.elementos[num][i]).AsString();
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 else
-                {
-                    return null;
-                }
+                    resultado[i] = datos.elementos[num][i];
             }
             return resultado;
         }
