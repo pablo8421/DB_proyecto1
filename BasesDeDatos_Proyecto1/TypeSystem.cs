@@ -5709,8 +5709,11 @@ namespace BasesDeDatos_Proyecto1
 
                 if (!propia.tipos_columnas[inPro].Equals(foranea.tipos_columnas[inFor]))
                 {
-                    errores += "Error en línea " + context.start.Line + ": Los tipos de '" + propia.columnas[inPro] + "' de la tabla '" + propia.nombre + "' y '" + foranea.columnas[inFor] + "' de la tabla '" + foranea.nombre + "' ('" + propia.tipos_columnas[inPro] + "', '" + foranea.tipos_columnas[inFor] + "') no concuerdan." + Environment.NewLine;
-                    return "Error";
+                    if (!(propia.tipos_columnas[inPro].StartsWith("CHAR") && foranea.tipos_columnas[inPro].StartsWith("CHAR")))
+                    { 
+                        errores += "Error en línea " + context.start.Line + ": Los tipos de '" + propia.columnas[inPro] + "' de la tabla '" + propia.nombre + "' y '" + foranea.columnas[inFor] + "' de la tabla '" + foranea.nombre + "' ('" + propia.tipos_columnas[inPro] + "', '" + foranea.tipos_columnas[inFor] + "') no concuerdan." + Environment.NewLine;
+                        return "Error";
+                    }
                 }
             }
             //Nombrar y agregar la restriccion
