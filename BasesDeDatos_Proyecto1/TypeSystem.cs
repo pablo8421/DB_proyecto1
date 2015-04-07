@@ -4881,7 +4881,7 @@ namespace BasesDeDatos_Proyecto1
                     tabla.columnas.Remove(columna);
                     errores += "Error en línea " + context.start.Line +
                                ": La columna '" + columna +
-                               "' no fue agregada en la tabla'" +
+                               "' no fue agregada en la tabla '" +
                                tabla.nombre + "' por errores en las Constraints." + Environment.NewLine;
                     return "Error";
                 }
@@ -5542,7 +5542,7 @@ namespace BasesDeDatos_Proyecto1
                         errores = errores.Substring(0, errores.LastIndexOf("Error en línea "));
                         errores += "Error en línea " + context.start.Line +
                                    ": Los datos en la tabla '" + propia.nombre +
-                                   "' no cumplen con la restriccion'" + restriccion.nombre +
+                                   "' no cumplen con la restriccion '" + restriccion.nombre +
                                    "'." + Environment.NewLine;
                         return "Error";
                     }
@@ -5786,7 +5786,7 @@ namespace BasesDeDatos_Proyecto1
                         errores = errores.Substring(0, errores.LastIndexOf("Error en línea "));
                         errores += "Error en línea " + context.start.Line +
                                    ": Los datos en la tabla '" + propia.nombre +
-                                   "' no cumplen con la restriccion'" + restriccion.nombre +
+                                   "' no cumplen con la restriccion '" + restriccion.nombre +
                                    "'." + Environment.NewLine;
                         return "Error";
                     }
@@ -6249,7 +6249,7 @@ namespace BasesDeDatos_Proyecto1
                         errores = errores.Substring(0, errores.LastIndexOf("Error en línea "));
                         errores += "Error en línea " + context.start.Line +
                                    ": Los datos en la tabla '" + tActual.nombre +
-                                   "' no cumplen con la restriccion'" + restriccion.nombre +
+                                   "' no cumplen con la restriccion '" + restriccion.nombre +
                                    "'." + Environment.NewLine;
                         return "Error";
                     }
