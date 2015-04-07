@@ -5531,23 +5531,25 @@ namespace BasesDeDatos_Proyecto1
             propia.restricciones.Add(restriccion);
 
             FilaTabla datos = getFilaTabla(propia);
-            for (int i = 0; i < datos.datos.elementos.Count; i++ )
+            if (datos != null)
             {
-                List<Object> fila = new List<object>(datos.obtenerFila(i));
-                //Verificar si existe una fila que no cumpla con la restriccion
-                if (!verificarRestricciones(datos, fila, context.start.Line))
+                for (int i = 0; i < datos.datos.elementos.Count; i++)
                 {
-                    //Remover la restriccion
-                    propia.restricciones.Remove(restriccion);
-                    //Mensaje de error
-                    errores += "Error en línea " + context.start.Line +
-                               ": Los datos en la tabla '" + propia.nombre +
-                               "' no cumplen con la restriccion'" + restriccion.nombre +
-                               "'." + Environment.NewLine;
-                    return "Error";
+                    List<Object> fila = new List<object>(datos.obtenerFila(i));
+                    //Verificar si existe una fila que no cumpla con la restriccion
+                    if (!verificarRestricciones(datos, fila, context.start.Line))
+                    {
+                        //Remover la restriccion
+                        propia.restricciones.Remove(restriccion);
+                        //Mensaje de error
+                        errores += "Error en línea " + context.start.Line +
+                                   ": Los datos en la tabla '" + propia.nombre +
+                                   "' no cumplen con la restriccion'" + restriccion.nombre +
+                                   "'." + Environment.NewLine;
+                        return "Error";
+                    }
                 }
             }
-
             mensajes += "Se ha agregado la Constraint '" + nombreCH + "' en la tabla '" + propia.nombre + "' con éxito." + Environment.NewLine;
             return "void";
         }
@@ -5728,24 +5730,57 @@ namespace BasesDeDatos_Proyecto1
             propia.restricciones.Add(restriccion);
             restriccion.tabla = foranea.nombre;
 
-            FilaTabla datos = getFilaTabla(propia);
-            for (int i = 0; i < datos.datos.elementos.Count; i++)
+            foreach (Restriccion res in foranea.restricciones)
             {
-                List<Object> fila = new List<object>(datos.obtenerFila(i));
-                //Verificar si existe una fila que no cumpla con la restriccion
-                if (!verificarRestricciones(datos, fila, context.start.Line))
+                if (res.nombre.Equals("PK"))
                 {
-                    //Remover la restriccion
-                    propia.restricciones.Remove(restriccion);
-                    //Mensaje de error
-                    errores += "Error en línea " + context.start.Line +
-                               ": Los datos en la tabla '" + propia.nombre +
-                               "' no cumplen con la restriccion'" + restriccion.nombre +
-                               "'." + Environment.NewLine;
-                    return "Error";
+                    if(res.columnasPropias.Count == restriccion.columnasForaneas.Count){
+                        //El tamaño concuerda
+                        foreach(String nombreRestriccion in res.columnasPropias){
+                            if(!restriccion.columnasForaneas.Contains(nombreRestriccion)){
+                                //Error, la llave foranea no apunta a una llave primaria
+                                errores += "Error en línea " + context.start.Line +
+                                           ": La restriccion de llave foranea '" + restriccion.nombre +
+                                           "' no apunta a una llave primaria de '" + foranea.nombre +
+                                           "'." + Environment.NewLine;
+                                return "Error";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //Error, la llave foranea no apunta a una llave primaria
+                        errores += "Error en línea " + context.start.Line +
+                                   ": La restriccion de llave foranea '" + restriccion.nombre +
+                                   "' no apunta a una llave primaria de '" + foranea.nombre +
+                                   "'." + Environment.NewLine;
+                        return "Error";
+
+                    }
                 }
             }
 
+            //Verificar que los datos de la tabla cumplan con la restriccion
+            FilaTabla datos = getFilaTabla(propia);
+            if (datos != null) 
+            { 
+                for (int i = 0; i < datos.datos.elementos.Count; i++)
+                {
+                    List<Object> fila = new List<object>(datos.obtenerFila(i));
+                    //Verificar si existe una fila que no cumpla con la restriccion
+                    if (!verificarRestricciones(datos, fila, context.start.Line))
+                    {
+                        //Remover la restriccion
+                        propia.restricciones.Remove(restriccion);
+                        //Mensaje de error
+                        errores += "Error en línea " + context.start.Line +
+                                   ": Los datos en la tabla '" + propia.nombre +
+                                   "' no cumplen con la restriccion'" + restriccion.nombre +
+                                   "'." + Environment.NewLine;
+                        return "Error";
+                    }
+                }
+            }
             mensajes += "Se ha agregado la Constraint '" + nombreFK + "' en la tabla '" + propia.nombre + "' con éxito." + Environment.NewLine;
             return "void";
         }
