@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+Pablo Sánchez, 12148
+César Guerra, 12593
+Sección 10
+Clase encargada de manejar las restricciones de las columnas.
+*/
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
