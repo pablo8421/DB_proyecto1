@@ -6225,22 +6225,23 @@ namespace BasesDeDatos_Proyecto1
             ListaTablas[0].restricciones.Add(restriccion);
 
             FilaTabla datos = getFilaTabla(tActual);
-            for (int i = 0; i < datos.datos.elementos.Count; i++)
-            {
-                List<Object> fila = new List<object>(datos.obtenerFila(i));
-                //Verificar si existe una fila que no cumpla con la restriccion
-                if (!verificarRestricciones(datos, fila, context.start.Line))
+            if (datos !=null)
+                for (int i = 0; i < datos.datos.elementos.Count; i++)
                 {
-                    //Remover la restriccion
-                    tActual.restricciones.Remove(restriccion);
-                    //Mensaje de error
-                    errores += "Error en línea " + context.start.Line +
-                               ": Los datos en la tabla '" + tActual.nombre +
-                               "' no cumplen con la restriccion'" + restriccion.nombre +
-                               "'." + Environment.NewLine;
-                    return "Error";
+                    List<Object> fila = new List<object>(datos.obtenerFila(i));
+                    //Verificar si existe una fila que no cumpla con la restriccion
+                    if (!verificarRestricciones(datos, fila, context.start.Line))
+                    {
+                        //Remover la restriccion
+                        tActual.restricciones.Remove(restriccion);
+                        //Mensaje de error
+                        errores += "Error en línea " + context.start.Line +
+                                   ": Los datos en la tabla '" + tActual.nombre +
+                                   "' no cumplen con la restriccion'" + restriccion.nombre +
+                                   "'." + Environment.NewLine;
+                        return "Error";
+                    }
                 }
-            }
             
             mensajes += "Se ha agregado la Constraint '" + nombrePK + "' en la tabla '" + tActual.nombre + "' con éxito." + Environment.NewLine;
             return "void";
