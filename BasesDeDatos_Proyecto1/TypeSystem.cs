@@ -221,7 +221,13 @@ namespace BasesDeDatos_Proyecto1
 
                 if (tipoColumna.StartsWith("CHAR"))
                 {
-                    valor = valor.Substring(1, valor.Length - 2);
+                    
+                    int largo = Convert.ToInt32(tipoColumna.Substring(5,tipoColumna.Length-6));
+                    //Revisar si no se pasa del tamaño establecido por la columna
+                    if ((valor.Length-2) >= largo)
+                        valor = valor.Substring(1, largo);
+                    else
+                        valor = valor.Substring(1, valor.Length - 2);
                     datosUpdate.Add((String)valor);
                 }
                 else if (tipoColumna.StartsWith("INT"))
@@ -3189,9 +3195,15 @@ namespace BasesDeDatos_Proyecto1
                     string pk = "";
                     if (esReferenciado(fila, tActual, masterTabla, out pk))
                     {
-                        errores += "Error en línea " + context.start.Line +
-                                    ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
-                        return "Error";
+                        foreach (Restriccion r in datos.tabla.restricciones)
+                            if (r.tipo.Equals("PK"))
+                                foreach (String c in columnasUpdate)
+                                    if (r.columnasPropias.Contains(c))
+                                    {
+                                        errores += "Error en línea " + context.start.Line +
+                                                    ": Al menos una de las filas a actualizar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
+                                        return "Error";
+                                    }
                     }
                 }
 
@@ -3268,9 +3280,15 @@ namespace BasesDeDatos_Proyecto1
                     string pk = "";
                     if (esReferenciado(fila, tActual, masterTabla, out pk))
                     {
-                        errores += "Error en línea " + context.start.Line +
-                                    ": Al menos una de las filas a borrar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
-                        return "Error";
+                        foreach (Restriccion r in datos.tabla.restricciones)
+                            if (r.tipo.Equals("PK"))
+                                foreach (String c in columnasUpdate)
+                                    if (r.columnasPropias.Contains(c))
+                                    {
+                                        errores += "Error en línea " + context.start.Line +
+                                                    ": Al menos una de las filas a actualizar es actualmente referenciada por la llave foranea " + pk + "." + Environment.NewLine;
+                                        return "Error";
+                                    }
                     }
                 }
 
