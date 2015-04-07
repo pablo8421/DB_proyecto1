@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+Pablo Sánchez, 12148
+César Guerra, 12593
+Sección 10
+Clase que modela una abse de datos
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
