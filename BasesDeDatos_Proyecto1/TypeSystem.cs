@@ -819,9 +819,6 @@ namespace BasesDeDatos_Proyecto1
                             Object enTabla = fila[indices[i]];
                             Object porAgregar = (Object)row[indices[i]];
 
-                            Console.WriteLine(enTabla.GetType());
-                            Console.WriteLine(porAgregar.GetType());
-
                             if (datos.tabla.tipos_columnas[indices[i]].Equals("INT"))
                             {
                                 if (!(((Int32)enTabla)
