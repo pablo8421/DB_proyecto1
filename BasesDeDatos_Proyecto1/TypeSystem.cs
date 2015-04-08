@@ -4718,7 +4718,11 @@ namespace BasesDeDatos_Proyecto1
                     {
                         stack.Push("NULL ");
                     }
-                    stack.Push(e);
+                    else
+                    {
+                        stack.Push(e);
+                    }
+
                 }
             }
             return stack.Pop().Equals("TRUE ");
