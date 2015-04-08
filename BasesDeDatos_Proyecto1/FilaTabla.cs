@@ -79,13 +79,12 @@ namespace BasesDeDatos_Proyecto1
         {
             return datos.elementos[num];
         }
-         
+
         public object[] obtenerFila(int num)
         {
             object[] resultado = new object[datos.elementos[num].Count];
             for (int i = 0; i < resultado.Length; i++ )
             {
-                if (datos.elementos[num][i] != null)
                     if (!((MsgPack.MessagePackObject)datos.elementos[num][i]).IsNil)
                         if (tabla.tipos_columnas[i].Equals("INT"))
                         {
@@ -108,9 +107,7 @@ namespace BasesDeDatos_Proyecto1
                             return null;
                         }
                     else
-                        resultado[i] = datos.elementos[num][i];
-                else
-                    resultado[i] = null;
+                        resultado[i] = null;
             }
             return resultado;
         }
