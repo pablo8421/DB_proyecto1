@@ -38,7 +38,8 @@ namespace BasesDeDatos_Proyecto1
                 string text = streamReader.ReadToEnd();
                 streamReader.Close();
 
-                text.Replace("\n", Environment.NewLine);
+                text = text.Replace("\r\n", "\n");
+                text = text.Replace("\n", Environment.NewLine);
 
                 queryText.Text = text;
             }
