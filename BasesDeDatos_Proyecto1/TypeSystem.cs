@@ -3269,7 +3269,6 @@ namespace BasesDeDatos_Proyecto1
                         {
                             columnaUpdate = datosUpdate.ElementAt(iColUp);
                             int index1 = fTabla.tabla.columnas.IndexOf(cF);
-                            //int index2 = datos.tabla.columnas.IndexOf(cP);
                             for (int j = 0; j < fTabla.getTamanio(); j++)
                             {
                                 if (fTabla.getRowElement(j, index1).Equals(columnaUpdate))
@@ -3278,6 +3277,8 @@ namespace BasesDeDatos_Proyecto1
                                     break;
                                 }
                             }
+                            if (columnaUpdate == null) 
+                                banderaExiste = true;
                             if (!banderaExiste)
                             {
                                 errores += "Error en línea " + nLinea + ": Update en la tabla '" + restriccion.tabla + "' viola la llave foránea '" + restriccion.nombre + "'.\r\n";
@@ -3342,7 +3343,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                 }
 
-                //Verificar restriccion de foreign key de hace referencia a un dato ya existente
+                //Verificar restriccion de foreign key de hace referencia a un dato ya existente o null
                 if (!verificarForeignKeyUpdate(datos, datosUpdate, columnasUpdate, context.start.Line))
                     return "Error";
 
@@ -3427,7 +3428,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                 }
 
-                //Verificar restriccion de foreign key de hace referencia a un dato ya existente
+                //Verificar restriccion de foreign key de hace referencia a un dato ya existente o null
                 if (!verificarForeignKeyUpdate(datos, datosUpdate, columnasUpdate, context.start.Line))
                     return "Error";
 
