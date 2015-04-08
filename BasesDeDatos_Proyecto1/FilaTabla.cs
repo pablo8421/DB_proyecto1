@@ -79,7 +79,7 @@ namespace BasesDeDatos_Proyecto1
         {
             return datos.elementos[num];
         }
-
+         
         public object[] obtenerFila(int num)
         {
             object[] resultado = new object[datos.elementos[num].Count];
