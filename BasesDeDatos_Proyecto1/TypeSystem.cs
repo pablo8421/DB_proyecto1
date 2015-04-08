@@ -3681,7 +3681,7 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        if(row[indexUno] == null)
+                        if (row[indexUno] == null || ((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                         {
                             datoUno = null;
                         }
@@ -3726,7 +3726,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        if (row[indexDos] == null)
+                        if (row[indexDos] == null || ((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                         {
                             datoDos = null;
                         }
@@ -3842,7 +3842,7 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        if (row[indexUno] == null)
+                        if (row[indexUno] == null || ((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                         {
                             datoUno = null;
                         }
@@ -3887,7 +3887,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        if (row[indexDos] == null)
+                        if (row[indexDos] == null || ((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                         {
                             datoDos = null;
                         }
@@ -4004,7 +4004,7 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        if (row[indexUno] == null)
+                        if (row[indexUno] == null || ((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                         {
                             datoUno = null;
                         }
@@ -4049,7 +4049,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        if (row[indexDos] == null)
+                        if (row[indexDos] == null || ((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                         {
                             datoDos = null;
                         }
@@ -4180,7 +4180,7 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        if (row[indexUno] == null)
+                        if (row[indexUno] == null || ((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                         {
                             datoUno = null;
                         }
@@ -4225,7 +4225,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        if (row[indexDos] == null)
+                        if (row[indexDos] == null || ((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                         {
                             datoDos = null;
                         }
@@ -4356,7 +4356,7 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        if (row[indexUno] == null)
+                        if (row[indexUno] == null || ((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                         {
                             datoUno = null;
                         }
@@ -4401,7 +4401,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        if (row[indexDos] == null)
+                        if (row[indexDos] == null || ((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                         {
                             datoDos = null;
                         }
@@ -4532,7 +4532,7 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        if (row[indexUno] == null)
+                        if (row[indexUno] == null || ((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                         {
                             datoUno = null;
                         }
@@ -4577,7 +4577,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        if (row[indexDos] == null)
+                        if (row[indexDos] == null || ((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                         {
                             datoDos = null;
                         }
@@ -4756,7 +4756,7 @@ namespace BasesDeDatos_Proyecto1
                                 int indiceOtro = otra.columnas.IndexOf(restriccion.columnasPropias[i]);
 
                                 //Si uno de los dos valores es falso
-                                if (row[indicePropio] == null || rowOtra[indiceOtro] == null)
+                                if (((MsgPack.MessagePackObject)row[indicePropio]).IsNil || ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).IsNil)
                                 {
                                     esReferenciada = false;
                                     break;
