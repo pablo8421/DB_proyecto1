@@ -86,7 +86,7 @@ namespace BasesDeDatos_Proyecto1
             for (int i = 0; i < resultado.Length; i++ )
             {
                 if (datos.elementos[num][i] != null)
-                    if (datos.elementos[num][i] is MsgPack.MessagePackObject)
+                    if (!((MsgPack.MessagePackObject)datos.elementos[num][i]).IsNil)
                         if (tabla.tipos_columnas[i].Equals("INT"))
                         {
                             resultado[i] = ((MsgPack.MessagePackObject)datos.elementos[num][i]).AsInt32();
@@ -117,7 +117,7 @@ namespace BasesDeDatos_Proyecto1
 
         public Object getRowElement(int row, int columna)
         {
-            if (datos.elementos[row][columna]!=null)
+            if (!((MsgPack.MessagePackObject)datos.elementos[row][columna]).IsNil)
                 if (tabla.tipos_columnas[columna].Equals("INT"))
                 {
                     return  ((MsgPack.MessagePackObject) datos.elementos[row][columna]).AsInt32();
@@ -158,4 +158,4 @@ namespace BasesDeDatos_Proyecto1
             elementos = new List<List<Object>>();
         }
     }
-} 
+}
