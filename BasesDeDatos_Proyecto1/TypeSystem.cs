@@ -825,6 +825,13 @@ namespace BasesDeDatos_Proyecto1
                             Object enTabla = fila[indices[i]];
                             Object porAgregar = (Object)row[indices[i]];
 
+                            if(porAgregar == null){
+                                errores += "Error en la línea " + nLinea +
+                                           ": La llave primaria '" + 
+                                           restriccion.nombre + "' no puede contener valores 'NULL'.\r\n";
+                                return false;
+                            }
+
                             if (datos.tabla.tipos_columnas[indices[i]].Equals("INT"))
                             {
                                 if (!(((Int32)enTabla)
@@ -888,7 +895,8 @@ namespace BasesDeDatos_Proyecto1
                         int index1 = fTabla.tabla.columnas.IndexOf(cF);
                         int index2 = datos.tabla.columnas.IndexOf(cP);
                         for (int j = 0; j < fTabla.getTamanio(); j++) {
-                            if (fTabla.getRowElement(j, index1).Equals(row.ElementAt(index2))) {
+                            if (row.ElementAt(index2) == null || fTabla.getRowElement(j, index1).Equals(row.ElementAt(index2)))
+                            {
                                 banderaExiste = true;
                                 break;
                             }
@@ -950,7 +958,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (uno.StartsWith("'"))
+                                if (uno.Equals("NULL "))
+                                {
+                                    datoUno = null;
+                                }
+                                else if (uno.StartsWith("'"))
                                 {
                                     datoUno = uno.Substring(1, uno.Length - 2);
                                 }
@@ -976,7 +988,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (dos.StartsWith("'"))
+                                if (dos.Equals("NULL "))
+                                {
+                                    datoDos = null;
+                                }
+                                else if (dos.StartsWith("'"))
                                 {
                                     datoDos = dos.Substring(1, dos.Length - 2);
                                 }
@@ -994,9 +1010,13 @@ namespace BasesDeDatos_Proyecto1
                                     throw new NotImplementedException();
                                 }
                             }
-                            
-                            if (datoUno is Int32
-                             && datoDos is Int32)
+
+                            if (datoUno == null || datoDos == null)
+                            {
+                                stack.Push("TRUE ");
+                            }
+                            else if (datoUno is Int32
+                                  && datoDos is Int32)
                             {
                                 if(((Int32) datoUno).Equals(((Int32) datoDos))){
                                     stack.Push("FALSE ");
@@ -1069,7 +1089,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (uno.StartsWith("'"))
+                                if (uno.Equals("NULL "))
+                                {
+                                    datoUno = null;
+                                }
+                                else if (uno.StartsWith("'"))
                                 {
                                     datoUno = uno.Substring(1, uno.Length - 2);
                                 }
@@ -1095,7 +1119,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (dos.StartsWith("'"))
+                                if (dos.Equals("NULL "))
+                                {
+                                    datoDos = null;
+                                }
+                                else if (dos.StartsWith("'"))
                                 {
                                     datoDos = dos.Substring(1, dos.Length - 2);
                                 }
@@ -1113,9 +1141,12 @@ namespace BasesDeDatos_Proyecto1
                                     throw new NotImplementedException();
                                 }
                             }
-
-                            if (datoUno is Int32
-                             && datoDos is Int32)
+                            if (datoUno == null || datoDos == null)
+                            {
+                                stack.Push("TRUE ");
+                            }
+                            else if (datoUno is Int32
+                                  && datoDos is Int32)
                             {
                                 if (!((Int32)datoUno).Equals(((Int32)datoDos)))
                                 {
@@ -1189,7 +1220,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (uno.StartsWith("'"))
+                                if (uno.Equals("NULL "))
+                                {
+                                    datoUno = null;
+                                }
+                                else if (uno.StartsWith("'"))
                                 {
                                     datoUno = uno.Substring(1, uno.Length - 2);
                                 }
@@ -1215,7 +1250,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (dos.StartsWith("'"))
+                                if (dos.Equals("NULL "))
+                                {
+                                    datoDos = null;
+                                }
+                                else if (dos.StartsWith("'"))
                                 {
                                     datoDos = dos.Substring(1, dos.Length - 2);
                                 }
@@ -1234,8 +1273,12 @@ namespace BasesDeDatos_Proyecto1
                                 }
                             }
 
-                            if (datoUno is Int32
-                             && datoDos is Int32)
+                            if (datoUno == null || datoDos == null)
+                            {
+                                stack.Push("TRUE ");
+                            }
+                            else if (datoUno is Int32
+                                  && datoDos is Int32)
                             {
                                 if (((Int32)datoUno).CompareTo(((Int32)datoDos)) >= 0)
                                 {
@@ -1323,7 +1366,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (uno.StartsWith("'"))
+                                if (uno.Equals("NULL "))
+                                {
+                                    datoUno = null;
+                                }
+                                else if (uno.StartsWith("'"))
                                 {
                                     datoUno = uno.Substring(1, uno.Length - 2);
                                 }
@@ -1349,7 +1396,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (dos.StartsWith("'"))
+                                if (dos.Equals("NULL "))
+                                {
+                                    datoDos = null;
+                                }
+                                else if (dos.StartsWith("'"))
                                 {
                                     datoDos = dos.Substring(1, dos.Length - 2);
                                 }
@@ -1368,8 +1419,12 @@ namespace BasesDeDatos_Proyecto1
                                 }
                             }
 
-                            if (datoUno is Int32
-                             && datoDos is Int32)
+                            if (datoUno == null || datoDos == null)
+                            {
+                                stack.Push("TRUE ");
+                            }
+                            else if (datoUno is Int32
+                                  && datoDos is Int32)
                             {
                                 if (((Int32)datoUno).CompareTo(((Int32)datoDos)) <= 0)
                                 {
@@ -1457,7 +1512,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (uno.StartsWith("'"))
+                                if (uno.Equals("NULL "))
+                                {
+                                    datoUno = null;
+                                }
+                                else if (uno.StartsWith("'"))
                                 {
                                     datoUno = uno.Substring(1, uno.Length - 2);
                                 }
@@ -1483,7 +1542,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (dos.StartsWith("'"))
+                                if (dos.Equals("NULL "))
+                                {
+                                    datoDos = null;
+                                }
+                                else if (dos.StartsWith("'"))
                                 {
                                     datoDos = dos.Substring(1, dos.Length - 2);
                                 }
@@ -1502,8 +1565,12 @@ namespace BasesDeDatos_Proyecto1
                                 }
                             }
 
-                            if (datoUno is Int32
-                             && datoDos is Int32)
+                            if (datoUno == null || datoDos == null)
+                            {
+                                stack.Push("TRUE ");
+                            }
+                            else if (datoUno is Int32
+                                  && datoDos is Int32)
                             {
                                 if (((Int32)datoUno).CompareTo(((Int32)datoDos)) > 0)
                                 {
@@ -1591,7 +1658,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (uno.StartsWith("'"))
+                                if (uno.Equals("NULL "))
+                                {
+                                    datoUno = null;
+                                }
+                                else if (uno.StartsWith("'"))
                                 {
                                     datoUno = uno.Substring(1, uno.Length - 2);
                                 }
@@ -1617,7 +1688,11 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int num;
                                 float numF;
-                                if (dos.StartsWith("'"))
+                                if (dos.Equals("NULL "))
+                                {
+                                    datoDos = null;
+                                }
+                                else if (dos.StartsWith("'"))
                                 {
                                     datoDos = dos.Substring(1, dos.Length - 2);
                                 }
@@ -1636,8 +1711,12 @@ namespace BasesDeDatos_Proyecto1
                                 }
                             }
 
-                            if (datoUno is Int32
-                             && datoDos is Int32)
+                            if (datoUno == null || datoDos == null)
+                            {
+                                stack.Push("TRUE ");
+                            }
+                            else if (datoUno is Int32
+                                  && datoDos is Int32)
                             {
                                 if (((Int32)datoUno).CompareTo(((Int32)datoDos)) < 0)
                                 {
