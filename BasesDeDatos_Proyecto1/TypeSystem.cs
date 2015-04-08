@@ -2076,8 +2076,19 @@ namespace BasesDeDatos_Proyecto1
                             String nColumna = columnas.ElementAt(i);
                             int indexC = fila.tabla.columnas.IndexOf(nColumna);
                             for (int j = 0; j < fila.datos.elementos.Count; j++) {
-                                if (fila.datos.elementos[j].ElementAt(indexC).Equals(rowUpdate.ElementAt(i))) {
-                                    errores += "Error en la línea " + nLinea + ": Llave duplicada viola restricción de unicidad '" + r.nombre + "'.\r\n";
+                                if (rowUpdate.ElementAt(i) != null)
+                                {
+                                    if (fila.datos.elementos[j].ElementAt(indexC).Equals(rowUpdate.ElementAt(i)))
+                                    {
+                                        errores += "Error en la línea " + nLinea + ": Llave duplicada viola restricción de unicidad '" + r.nombre + "'.\r\n";
+                                        return false;
+                                    }
+                                }
+                                else
+                                {
+                                    errores += "Error en la línea " + nLinea +
+                                           ": La llave primaria '" +
+                                           r.nombre + "' no puede contener valores 'NULL'.\r\n";
                                     return false;
                                 }
                             }
@@ -3216,6 +3227,10 @@ namespace BasesDeDatos_Proyecto1
                         //Es el nombre de la columna o un dato
                         else
                         {
+                            if (e.Equals("NULL"))
+                            {
+                                stack.Push("NULL ");
+                            } 
                             stack.Push(e);
                         }
                     }
