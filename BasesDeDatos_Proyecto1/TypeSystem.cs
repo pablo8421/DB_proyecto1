@@ -179,6 +179,10 @@ namespace BasesDeDatos_Proyecto1
                 {
                     tipoValor = "INT";
                 }
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(0)).symbol.Type == SqlParser.NULL)
+                {
+                    tipoValor = "NULL";
+                }
                 else
                 {
                     throw new NotImplementedException();
@@ -194,6 +198,7 @@ namespace BasesDeDatos_Proyecto1
                 
                 //Verificacion de tipos
                 if (!(tipoValor.Equals(tipoColumna)
+                    || (tipoValor.Equals("NULL"))
                     || (tipoValor.Equals("DATE") && tipoColumna.StartsWith("CHAR"))
                     || (tipoValor.Equals("INT") && tipoColumna.Equals("FLOAT"))
                     || (tipoValor.Equals("FLOAT") && tipoColumna.Equals("INT"))
@@ -234,6 +239,8 @@ namespace BasesDeDatos_Proyecto1
                     datosUpdate.Add(Convert.ToInt32(valor));
                 else if (tipoColumna.StartsWith("FLOAT"))
                     datosUpdate.Add(Convert.ToSingle(valor));
+                else if (tipoColumna.StartsWith("NULL"))
+                    datosUpdate.Add(null);
                 else
                 {
                     valor = valor.Substring(1, valor.Length - 2);
@@ -272,6 +279,10 @@ namespace BasesDeDatos_Proyecto1
                 {
                     tipoValor = "INT";
                 }
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(0)).symbol.Type == SqlParser.NULL)
+                {
+                    tipoValor = "NULL";
+                }
                 else
                 {
                     throw new NotImplementedException();
@@ -287,6 +298,7 @@ namespace BasesDeDatos_Proyecto1
 
                 //Verificacion de tipos
                 if (!(tipoValor.Equals(tipoColumna)
+                    || (tipoValor.Equals("NULL")) 
                     || (tipoValor.Equals("DATE") && tipoColumna.StartsWith("CHAR"))
                     || (tipoValor.Equals("INT") && tipoColumna.Equals("FLOAT"))
                     || (tipoValor.Equals("FLOAT") && tipoColumna.Equals("INT"))
@@ -321,6 +333,8 @@ namespace BasesDeDatos_Proyecto1
                     datosUpdate.Add(Convert.ToInt32(valor));
                 else if (tipoColumna.StartsWith("FLOAT"))
                     datosUpdate.Add(Convert.ToSingle(valor));
+                else if (tipoColumna.StartsWith("NULL"))
+                    datosUpdate.Add(null);
                 else
                 {
                     valor = valor.Substring(1, valor.Length - 2);
