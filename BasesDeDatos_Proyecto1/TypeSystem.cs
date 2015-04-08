@@ -6040,18 +6040,6 @@ namespace BasesDeDatos_Proyecto1
                         return "Error";
                     }
                 }
-                if (!verificarRestriccionPK(datos, context.start.Line))
-                {
-                    //Remover la restriccion
-                    propia.restricciones.Remove(restriccion);
-                    //Mensaje de error
-                    errores = errores.Substring(0, errores.LastIndexOf("Error en línea "));
-                    errores += "Error en línea " + context.start.Line +
-                               ": Los datos en la tabla '" + propia.nombre +
-                               "' no cumplen con la restriccion '" + restriccion.nombre +
-                               "'." + Environment.NewLine;
-                    return "Error";
-                }
             }
             mensajes += "Se ha agregado la Constraint '" + nombreCH + "' en la tabla '" + propia.nombre + "' con éxito." + Environment.NewLine;
             return "void";
@@ -6750,22 +6738,17 @@ namespace BasesDeDatos_Proyecto1
 
             FilaTabla datos = getFilaTabla(tActual);
             if (datos !=null)
-                for (int i = 0; i < datos.datos.elementos.Count; i++)
+                if (!verificarRestriccionPK(datos, context.start.Line))
                 {
-                    List<Object> fila = new List<object>(datos.obtenerFila(i));
-                    //Verificar si existe una fila que no cumpla con la restriccion
-                    if (!verificarRestricciones(datos, fila, context.start.Line, i))
-                    {
-                        //Remover la restriccion
-                        tActual.restricciones.Remove(restriccion);
-                        //Mensaje de error
-                        //errores = errores.Substring(0, errores.LastIndexOf("Error en línea "));
-                        errores += "Error en línea " + context.start.Line +
-                                   ": Los datos en la tabla '" + tActual.nombre +
-                                   "' no cumplen con la restriccion '" + restriccion.nombre +
-                                   "'." + Environment.NewLine;
-                        return "Error";
-                    }
+                    //Remover la restriccion
+                    tActual.restricciones.Remove(restriccion);
+                    //Mensaje de error
+                    //errores = errores.Substring(0, errores.LastIndexOf("Error en línea "));
+                    errores += "Error en línea " + context.start.Line +
+                               ": Los datos en la tabla '" + tActual.nombre +
+                               "' no cumplen con la restriccion '" + restriccion.nombre +
+                               "'." + Environment.NewLine;
+                    return "Error";
                 }
             
             mensajes += "Se ha agregado la Constraint '" + nombrePK + "' en la tabla '" + tActual.nombre + "' con éxito." + Environment.NewLine;
