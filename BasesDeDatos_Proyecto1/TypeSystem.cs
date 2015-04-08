@@ -819,7 +819,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
-        private bool verificarRestricciones(FilaTabla datos, List<Object> row, int nLinea)
+        private bool verificarRestricciones(FilaTabla datos, List<Object> row, int nLinea, int indiceFila)
         {
             //Por cada restriccion
             foreach (Restriccion restriccion in datos.tabla.restricciones)
@@ -888,7 +888,7 @@ namespace BasesDeDatos_Proyecto1
                             i++;
                         }
                         //Si ya existe la llave Primaria, no se puede agregar
-                        if (yaExistePK)
+                        if (yaExistePK && num != indiceFila)
                         {
                             errores += "Error en la línea " + nLinea + ": Llave duplicada viola restricción de unicidad '" + restriccion.nombre + "'.\r\n";
                             return false;
@@ -1982,7 +1982,7 @@ namespace BasesDeDatos_Proyecto1
                 FilaTabla datos = getFilaTabla(tabla);
 
                 //Verificar las restricciones
-                bool aceptado = verificarRestricciones(datos, row, context.start.Line);
+                bool aceptado = verificarRestricciones(datos, row, context.start.Line, -1);
                 if (!aceptado)
                 {
                     return "Error";
@@ -2158,7 +2158,7 @@ namespace BasesDeDatos_Proyecto1
                 FilaTabla datos = getFilaTabla(tabla);
 
                 //Verificar las restricciones
-                bool aceptado = verificarRestricciones(datos, row, context.start.Line);
+                bool aceptado = verificarRestricciones(datos, row, context.start.Line, -1);
                 if (!aceptado)
                 {
                     return "Error";
@@ -5939,7 +5939,7 @@ namespace BasesDeDatos_Proyecto1
                 {
                     List<Object> fila = new List<object>(datos.obtenerFila(i));
                     //Verificar si existe una fila que no cumpla con la restriccion
-                    if (!verificarRestricciones(datos, fila, context.start.Line))
+                    if (!verificarRestricciones(datos, fila, context.start.Line, i))
                     {
                         //Remover la restriccion
                         propia.restricciones.Remove(restriccion);
@@ -6190,7 +6190,7 @@ namespace BasesDeDatos_Proyecto1
                 {
                     List<Object> fila = new List<object>(datos.obtenerFila(i));
                     //Verificar si existe una fila que no cumpla con la restriccion
-                    if (!verificarRestricciones(datos, fila, context.start.Line))
+                    if (!verificarRestricciones(datos, fila, context.start.Line, i))
                     {
                         //Remover la restriccion
                         propia.restricciones.Remove(restriccion);
@@ -6654,7 +6654,7 @@ namespace BasesDeDatos_Proyecto1
                 {
                     List<Object> fila = new List<object>(datos.obtenerFila(i));
                     //Verificar si existe una fila que no cumpla con la restriccion
-                    if (!verificarRestricciones(datos, fila, context.start.Line))
+                    if (!verificarRestricciones(datos, fila, context.start.Line, i))
                     {
                         //Remover la restriccion
                         tActual.restricciones.Remove(restriccion);
