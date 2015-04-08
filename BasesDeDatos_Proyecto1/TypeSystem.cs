@@ -4723,8 +4723,14 @@ namespace BasesDeDatos_Proyecto1
                                 int indicePropio = tabla.columnas.IndexOf(restriccion.columnasForaneas[i]);
                                 int indiceOtro = otra.columnas.IndexOf(restriccion.columnasPropias[i]);
 
+                                //Si uno de los dos valores es falso
+                                if (row[indicePropio] == null || rowOtra[indiceOtro] == null)
+                                {
+                                    esReferenciada = false;
+                                    break;
+                                }
                                 //Cada caso segun el tipo que es
-                                if (tabla.tipos_columnas[indicePropio].Equals("INT"))
+                                else if (tabla.tipos_columnas[indicePropio].Equals("INT"))
                                 {
                                     //Obtener valores
                                     Int32 valorPropio = ((MsgPack.MessagePackObject)row[indicePropio]).AsInt32();
@@ -4769,7 +4775,6 @@ namespace BasesDeDatos_Proyecto1
                                 pk = "'" + restriccion.nombre + "'" + "de la tabla '" + otra.nombre + "'";
                                 return true;
                             }
-
                         }
                     }
                 }
