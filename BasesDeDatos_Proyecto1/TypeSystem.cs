@@ -718,7 +718,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.NULL)
                 {
-                    return "NULL " + context.GetChild(2).GetText();
+                    propio =  "NULL " + context.GetChild(2).GetText();
                 }
                 else
                 {
