@@ -634,7 +634,7 @@ namespace BasesDeDatos_Proyecto1
             //Hacerlo notSortable
             for (int i = 0; i < resultados.ColumnCount; i++)
             {
-                resultados.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+                resultados.Columns[i].SortMode = DataGridViewColumnSortMode.Programmatic;
             }
 
             //Obtener el orderBy
