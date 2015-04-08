@@ -3390,7 +3390,7 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
 
-                //Lista de elementos a borrar
+                //Lista de elementos a actualizar
                 List<List<Object>> paraUpdate = new List<List<Object>>();
 
                 //Verificar si existe alguna referencia hacia la tabla
