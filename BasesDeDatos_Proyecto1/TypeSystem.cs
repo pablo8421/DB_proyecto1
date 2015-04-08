@@ -628,15 +628,6 @@ namespace BasesDeDatos_Proyecto1
             resultados.RowHeadersVisible = false;
             resultados.AllowUserToAddRows = false;
             DataView dataView = new DataView(dt);
-            //Hacer el binding de datos
-            resultados.DataSource = dataView;
-
-            //Hacerlo notSortable
-            for (int i = 0; i < resultados.ColumnCount; i++)
-            {
-                resultados.Columns[i].SortMode = DataGridViewColumnSortMode.Programmatic;
-            }
-
             //Obtener el orderBy
             String columnasAOrdenar = Visit(context.GetChild(5));
             if (columnasAOrdenar.StartsWith("ERROR"))
@@ -644,7 +635,9 @@ namespace BasesDeDatos_Proyecto1
                 return "Error";
             }
             //Se ordenan, si se pidio que se ordenara
-            if(!columnasAOrdenar.Equals("")){
+            if (!columnasAOrdenar.Equals(""))
+            {
+                String orden = "";
                 List<String> listaAOrdenar = new List<String>(columnasAOrdenar.Split(','));
                 int index = listaAOrdenar.Count - 1;
                 while (index >= 0)
@@ -654,15 +647,26 @@ namespace BasesDeDatos_Proyecto1
                     int i = resultado.tabla.columnas.IndexOf(col);
                     if (tipo.Equals("ASC"))
                     {
-                        resultados.Sort(resultados.Columns[i], ListSortDirection.Ascending);
+                        orden += dt.Columns[i].ColumnName + " ASC" + ", ";
+                        //resultados.Sort(resultados.Columns[i], ListSortDirection.Ascending);
 
                     }
                     else
                     {
-                        resultados.Sort(resultados.Columns[i], ListSortDirection.Descending);
+                        orden += dt.Columns[i].ColumnName + " DESC" + ", ";
+                        //resultados.Sort(resultados.Columns[i], ListSortDirection.Descending);
                     }
                     index = index - 1;
                 }
+                orden = orden.Substring(0,orden.Length -2);
+                dataView.Sort = orden;
+            }
+            //Hacer el binding de datos
+            resultados.DataSource = dataView;
+            //Hacerlo notSortable
+            for (int i = 0; i < resultados.ColumnCount; i++)
+            {
+                resultados.Columns[i].SortMode = DataGridViewColumnSortMode.Programmatic;
             }
             
             int cant = dt.Rows.Count;
