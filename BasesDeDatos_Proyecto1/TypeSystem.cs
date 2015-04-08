@@ -5573,13 +5573,17 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitFull_query(SqlParser.Full_queryContext context)
         {
+            String retorno = "void";
             foreach (SqlParser.QueryContext query in context._queries)
             {
                 resultados.DataSource = null;
                 resultados.DataBindings.Clear();
                 resultados.ColumnCount = 0;
-                if (!Visit(query).Equals("void"))
-                    return "Error";
+                if (!Visit(query).Equals("void")) 
+                { 
+                    retorno = "Error";
+                    break;
+                }
             }
             
             //Serealizar masterBD
@@ -5592,7 +5596,7 @@ namespace BasesDeDatos_Proyecto1
                 guardarDatosTablas();
             }
             
-            return "void";
+            return retorno;
         }
 
         override
