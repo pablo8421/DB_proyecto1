@@ -85,6 +85,7 @@ namespace BasesDeDatos_Proyecto1
             object[] resultado = new object[datos.elementos[num].Count];
             for (int i = 0; i < resultado.Length; i++ )
             {
+                if (datos.elementos[num][i] is MsgPack.MessagePackObject)
                     if (!((MsgPack.MessagePackObject)datos.elementos[num][i]).IsNil)
                         if (tabla.tipos_columnas[i].Equals("INT"))
                         {
@@ -108,6 +109,8 @@ namespace BasesDeDatos_Proyecto1
                         }
                     else
                         resultado[i] = null;
+                else
+                    resultado[i] = datos.elementos[num][i];
             }
             return resultado;
         }
