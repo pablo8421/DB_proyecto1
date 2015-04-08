@@ -5756,7 +5756,7 @@ namespace BasesDeDatos_Proyecto1
             bool fueVerificado = false;
             foreach (Restriccion res in foranea.restricciones)
             {
-                if (res.nombre.Equals("PK"))
+                if (res.tipo.Equals("PK"))
                 {
                     fueVerificado = true;
                     if(res.columnasPropias.Count == restriccion.columnasForaneas.Count){
