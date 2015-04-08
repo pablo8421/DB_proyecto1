@@ -3339,10 +3339,9 @@ namespace BasesDeDatos_Proyecto1
                         else
                         {
                             if (e.Equals("NULL"))
-                            {
                                 stack.Push("NULL ");
-                            } 
-                            stack.Push(e);
+                            else
+                                stack.Push(e);
                         }
                     }
                     if (stack.Pop().Equals("FALSE "))
