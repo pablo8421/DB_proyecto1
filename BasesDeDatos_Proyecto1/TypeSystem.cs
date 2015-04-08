@@ -27,7 +27,8 @@ namespace BasesDeDatos_Proyecto1
         public String mensajes;
         public DataGridView resultados;
         public String BDenUso;
-        
+        public Boolean hayVerbose;
+
         private MasterTabla masterTabla;
         private MasterBD masterBD;
 
