@@ -179,6 +179,10 @@ namespace BasesDeDatos_Proyecto1
                 {
                     tipoValor = "INT";
                 }
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.NULL)
+                {
+                    tipoValor = "NULL";
+                }
                 else
                 {
                     throw new NotImplementedException();
@@ -194,6 +198,7 @@ namespace BasesDeDatos_Proyecto1
                 
                 //Verificacion de tipos
                 if (!(tipoValor.Equals(tipoColumna)
+                    || (tipoValor.Equals("NULL"))
                     || (tipoValor.Equals("DATE") && tipoColumna.StartsWith("CHAR"))
                     || (tipoValor.Equals("INT") && tipoColumna.Equals("FLOAT"))
                     || (tipoValor.Equals("FLOAT") && tipoColumna.Equals("INT"))
@@ -219,9 +224,10 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
 
-                if (tipoColumna.StartsWith("CHAR"))
+                if (tipoValor.StartsWith("NULL"))
+                    datosUpdate.Add(null);
+                else if (tipoColumna.StartsWith("CHAR"))
                 {
-                    
                     int largo = Convert.ToInt32(tipoColumna.Substring(5,tipoColumna.Length-6));
                     //Revisar si no se pasa del tamaño establecido por la columna
                     if ((valor.Length-2) >= largo)
@@ -272,6 +278,10 @@ namespace BasesDeDatos_Proyecto1
                 {
                     tipoValor = "INT";
                 }
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(4)).symbol.Type == SqlParser.NULL)
+                {
+                    tipoValor = "NULL";
+                }
                 else
                 {
                     throw new NotImplementedException();
@@ -287,6 +297,7 @@ namespace BasesDeDatos_Proyecto1
 
                 //Verificacion de tipos
                 if (!(tipoValor.Equals(tipoColumna)
+                    || (tipoValor.Equals("NULL")) 
                     || (tipoValor.Equals("DATE") && tipoColumna.StartsWith("CHAR"))
                     || (tipoValor.Equals("INT") && tipoColumna.Equals("FLOAT"))
                     || (tipoValor.Equals("FLOAT") && tipoColumna.Equals("INT"))
@@ -312,7 +323,9 @@ namespace BasesDeDatos_Proyecto1
                     errores += "Error en línea " + context.start.Line + ": No se puede colocar la columna '" + nColumna + "' más de una vez." + Environment.NewLine;
                     return "Error";
                 }
-                if (tipoColumna.StartsWith("CHAR"))
+                if (tipoValor.StartsWith("NULL"))
+                    datosUpdate.Add(null);
+                else if (tipoColumna.StartsWith("CHAR"))
                 {
                     valor = valor.Substring(1, valor.Length - 2);
                     datosUpdate.Add((String)valor);
