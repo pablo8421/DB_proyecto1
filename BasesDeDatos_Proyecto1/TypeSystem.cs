@@ -605,8 +605,7 @@ namespace BasesDeDatos_Proyecto1
             for (int i = 0; i < resultado.datos.elementos.Count; i++)
             {
                 object[] fila = resultado.obtenerFila(i);
-                dt.Rows.Add();
-                dt.Rows[i].ItemArray = fila;
+                dt.Rows.Add(fila);
             }
             if (!columnasAMostrar.Equals("*"))
             {
@@ -1913,7 +1912,14 @@ namespace BasesDeDatos_Proyecto1
                         //Es el nombre de la columna o un dato
                         else
                         {
-                            stack.Push(e);
+                            if (e.Equals("NULL"))
+                            {
+                                stack.Push("NULL ");
+                            }
+                            else
+                            {
+                                stack.Push(e);
+                            }
                         }
                     }
                     if (stack.Pop().Equals("FALSE "))
