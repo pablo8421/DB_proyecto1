@@ -819,9 +819,8 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
-        private bool verificarRestricciones(FilaTabla datos, List<Object> row, int nLinea, int indiceFila)
+        private bool verificarRestriccionPK(FilaTabla datos, int nLinea)
         {
-            //Por cada restriccion
             foreach (Restriccion restriccion in datos.tabla.restricciones)
             {
                 //Si es llave primaria
@@ -834,68 +833,157 @@ namespace BasesDeDatos_Proyecto1
                         indices.Add(datos.tabla.columnas.IndexOf(columna));
                     }
                     //Revisar para cada fila en la tabla
-                    for (int num = 0; num < datos.datos.elementos.Count; num++ )
+                    for (int num = 0; num < datos.datos.elementos.Count; num++)
                     {
-                        Object[] fila = datos.obtenerFila(num);
-                        bool yaExistePK = true;
-                        int i = 0;
-                        //Mientras los datos sean los mismos, se siguen evaluando los datos
-                        //El ciclo para cuando se analizan todos o se encuentra uno distinto
-                        while (yaExistePK && i < indices.Count)
+                        for (int num2 = num + 1; num2 < datos.datos.elementos.Count; num2++)
                         {
-                            Object enTabla = fila[indices[i]];
-                            Object porAgregar = (Object)row[indices[i]];
+                            Object[] fila = datos.obtenerFila(num);
+                            Object[] row = datos.obtenerFila(num2);
+                            bool yaExistePK = true;
+                            int i = 0;
+                            //Mientras los datos sean los mismos, se siguen evaluando los datos
+                            //El ciclo para cuando se analizan todos o se encuentra uno distinto
+                            while (yaExistePK && i < indices.Count)
+                            {
+                                Object enTabla = fila[indices[i]];
+                                Object porAgregar = row[indices[i]];
 
-                            if(porAgregar == null){
-                                errores += "Error en la línea " + nLinea +
-                                           ": La llave primaria '" + 
-                                           restriccion.nombre + "' no puede contener valores 'NULL'.\r\n";
+                                if (porAgregar == null)
+                                {
+                                    errores += "Error en la línea " + nLinea +
+                                               ": La llave primaria '" +
+                                               restriccion.nombre + "' no puede contener valores 'NULL'.\r\n";
+                                    return false;
+                                }
+
+                                if (datos.tabla.tipos_columnas[indices[i]].Equals("INT"))
+                                {
+                                    if (!(((Int32)enTabla)
+                                 .Equals(((Int32)porAgregar))))
+                                    {
+                                        yaExistePK = false;
+                                    }
+                                }
+                                else if (datos.tabla.tipos_columnas[indices[i]].Equals("FLOAT"))
+                                {
+                                    if (!(((Single)enTabla)
+                                 .Equals(((Single)porAgregar))))
+                                    {
+                                        yaExistePK = false;
+                                    }
+                                }
+                                else if (datos.tabla.tipos_columnas[indices[i]].Equals("DATE"))
+                                {
+                                    if (!(((String)enTabla)
+                                 .Equals(((String)porAgregar))))
+                                    {
+                                        yaExistePK = false;
+                                    }
+                                }
+                                else if (datos.tabla.tipos_columnas[indices[i]].StartsWith("CHAR"))
+                                {
+                                    if (!(((String)enTabla)
+                                 .Equals(((String)porAgregar))))
+                                    {
+                                        yaExistePK = false;
+                                    }
+                                }
+                                i++;
+                            }
+                            //Si ya existe la llave Primaria, no se puede agregar
+                            if (yaExistePK)
+                            {
+                                errores += "Error en la línea " + nLinea + ": Llave duplicada viola restricción de unicidad '" + restriccion.nombre + "'.\r\n";
+                                return false;
+                            }
+                        }
+                    }
+
+                }
+            }
+            return true;
+        }
+
+        private bool verificarRestricciones(FilaTabla datos, List<Object> row, int nLinea, int indiceFila)
+        {
+            //Por cada restriccion
+            foreach (Restriccion restriccion in datos.tabla.restricciones)
+            {
+                //Si es llave primaria
+                if (restriccion.tipo.Equals("PK"))
+                {
+                    if (indiceFila == -1)
+                    {
+                        //Obtener los indices de la llave primaria
+                        List<int> indices = new List<int>();
+                        foreach (String columna in restriccion.columnasPropias)
+                        {
+                            indices.Add(datos.tabla.columnas.IndexOf(columna));
+                        }
+                        //Revisar para cada fila en la tabla
+                        for (int num = 0; num < datos.datos.elementos.Count; num++)
+                        {
+                            Object[] fila = datos.obtenerFila(num);
+                            bool yaExistePK = true;
+                            int i = 0;
+                            //Mientras los datos sean los mismos, se siguen evaluando los datos
+                            //El ciclo para cuando se analizan todos o se encuentra uno distinto
+                            while (yaExistePK && i < indices.Count)
+                            {
+                                Object enTabla = fila[indices[i]];
+                                Object porAgregar = (Object)row[indices[i]];
+
+                                if (porAgregar == null)
+                                {
+                                    errores += "Error en la línea " + nLinea +
+                                               ": La llave primaria '" +
+                                               restriccion.nombre + "' no puede contener valores 'NULL'.\r\n";
+                                    return false;
+                                }
+
+                                if (datos.tabla.tipos_columnas[indices[i]].Equals("INT"))
+                                {
+                                    if (!(((Int32)enTabla)
+                                 .Equals(((Int32)porAgregar))))
+                                    {
+                                        yaExistePK = false;
+                                    }
+                                }
+                                else if (datos.tabla.tipos_columnas[indices[i]].Equals("FLOAT"))
+                                {
+                                    if (!(((Single)enTabla)
+                                 .Equals(((Single)porAgregar))))
+                                    {
+                                        yaExistePK = false;
+                                    }
+                                }
+                                else if (datos.tabla.tipos_columnas[indices[i]].Equals("DATE"))
+                                {
+                                    if (!(((String)enTabla)
+                                 .Equals(((String)porAgregar))))
+                                    {
+                                        yaExistePK = false;
+                                    }
+                                }
+                                else if (datos.tabla.tipos_columnas[indices[i]].StartsWith("CHAR"))
+                                {
+                                    if (!(((String)enTabla)
+                                 .Equals(((String)porAgregar))))
+                                    {
+                                        yaExistePK = false;
+                                    }
+                                }
+                                i++;
+                            }
+                            //Si ya existe la llave Primaria, no se puede agregar
+                            if (yaExistePK)
+                            {
+                                errores += "Error en la línea " + nLinea + ": Llave duplicada viola restricción de unicidad '" + restriccion.nombre + "'.\r\n";
                                 return false;
                             }
 
-                            if (datos.tabla.tipos_columnas[indices[i]].Equals("INT"))
-                            {
-                                if (!(((Int32)enTabla)
-                             .Equals(((Int32)porAgregar))))
-                                {
-                                    yaExistePK = false;
-                                }
-                            }
-                            else if (datos.tabla.tipos_columnas[indices[i]].Equals("FLOAT"))
-                            {
-                                if (!(((Single)enTabla)
-                             .Equals(((Single)porAgregar))))
-                                {
-                                    yaExistePK = false;
-                                }
-                            }
-                            else if (datos.tabla.tipos_columnas[indices[i]].Equals("DATE"))
-                            {
-                                if (!(((String)enTabla)
-                             .Equals(((String)porAgregar))))
-                                {
-                                    yaExistePK = false;
-                                }
-                            }
-                            else if (datos.tabla.tipos_columnas[indices[i]].StartsWith("CHAR"))
-                            {
-                                if (!(((String)enTabla)
-                             .Equals(((String)porAgregar))))
-                                {
-                                    yaExistePK = false;
-                                }
-                            }
-                            i++;
                         }
-                        //Si ya existe la llave Primaria, no se puede agregar
-                        if (yaExistePK && num != indiceFila)
-                        {
-                            errores += "Error en la línea " + nLinea + ": Llave duplicada viola restricción de unicidad '" + restriccion.nombre + "'.\r\n";
-                            return false;
-                        }
-
                     }
-
                 }
                 //Si es llave foranea
                 else if (restriccion.tipo.Equals("FK"))
@@ -5951,6 +6039,18 @@ namespace BasesDeDatos_Proyecto1
                                    "'." + Environment.NewLine;
                         return "Error";
                     }
+                }
+                if (!verificarRestriccionPK(datos, context.start.Line))
+                {
+                    //Remover la restriccion
+                    propia.restricciones.Remove(restriccion);
+                    //Mensaje de error
+                    errores = errores.Substring(0, errores.LastIndexOf("Error en línea "));
+                    errores += "Error en línea " + context.start.Line +
+                               ": Los datos en la tabla '" + propia.nombre +
+                               "' no cumplen con la restriccion '" + restriccion.nombre +
+                               "'." + Environment.NewLine;
+                    return "Error";
                 }
             }
             mensajes += "Se ha agregado la Constraint '" + nombreCH + "' en la tabla '" + propia.nombre + "' con éxito." + Environment.NewLine;
