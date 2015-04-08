@@ -3434,7 +3434,11 @@ namespace BasesDeDatos_Proyecto1
                     Object datoUno, datoDos;
                     if (indexUno >= 0)
                     {
-                        if (tabla.tipos_columnas[indexUno].Equals("INT"))
+                        if(row[indexUno] == null)
+                        {
+                            datoUno = null;
+                        }
+                        else if (tabla.tipos_columnas[indexUno].Equals("INT"))
                         {
                             datoUno = ((MsgPack.MessagePackObject)row[indexUno]).AsInt32();
                         }
@@ -3451,7 +3455,11 @@ namespace BasesDeDatos_Proyecto1
                     {
                         int num;
                         float numF;
-                        if (uno.StartsWith("'"))
+                        if (uno.Equals("NULL "))
+                        {
+                            datoUno = null;
+                        }
+                        else if (uno.StartsWith("'"))
                         {
                             datoUno = uno.Substring(1, uno.Length - 2);
                         }
@@ -3471,7 +3479,11 @@ namespace BasesDeDatos_Proyecto1
                     }
                     if (indexDos >= 0)
                     {
-                        if (tabla.tipos_columnas[indexDos].Equals("INT"))
+                        if (row[indexDos] == null)
+                        {
+                            datoDos = null;
+                        }
+                        else if (tabla.tipos_columnas[indexDos].Equals("INT"))
                         {
                             datoDos = ((MsgPack.MessagePackObject)row[indexDos]).AsInt32();
                         }
@@ -3488,7 +3500,11 @@ namespace BasesDeDatos_Proyecto1
                     {
                         int num;
                         float numF;
-                        if (dos.StartsWith("'"))
+                        if (dos.Equals("NULL "))
+                        {
+                            datoDos = null;
+                        }
+                        else if (dos.StartsWith("'"))
                         {
                             datoDos = dos.Substring(1, dos.Length - 2);
                         }
@@ -3506,8 +3522,11 @@ namespace BasesDeDatos_Proyecto1
                             throw new NotImplementedException();
                         }
                     }
-
-                    if (datoUno is Int32
+                    if (datoUno == null || datoDos == null)
+                    {
+                        stack.Push("TRUE ");
+                    }
+                    else if (datoUno is Int32
                      && datoDos is Int32)
                     {
                         if (((Int32)datoUno).Equals(((Int32)datoDos)))
@@ -4348,6 +4367,10 @@ namespace BasesDeDatos_Proyecto1
                 //Es el nombre de la columna o un dato
                 else
                 {
+                    if(e.Equals("NULL"))
+                    {
+                        stack.Push("NULL ");
+                    }
                     stack.Push(e);
                 }
             }
