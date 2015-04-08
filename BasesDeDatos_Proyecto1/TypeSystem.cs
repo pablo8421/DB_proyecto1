@@ -2155,8 +2155,19 @@ namespace BasesDeDatos_Proyecto1
                             String nColumna = columnas.ElementAt(i);
                             int indexC = fila.tabla.columnas.IndexOf(nColumna);
                             for (int j = 0; j < fila.datos.elementos.Count; j++) {
-                                if (fila.datos.elementos[j].ElementAt(indexC).Equals(rowUpdate.ElementAt(i))) {
-                                    errores += "Error en la línea " + nLinea + ": Llave duplicada viola restricción de unicidad '" + r.nombre + "'.\r\n";
+                                if (rowUpdate.ElementAt(i) != null)
+                                {
+                                    if (fila.datos.elementos[j].ElementAt(indexC).Equals(rowUpdate.ElementAt(i)))
+                                    {
+                                        errores += "Error en la línea " + nLinea + ": Llave duplicada viola restricción de unicidad '" + r.nombre + "'.\r\n";
+                                        return false;
+                                    }
+                                }
+                                else
+                                {
+                                    errores += "Error en la línea " + nLinea +
+                                           ": La llave primaria '" +
+                                           r.nombre + "' no puede contener valores 'NULL'.\r\n";
                                     return false;
                                 }
                             }
@@ -3295,6 +3306,10 @@ namespace BasesDeDatos_Proyecto1
                         //Es el nombre de la columna o un dato
                         else
                         {
+                            if (e.Equals("NULL"))
+                            {
+                                stack.Push("NULL ");
+                            } 
                             stack.Push(e);
                         }
                     }
@@ -3333,7 +3348,6 @@ namespace BasesDeDatos_Proyecto1
                         {
                             columnaUpdate = datosUpdate.ElementAt(iColUp);
                             int index1 = fTabla.tabla.columnas.IndexOf(cF);
-                            //int index2 = datos.tabla.columnas.IndexOf(cP);
                             for (int j = 0; j < fTabla.getTamanio(); j++)
                             {
                                 if (fTabla.getRowElement(j, index1).Equals(columnaUpdate))
@@ -3342,6 +3356,8 @@ namespace BasesDeDatos_Proyecto1
                                     break;
                                 }
                             }
+                            if (columnaUpdate == null) 
+                                banderaExiste = true;
                             if (!banderaExiste)
                             {
                                 errores += "Error en línea " + nLinea + ": Update en la tabla '" + restriccion.tabla + "' viola la llave foránea '" + restriccion.nombre + "'.\r\n";
@@ -3406,7 +3422,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                 }
 
-                //Verificar restriccion de foreign key de hace referencia a un dato ya existente
+                //Verificar restriccion de foreign key de hace referencia a un dato ya existente o null
                 if (!verificarForeignKeyUpdate(datos, datosUpdate, columnasUpdate, context.start.Line))
                     return "Error";
 
@@ -3453,7 +3469,7 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
 
-                //Lista de elementos a borrar
+                //Lista de elementos a actualizar
                 List<List<Object>> paraUpdate = new List<List<Object>>();
 
                 //Verificar si existe alguna referencia hacia la tabla
@@ -3491,7 +3507,7 @@ namespace BasesDeDatos_Proyecto1
                     }
                 }
 
-                //Verificar restriccion de foreign key de hace referencia a un dato ya existente
+                //Verificar restriccion de foreign key de hace referencia a un dato ya existente o null
                 if (!verificarForeignKeyUpdate(datos, datosUpdate, columnasUpdate, context.start.Line))
                     return "Error";
 
