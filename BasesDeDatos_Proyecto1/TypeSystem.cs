@@ -6177,6 +6177,7 @@ namespace BasesDeDatos_Proyecto1
                 ListaTablas = new List<Tabla>();
                 ListaTablas.Add(nueva);
                 if(Visit(context.GetChild(6)).Equals("Error")){
+                    masterTabla.borrarTabla(nueva.nombre);
                     return "Error";
                 }
 
