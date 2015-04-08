@@ -134,7 +134,8 @@ paren_expression : '(' multi_exp ')'
 exp: (IDENTIFICADOR | ID)	#exp_Ident
    | INT					#exp_Int
    | FLOAT					#exp_Float
-   | STRING					#exp_String;
+   | STRING					#exp_String
+   | NULL					#exp_Null;
 
 accion: RENAME TO ID #accion_rename
 	  | ADD COLUMN ID tipo  (multi_constraint_completo)? #accion_addColumn
@@ -160,13 +161,13 @@ insert : INSERT INTO ID ('(' id_completo ')')? VALUES '(' valor_completo ')';
 id_completo : id_completo ',' ID
 				 | ID;
 
-valor_completo : valor_completo ',' (INT | FLOAT | STRING)
-				 | (INT | FLOAT | STRING);
+valor_completo : valor_completo ',' (INT | FLOAT | STRING | NULL)
+				 | (INT | FLOAT | STRING | NULL);
 
 update : UPDATE ID SET asignacion (WHERE multi_exp)?;
 
-asignacion : asignacion ',' ID '=' (INT | FLOAT | STRING)
-			| ID '=' (INT | FLOAT | STRING);
+asignacion : asignacion ',' ID '=' (INT | FLOAT | STRING | NULL)
+			| ID '=' (INT | FLOAT | STRING | NULL);
 
 delete : DELETE FROM ID (WHERE multi_exp)?;
 

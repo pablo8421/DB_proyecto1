@@ -5490,6 +5490,11 @@ namespace BasesDeDatos_Proyecto1
         }
 
         override
+        public string VisitExp_Null(SqlParser.Exp_NullContext context)
+        {
+            return "NULL " + context.GetText();
+        }
+        override
         public string VisitMostrar_BD(SqlParser.Mostrar_BDContext context)
         {
             resultados.ColumnCount = 2;
