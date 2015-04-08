@@ -685,6 +685,10 @@ namespace BasesDeDatos_Proyecto1
                 {
                     return "INT  " + context.GetChild(0).GetText();
                 }
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(0)).symbol.Type == SqlParser.NULL)
+                {
+                    return "NULL " + context.GetChild(0).GetText();
+                }
                 else
                 {
                     throw new NotImplementedException();
@@ -711,6 +715,10 @@ namespace BasesDeDatos_Proyecto1
                 else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.INT)
                 {
                     propio = "INT  " + context.GetChild(2).GetText();
+                }
+                else if (((Antlr4.Runtime.Tree.TerminalNodeImpl)context.GetChild(2)).symbol.Type == SqlParser.NULL)
+                {
+                    return "NULL " + context.GetChild(2).GetText();
                 }
                 else
                 {
@@ -1896,6 +1904,7 @@ namespace BasesDeDatos_Proyecto1
                 for (int i = 0; i < listaTipos.Count; i++ ) 
                 {
                     if (!(listaTipos[i].Equals(tabla.tipos_columnas[i])
+                      || (listaTipos[i].Equals("NULL"))
                       || (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[i].StartsWith("CHAR"))
                       || (listaTipos[i].Equals("INT") && tabla.tipos_columnas[i].Equals("FLOAT"))
                       || (listaTipos[i].Equals("FLOAT") && tabla.tipos_columnas[i].Equals("INT"))
@@ -1919,7 +1928,11 @@ namespace BasesDeDatos_Proyecto1
                 List<Object> row = new List<Object>();
                 for (int i = 0; i < listaValores.Count; i++)
                 {
-                    if (listaTipos[i].Equals("INT"))
+                    if (listaTipos[i].Equals("NULL"))
+                    {
+                        row.Add(null);
+                    }
+                    else if (listaTipos[i].Equals("INT"))
                     {
                         row.Add(Convert.ToInt32(listaValores[i]));
                     }
@@ -2034,6 +2047,7 @@ namespace BasesDeDatos_Proyecto1
                 {
                     int indice = tabla.columnas.IndexOf(listaColumnas[i]);
                     if (!(listaTipos[i].Equals(tabla.tipos_columnas[indice])
+                      || (listaTipos[i].Equals("NULL"))
                       || (listaTipos[i].Equals("DATE") && tabla.tipos_columnas[indice].StartsWith("CHAR"))
                       || (listaTipos[i].Equals("INT") && tabla.tipos_columnas[indice].Equals("FLOAT"))
                       || (listaTipos[i].Equals("FLOAT") && tabla.tipos_columnas[indice].Equals("INT"))
@@ -2063,8 +2077,13 @@ namespace BasesDeDatos_Proyecto1
                         //Saber que valor se va a agregar aqui
                         int indice = listaCol.IndexOf(tabla.columnas[i]);
 
+                        //Si el valor ingresado es NULL
+                        if (listaValores.Equals("NULL"))
+                        {
+                            row.Add(null);
+                        }
                         //Se agrega el valor segun el tipo
-                        if (tabla.tipos_columnas[i].Equals("INT"))
+                        else if (tabla.tipos_columnas[i].Equals("INT"))
                         {
                             row.Add(Convert.ToInt32(listaValores[indice]));
                         }
@@ -5138,7 +5157,9 @@ namespace BasesDeDatos_Proyecto1
                 || (tipo_mayMin.Equals("FLOAT") && tipo_neg.Equals("INT")) 
                 || (tipo_mayMin.Equals("INT") && tipo_neg.Equals("FLOAT"))
                 || (tipo_mayMin.StartsWith("CHAR") && tipo_neg.Equals("DATE")) 
-                || (tipo_mayMin.Equals("DATE") && tipo_neg.StartsWith("CHAR")))
+                || (tipo_mayMin.Equals("DATE") && tipo_neg.StartsWith("CHAR"))
+                || (tipo_mayMin.Equals("NULL") && !tipo_neg.Equals("ERROR"))
+                || (!tipo_mayMin.Equals("ERROR") && tipo_neg.Equals("NULL")))
                 {
                     return "BOOL " + mayMin + " " + neg + " " + context.GetChild(1).GetText();
                 }
@@ -5492,7 +5513,7 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitExp_Null(SqlParser.Exp_NullContext context)
         {
-            return "NULL " + context.GetText();
+            return "NULL NULL";
         }
         override
         public string VisitMostrar_BD(SqlParser.Mostrar_BDContext context)
@@ -5546,7 +5567,9 @@ namespace BasesDeDatos_Proyecto1
                 || (tipo_difEq.Equals("FLOAT") && tipo_mayMin.Equals("INT")) 
                 || (tipo_difEq.Equals("INT") && tipo_mayMin.Equals("FLOAT"))
                 || (tipo_difEq.StartsWith("CHAR") && tipo_mayMin.Equals("DATE")) 
-                || (tipo_difEq.Equals("DATE") && tipo_mayMin.StartsWith("CHAR")))
+                || (tipo_difEq.Equals("DATE") && tipo_mayMin.StartsWith("CHAR"))
+                || (tipo_difEq.Equals("NULL") && !tipo_mayMin.Equals("ERROR"))
+                || (!tipo_difEq.Equals("ERROR") && tipo_mayMin.Equals("NULL")))
                 {
                     return "BOOL " + difEq + " " + mayMin + " " + context.GetChild(1).GetText();
                 }
@@ -6217,7 +6240,7 @@ namespace BasesDeDatos_Proyecto1
                 String tipo_neg = neg.Substring(0, 5).Trim();
                 neg = neg.Substring(5);
 
-                if (tipo_neg.Equals("BOOl"))
+                if (tipo_neg.Equals("BOOl") || tipo_neg.Equals("NULL"))
                 {
                     return "BOOL " + neg + " " + "NOT";
                 }
