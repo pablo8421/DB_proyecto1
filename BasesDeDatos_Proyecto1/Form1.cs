@@ -128,6 +128,7 @@ namespace BasesDeDatos_Proyecto1
             consolaText.Text = lectorErrores.erroresTotal;
 
             TypeSystem sistemaTipos = new TypeSystem(databaseActual);
+            sistemaTipos.hayVerbose = checkBox1.Checked;
             sistemaTipos.resultados = dataGridView1;
                 
             if(lectorErrores.noHayError){
