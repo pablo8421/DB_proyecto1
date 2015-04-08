@@ -2258,7 +2258,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    if(row[indexUno] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                                     {
                                         datoUno = null;
                                     }
@@ -2307,7 +2307,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    if(row[indexDos] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                                     {
                                         datoDos = null;
                                     }
@@ -2428,7 +2428,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    if(row[indexUno] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                                     {
                                         datoUno = null;
                                     }
@@ -2477,7 +2477,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    if(row[indexDos] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                                     {
                                         datoDos = null;
                                     }
@@ -2598,7 +2598,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    if(row[indexUno] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                                     {
                                         datoUno = null;
                                     } 
@@ -2647,7 +2647,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    if(row[indexDos] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                                     {
                                         datoDos = null;
                                     } 
@@ -2782,7 +2782,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    if (row[indexUno] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                                     {
                                         datoUno = null;
                                     }
@@ -2831,7 +2831,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    if (row[indexDos] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                                     {
                                         datoDos = null;
                                     }
@@ -2966,7 +2966,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    if (row[indexUno] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                                     {
                                         datoUno = null;
                                     }
@@ -3015,7 +3015,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    if (row[indexDos] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                                     {
                                         datoDos = null;
                                     }
@@ -3150,7 +3150,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateUno = columnas.IndexOf(uno);
                                 if (indexUpdateUno == -1)
-                                    if (row[indexUno] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexUno]).IsNil)
                                     {
                                         datoUno = null;
                                     }
@@ -3199,7 +3199,7 @@ namespace BasesDeDatos_Proyecto1
                             {
                                 int indexUpdateDos = columnas.IndexOf(dos);
                                 if (indexUpdateDos == -1)
-                                    if (row[indexDos] == null)
+                                    if (((MsgPack.MessagePackObject)row[indexDos]).IsNil)
                                     {
                                         datoDos = null;
                                     }
