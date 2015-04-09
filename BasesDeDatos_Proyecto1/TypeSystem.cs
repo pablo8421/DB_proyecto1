@@ -7163,31 +7163,44 @@ namespace BasesDeDatos_Proyecto1
                 int cambio;
                 if (ordenActual[0].Equals("ASC"))
                 {
-                    cambio = 1;
+                    cambio = -1;
                 }
                 else
                 {
-                    cambio = -1;
+                    cambio = 1;
                 }
                 //Obtener el indice de la lista de objetos a comparar
                 int indice = Convert.ToInt32(ordenActual[2]);
                 int comparacion = 0;
+                //Verificar Null
+                if (uno[indice] == null && dos[indice] == null)
+                {
+                    comparacion = 0;
+                }
+                else if (uno[indice] == null)
+                { 
+                    comparacion = 1;
+                }
+                else if (dos[indice] == null)
+                {
+                    comparacion = -1;
+                }
                 //Comparar segun el tipo
-                if (ordenActual[3].Equals("INT"))
+                else if (ordenActual[3].Equals("INT"))
                 {
                     comparacion = ((Int32) uno[indice]).CompareTo((Int32) dos[indice]);
                 }
                 else if (ordenActual[3].Equals("FLOAT"))
                 {
-                    throw new NotImplementedException();
+                    comparacion = ((Single)uno[indice]).CompareTo((Single)dos[indice]);
                 }
                 else if (ordenActual[3].Equals("DATE"))
                 {
-                    throw new NotImplementedException();
+                    comparacion = ((String)uno[indice]).CompareTo((String)dos[indice]);
                 }
                 else if (ordenActual[3].StartsWith("CHAR"))
                 {
-                    throw new NotImplementedException();
+                    comparacion = ((String)uno[indice]).CompareTo((String)dos[indice]);
                 }
                 else
                 {
