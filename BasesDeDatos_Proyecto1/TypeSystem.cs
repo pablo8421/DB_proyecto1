@@ -37,6 +37,7 @@ namespace BasesDeDatos_Proyecto1
         private List<String> columnasUpdate;
         private List<FilaTabla> datosTablas;
         private int cantInserts;
+        private List<String[]> ordenDeColumnas;
 
         public TypeSystem() {
             errores = "";
@@ -601,6 +602,43 @@ namespace BasesDeDatos_Proyecto1
                 //Se reasigna los datos de la tabla
                 resultado.datos.elementos = datosFiltrados;
             }
+            //Generar la lista de listas de Objetos a ordenar
+            List<object[]> resultadoQuery = new List<object[]>();
+            for (int i = 0; i < resultado.datos.elementos.Count; i++)
+            {
+                object[] fila = resultado.obtenerFila(i);
+                resultadoQuery.Add(fila);
+            }
+            //Obtener el orderBy
+            if (hayVerbose)
+            {
+                mensajes += "Obteniendo el orden pedido, si se pidio..." + Environment.NewLine;
+            }
+            String columnasAOrdenar = Visit(context.GetChild(5));
+            if (columnasAOrdenar.StartsWith("ERROR"))
+            {
+                return "Error";
+            }
+            //Se ordenan, si se pidio que se ordenara
+            if (!columnasAOrdenar.Equals(""))
+            {
+                if (hayVerbose)
+                {
+                    mensajes += "Ordenando los datos..." + Environment.NewLine;
+                }
+                
+                List<String> listaAOrdenar = new List<String>(columnasAOrdenar.Split(','));
+                ordenDeColumnas = new List<String[]>();
+                foreach (String columna in listaAOrdenar)
+                {
+                    String[] colActual = { columna.Substring(0, 3)  //Si es orden ASC o DES
+                                         , columna.Substring(3)     //El nombre de la columna
+                                         , resultado.tabla.columnas.IndexOf(columna.Substring(3)).ToString() //El indice de la columna
+                                         , resultado.tabla.tipos_columnas[resultado.tabla.columnas.IndexOf(columna.Substring(3))] }; //El tipo de la columna
+                    ordenDeColumnas.Add(colActual);
+                }
+                QuickSort_Recursive(resultadoQuery, 0, resultadoQuery.Count - 1);
+            }
 
             if (hayVerbose)
             {
@@ -627,9 +665,8 @@ namespace BasesDeDatos_Proyecto1
             }
 
             //Llenar los datos
-            for (int i = 0; i < resultado.datos.elementos.Count; i++)
+            foreach (object[] fila in resultadoQuery)
             {
-                object[] fila = resultado.obtenerFila(i);
                 dt.Rows.Add(fila);
             }
             if (!columnasAMostrar.Equals("*"))
@@ -638,14 +675,14 @@ namespace BasesDeDatos_Proyecto1
                 for (int i = 0; i < resultado.tabla.columnas.Count; i++)
                 {
                     String c = resultado.tabla.columnas[i];
-                    if (!colMostrar.Contains(c)) 
-                    { 
+                    if (!colMostrar.Contains(c))
+                    {
                         //Hacer algo para no mostrarla
-                        resultados.Columns[i].Visible =false;
+                        resultados.Columns[i].Visible = false;
                     }
                 }
             }
-            
+
             //Preaprar el datagridview
             resultados.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.None);
             resultados.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
@@ -653,47 +690,7 @@ namespace BasesDeDatos_Proyecto1
             resultados.RowHeadersVisible = false;
             resultados.AllowUserToAddRows = false;
             DataView dataView = new DataView(dt);
-            //Obtener el orderBy
-            if (hayVerbose)
-            {
-                mensajes += "Obteniendo el orden pedido, si se pidio..." + Environment.NewLine;
-            }
-            String columnasAOrdenar = Visit(context.GetChild(5));
-            if (columnasAOrdenar.StartsWith("ERROR"))
-            {
-                return "Error";
-            }
-            //Se ordenan, si se pidio que se ordenara
-            if (!columnasAOrdenar.Equals(""))
-            {
-                if (hayVerbose)
-                {
-                    mensajes += "Ordenando los datos..." + Environment.NewLine;
-                }
-                String orden = "";
-                List<String> listaAOrdenar = new List<String>(columnasAOrdenar.Split(','));
-                int index = listaAOrdenar.Count - 1;
-                while (index >= 0)
-                {
-                    String tipo = listaAOrdenar[index].Substring(0, 3);
-                    String col = listaAOrdenar[index].Substring(3);
-                    int i = resultado.tabla.columnas.IndexOf(col);
-                    if (tipo.Equals("ASC"))
-                    {
-                        orden += dt.Columns[i].ColumnName + " ASC" + ", ";
-                        //resultados.Sort(resultados.Columns[i], ListSortDirection.Ascending);
-
-                    }
-                    else
-                    {
-                        orden += dt.Columns[i].ColumnName + " DESC" + ", ";
-                        //resultados.Sort(resultados.Columns[i], ListSortDirection.Descending);
-                    }
-                    index = index - 1;
-                }
-                orden = orden.Substring(0,orden.Length -2);
-                dataView.Sort = orden;
-            }
+            
             //Hacer el binding de datos
             resultados.DataSource = dataView;
             //Hacerlo notSortable
@@ -7158,25 +7155,72 @@ namespace BasesDeDatos_Proyecto1
         //1 si uno es mayor a dos
         //0 si son iguales
         //-1 si dos es mayor a uno
-        private int comparar(List<Object> uno, List<Object> dos, List<String> orden)
+        private int comparar(object[] uno, object[] dos)
         {
+            foreach (String[] ordenActual in ordenDeColumnas)
+            {
+                //Obtener ASC o DESC
+                int cambio;
+                if (ordenActual[0].Equals("ASC"))
+                {
+                    cambio = 1;
+                }
+                else
+                {
+                    cambio = -1;
+                }
+                //Obtener el indice de la lista de objetos a comparar
+                int indice = Convert.ToInt32(ordenActual[2]);
+                int comparacion = 0;
+                //Comparar segun el tipo
+                if (ordenActual[3].Equals("INT"))
+                {
+                    comparacion = ((Int32) uno[indice]).CompareTo((Int32) dos[indice]);
+                }
+                else if (ordenActual[3].Equals("FLOAT"))
+                {
+                    throw new NotImplementedException();
+                }
+                else if (ordenActual[3].Equals("DATE"))
+                {
+                    throw new NotImplementedException();
+                }
+                else if (ordenActual[3].StartsWith("CHAR"))
+                {
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+                //Decidir que hacer segun la comparacion
+                if (comparacion < 0)
+                {
+                    return 1 * cambio;
+                }
+                else if (comparacion > 0)
+                {
+                    return -1 * cambio;
+                }
+            }
+            //Son iguales
             return 0;
         }
 
-        private int Partition(List<List<Object>> particion, int left, int right)
+        private int Partition(List<object[]> particion, int left, int right)
         {
-            List<Object> pivot = particion[left];
+            object[] pivot = particion[left];
             while (true)
             {
-                while (comparar(particion[right], pivot, new List<string>()) == -1)
+                while (comparar(particion[left], pivot) == -1)
                     left++;
 
-                while (comparar(particion[right], pivot, new List<string>()) == 1)
+                while (comparar(particion[right], pivot) == 1)
                     right--;
 
                 if (left < right)
                 {
-                    List<Object> temp = particion[right];
+                    object[] temp = particion[right];
                     particion[right] = particion[left];
                     particion[left] = temp;
                 }
@@ -7187,7 +7231,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
-        private void QuickSort_Recursive(List<List<Object>> arr, int left, int right)
+        private void QuickSort_Recursive(List<object[]> arr, int left, int right)
         {
             // For Recusrion
             if (left < right)
