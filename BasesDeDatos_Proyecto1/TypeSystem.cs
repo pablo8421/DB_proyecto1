@@ -3586,11 +3586,19 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitUpdate(SqlParser.UpdateContext context)
         {
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que haya base de datos en uso en la cual hacer update..." + Environment.NewLine;
+            }
             String nTabla = context.GetChild(1).GetText();
             if (BDenUso.Equals(""))
             { //No hay ninguna base de datos en uso
                 errores += "Error en línea " + context.start.Line + ": No se encuentra ninguna base de datos en uso." + Environment.NewLine;
                 return "Error";
+            }
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que exista la tabla en la cual hacer update..." + Environment.NewLine;
             }
             Tabla tActual = masterTabla.getTable(nTabla);
             if (tActual == null)
@@ -3602,6 +3610,10 @@ namespace BasesDeDatos_Proyecto1
             ListaTablas.Add(tActual);
             datosUpdate = new List<Object>();
             columnasUpdate = new List<String>();
+            if (hayVerbose)
+            {
+                mensajes += "Verificando las columnas que se desea actualizar y obteniendo los datos..." + Environment.NewLine;
+            }
             if (Visit(context.GetChild(3)).Equals("Error")) //Verifica que exista la columna y no se repita, y obtiene los datos
             {
                 //Mensaje de error
@@ -3611,12 +3623,20 @@ namespace BasesDeDatos_Proyecto1
 
             if (context.ChildCount == 4) //No tiene WHERE
             {
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando las llaves primarias en los datos a actualizar..." + Environment.NewLine;
+                }
                 //Verificar restriccion de primary key
                 bool banderaR = verificarPrimaryKeyUpdate(datosUpdate, columnasUpdate, datos, context.start.Line);
 
                 if (!banderaR)
                     return "Error";
 
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando las llaves foraneas que puedan hacer referencia a la tabla..." + Environment.NewLine;
+                }
                 //Verificar restriccion de foreign key de es referenciada por otra tabla
                 foreach (List<Object> fila in datos.datos.elementos)
                 {
@@ -3634,11 +3654,17 @@ namespace BasesDeDatos_Proyecto1
                                     }
                     }
                 }
-
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando referencias en los datos nuevos de la actualizacion..." + Environment.NewLine;
+                }
                 //Verificar restriccion de foreign key de hace referencia a un dato ya existente o null
                 if (!verificarForeignKeyUpdate(datos, datosUpdate, columnasUpdate, context.start.Line))
                     return "Error";
-
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando condiciones del check en los datos nuevos de la actualizacion..." + Environment.NewLine;
+                }
                 //Verificar restriccion de check
                 List<List<Object>> datosPosiblesACambiar = new List<List<Object>>();
                 foreach (List<Object> e in datos.datos.elementos)
@@ -3665,8 +3691,11 @@ namespace BasesDeDatos_Proyecto1
             else
             { //Si tiene WHERE
 
+                if (hayVerbose)
+                {
+                    mensajes += "Obteniendo la expresion en el where..." + Environment.NewLine;
+                }
                 //Obtener expresion postfix
-
                 ListaTablas = new List<Tabla>();
                 ListaTablas.Add(tActual);
                 String postfix = Visit(context.GetChild(5));
@@ -3684,7 +3713,10 @@ namespace BasesDeDatos_Proyecto1
 
                 //Lista de elementos a actualizar
                 List<List<Object>> paraUpdate = new List<List<Object>>();
-
+                if (hayVerbose)
+                {
+                    mensajes += "Filtrando los datos a actualizar..." + Environment.NewLine;
+                }
                 //Verificar si existe alguna referencia hacia la tabla
                 foreach (List<Object> fila in datos.datos.elementos)
                 {
@@ -3695,6 +3727,10 @@ namespace BasesDeDatos_Proyecto1
 
                 FilaTabla nuevosDatos = new FilaTabla(tActual, BDenUso);
                 nuevosDatos.datos.elementos = paraUpdate;
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando las llaves primarias en los datos a actualizar..." + Environment.NewLine;
+                }
 
                 //Verificar restriccion de primary key
                 bool banderaR = verificarPrimaryKeyUpdate(datosUpdate, columnasUpdate, nuevosDatos, context.start.Line);
@@ -3702,6 +3738,10 @@ namespace BasesDeDatos_Proyecto1
                 if (!banderaR)
                     return "Error";
 
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando las llaves foraneas que puedan hacer referencia a la tabla..." + Environment.NewLine;
+                }
                 //Verificar restriccion de foreign key
                 foreach (List<Object> fila in nuevosDatos.datos.elementos)
                 {
@@ -3719,11 +3759,18 @@ namespace BasesDeDatos_Proyecto1
                                     }
                     }
                 }
-
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando referencias en los datos nuevos de la actualizacion..." + Environment.NewLine;
+                }
                 //Verificar restriccion de foreign key de hace referencia a un dato ya existente o null
                 if (!verificarForeignKeyUpdate(datos, datosUpdate, columnasUpdate, context.start.Line))
                     return "Error";
 
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando condiciones del check en los datos nuevos de la actualizacion..." + Environment.NewLine;
+                }
                 //Verificar restriccion de check
                 List<List<Object>> datosPosiblesACambiar = new List<List<Object>>();
                 foreach (List<Object> e in nuevosDatos.datos.elementos)
