@@ -17,10 +17,11 @@ namespace BasesDeDatos_Proyecto1
 {
     class FilaTabla
     {
-        public Tabla tabla;
-        String BDenUso;
-        public Filas datos;
+        public Tabla tabla;     //Variable que modela la tabla de la BD
+        String BDenUso;         //Variable que contiene la información de la BD en uso.
+        public Filas datos;     //Variable que contiene los datos de las tablas
 
+        //Constructor de la clase
         public FilaTabla(Tabla tabla, String BDenUso)
         {
             this.tabla= tabla;
@@ -28,6 +29,7 @@ namespace BasesDeDatos_Proyecto1
             datos = new Filas();
         }
 
+        //Almacena los registros de la tabla
         public void guardar()
         {
             String path = "Databases\\" + BDenUso + "\\" + tabla.nombre + ".dat";
@@ -51,6 +53,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Obtiene los registro de la tabla
         public void cargar()
         {
             try
@@ -69,17 +72,19 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Devuelve la cantidad de registros que tiene la tabla
         public int getTamanio()
         {
             return tabla.cantidad_registros;
         }
 
-
+        //Devuelve un registro de la tabla
         public List<Object> getRow(int num)
         {
             return datos.elementos[num];
         }
 
+        //Devuelve un registro de la tabla (Realiza casting a los datos)
         public object[] obtenerFila(int num)
         {
             object[] resultado = new object[datos.elementos[num].Count];
@@ -115,6 +120,7 @@ namespace BasesDeDatos_Proyecto1
             return resultado;
         }
 
+        //Devuelve una celda de una fila de la tabla
         public Object getRowElement(int row, int columna)
         {
             if (!((MsgPack.MessagePackObject)datos.elementos[row][columna]).IsNil)
@@ -142,6 +148,7 @@ namespace BasesDeDatos_Proyecto1
                 return null;
         }
 
+        //Agrega un nuevo registro a la tabla
         public void agregarFila(List<Object> fila)
         {
             tabla.cantidad_registros++;
@@ -149,10 +156,12 @@ namespace BasesDeDatos_Proyecto1
         }        
     }
 
+    //Clase que modela la tabla que almacena los datos
     public class Filas
     {
         public List<List<Object>> elementos { get; set; }
 
+        //Constructor
         public Filas()
         {
             elementos = new List<List<Object>>();
