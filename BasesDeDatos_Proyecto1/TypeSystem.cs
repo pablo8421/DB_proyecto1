@@ -544,6 +544,10 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitSelect(SqlParser.SelectContext context)
         {
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que haya base de datos en uso para poder hacer el select..." + Environment.NewLine;
+            }
             //Verificar si hay base de datos en uso
             if (BDenUso.Equals(""))
             {
@@ -551,6 +555,10 @@ namespace BasesDeDatos_Proyecto1
                 return "Error";
             }
 
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que las tablas del from existan..." + Environment.NewLine;
+            }
             //Obtener tablas sobre las cuales se va a trabajar
             ListaTablas = new List<Tabla>();
             //El Visit llena ListaTablas
@@ -558,7 +566,10 @@ namespace BasesDeDatos_Proyecto1
             {
                 return "Error";
             }
-            
+            if (hayVerbose)
+            {
+                mensajes += "Obteniendo la expresion del where, si hay o no una..." + Environment.NewLine;
+            }
             //Obtener expresion del where
             String postfix = Visit(context.GetChild(4));
             if (postfix.Equals("Error"))
@@ -571,6 +582,10 @@ namespace BasesDeDatos_Proyecto1
 
             if (!postfix.Equals(""))
             {
+                if (hayVerbose)
+                {
+                    mensajes += "Filtrando los datos segun la condicion del where..." + Environment.NewLine;
+                }
                 List<List<Object>> datosFiltrados = new List<List<Object>>();
                 //Se evalua cada fila de la tabla de resultados
                 foreach (List<Object> fila in resultado.datos.elementos)
@@ -585,7 +600,10 @@ namespace BasesDeDatos_Proyecto1
                 resultado.datos.elementos = datosFiltrados;
             }
 
-
+            if (hayVerbose)
+            {
+                mensajes += "Obteniendo las columnas que se desean mostrar..." + Environment.NewLine;
+            }
             //TODO mostrar datos, hacer select
             String columnasAMostrar = context.GetChild(1).GetText();
             if (!columnasAMostrar.Equals("*"))
@@ -593,6 +611,10 @@ namespace BasesDeDatos_Proyecto1
             if (columnasAMostrar.Equals("Error"))
                 return "Error";
 
+            if (hayVerbose)
+            {
+                mensajes += "Preparando los datos en un formato para mostrarlos..." + Environment.NewLine;
+            }
             //Generar la data a linkear con el DataGridView
             DataTable dt = new DataTable();
 
@@ -630,6 +652,10 @@ namespace BasesDeDatos_Proyecto1
             resultados.AllowUserToAddRows = false;
             DataView dataView = new DataView(dt);
             //Obtener el orderBy
+            if (hayVerbose)
+            {
+                mensajes += "Obteniendo el orden pedido, si se pidio..." + Environment.NewLine;
+            }
             String columnasAOrdenar = Visit(context.GetChild(5));
             if (columnasAOrdenar.StartsWith("ERROR"))
             {
@@ -638,6 +664,10 @@ namespace BasesDeDatos_Proyecto1
             //Se ordenan, si se pidio que se ordenara
             if (!columnasAOrdenar.Equals(""))
             {
+                if (hayVerbose)
+                {
+                    mensajes += "Ordenando los datos..." + Environment.NewLine;
+                }
                 String orden = "";
                 List<String> listaAOrdenar = new List<String>(columnasAOrdenar.Split(','));
                 int index = listaAOrdenar.Count - 1;
@@ -1944,6 +1974,11 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitInsert(SqlParser.InsertContext context)
         {
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que haya base de datos en uso para poder hacer la insercesion..." + Environment.NewLine;
+            }
+
             if (BDenUso.Equals(""))
             {
                 errores += "Error en línea " + context.start.Line + ": No hay base de datos en uso por lo que no se puede alterar la tabla.";
@@ -1956,6 +1991,10 @@ namespace BasesDeDatos_Proyecto1
             if (context.ChildCount == 7)
             {
                 Tabla tabla = masterTabla.getTable(nombre);
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando que exista la tabla sobre la cual hacer la insercion..." + Environment.NewLine;
+                }
 
                 //Verificar que exista la tabla
                 if (tabla == null)
@@ -1965,6 +2004,11 @@ namespace BasesDeDatos_Proyecto1
                               "' no existe en la base de datos '" + BDenUso + 
                               "'." + Environment.NewLine;
                     return "Error";
+                }
+
+                if (hayVerbose)
+                {
+                    mensajes += "Analizando si los datos ingresados cumplen con el formato de la tabla..." + Environment.NewLine;
                 }
 
                 //Obtener valores a insertar 
@@ -1978,6 +2022,11 @@ namespace BasesDeDatos_Proyecto1
                               ")." + Environment.NewLine;
                     return "Error";
                 }
+                if (hayVerbose && valores.Count != tabla.columnas.Count)
+                {
+                    mensajes += "Llenando los datos con valores default para lo que falta..." + Environment.NewLine;
+                }
+
                 //Llenar los valores que faltan con lo default
                 while(valores.Count != tabla.columnas.Count)
                 {
@@ -2012,6 +2061,11 @@ namespace BasesDeDatos_Proyecto1
                     listaTipos.Add(tipo);
                     listaValores.Add(valor);
                 }
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando tipos y conversiones implicitas de los datos ingresados..." + Environment.NewLine;
+                }
+
                 //Verificar si los tipos concuerdan o la conversion implicita entre los tipos
                 for (int i = 0; i < listaTipos.Count; i++ ) 
                 {
@@ -2079,6 +2133,10 @@ namespace BasesDeDatos_Proyecto1
  
                 //Cargar la tabla
                 FilaTabla datos = getFilaTabla(tabla);
+                if (hayVerbose)
+                {
+                    mensajes += "Analizando si los datos ingresados cumplen con las restricciones de la tabla..." + Environment.NewLine;
+                }
 
                 //Verificar las restricciones
                 bool aceptado = verificarRestricciones(datos, row, context.start.Line, -1);
@@ -2102,6 +2160,11 @@ namespace BasesDeDatos_Proyecto1
             {
                 Tabla tabla = masterTabla.getTable(nombre);
 
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando que exista la tabla sobre la cual hacer la insercion..." + Environment.NewLine;
+                }
+
                 //Verificar que exista la tabla
                 if (tabla == null)
                 {
@@ -2120,6 +2183,10 @@ namespace BasesDeDatos_Proyecto1
                     return "Error";
                 }
                 String[] listaColumnas = columnasSelectas.Replace(tabla.nombre+".","").Split(',');
+                if (hayVerbose)
+                {
+                    mensajes += "Analizando si los datos ingresados cumplen con el formato de la tabla..." + Environment.NewLine;
+                }
                 
                 var hashset = new HashSet<string>();
                 foreach (var elemento in listaColumnas)
@@ -2154,6 +2221,12 @@ namespace BasesDeDatos_Proyecto1
                     listaTipos.Add(tipo);
                     listaValores.Add(valor);
                 }
+
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando tipos y conversiones implicitas de los datos ingresados..." + Environment.NewLine;
+                }
+                
                 //Verificar si los tipos concuerdan o la conversion implicita entre los tipos
                 for (int i = 0; i < listaTipos.Count; i++)
                 {
@@ -2182,6 +2255,11 @@ namespace BasesDeDatos_Proyecto1
                 //Generar lo que se va a agregar
                 List<String> listaCol = new List<String>(listaColumnas);
                 List<Object> row = new List<Object>();
+                if (hayVerbose && listaCol.Count != tabla.columnas.Count)
+                {
+                    mensajes += "Llenando los datos con valores default para lo que falta..." + Environment.NewLine;
+                }
+
                 for (int i = 0; i < tabla.columnas.Count; i++)
                 {
                     if (listaCol.Contains(tabla.columnas[i]))
@@ -2255,6 +2333,11 @@ namespace BasesDeDatos_Proyecto1
 
                 //Cargar la tabla
                 FilaTabla datos = getFilaTabla(tabla);
+
+                if (hayVerbose)
+                {
+                    mensajes += "Analizando si los datos ingresados cumplen con las restricciones de la tabla..." + Environment.NewLine;
+                }
 
                 //Verificar las restricciones
                 bool aceptado = verificarRestricciones(datos, row, context.start.Line, -1);
@@ -4921,6 +5004,11 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitDelete(SqlParser.DeleteContext context)
         {
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que haya base de datos en uso en la cual borrar..." + Environment.NewLine;
+            }
+
             //Revisar que haya base de datos en uso
             if (BDenUso.Equals(""))
             {
@@ -4931,7 +5019,10 @@ namespace BasesDeDatos_Proyecto1
             //Obtener el nombre de la tabla que se desea
             String nombre = context.GetChild(2).GetText();
             Tabla tabla = masterTabla.getTable(nombre);
-
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que exista la tabla sobre la cual borrar..." + Environment.NewLine;
+            }
             //Verificar que exista la tabla
             if (tabla == null)
             {
@@ -4946,7 +5037,10 @@ namespace BasesDeDatos_Proyecto1
             {
                 //Cargar los datos en si
                 FilaTabla datos = getFilaTabla(tabla);
-
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando si hay referencias hacia los datos a borrar de la tabla..." + Environment.NewLine;
+                }
                 //Verificar si existe alguna referencia hacia la tabla
                 foreach (List<Object> fila in datos.datos.elementos)
                 {
@@ -4975,6 +5069,11 @@ namespace BasesDeDatos_Proyecto1
             }
             else
             {
+                if (hayVerbose)
+                {
+                    mensajes += "Analizando la expresion del where..." + Environment.NewLine;
+                }
+
                 //Obtener expresion postfix
                 ListaTablas = new List<Tabla>();
                 ListaTablas.Add(tabla);
@@ -4996,6 +5095,12 @@ namespace BasesDeDatos_Proyecto1
 
                 //Cargar los datos en si
                 FilaTabla datos = getFilaTabla(tabla);
+
+                if (hayVerbose)
+                {
+                    mensajes += "Filtrando los datos a borrar segun la condicion de la expresion en el where..." + Environment.NewLine;
+                    mensajes += "Verificando si hay referencias hacia los datos a borrar de la tabla..." + Environment.NewLine;
+                }
 
                 //Verificar si existe alguna referencia hacia la tabla
                 foreach(List<Object> fila in datos.datos.elementos)
@@ -5078,6 +5183,21 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitBotar_table(SqlParser.Botar_tableContext context)
         {
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que haya base de datos en uso en la cual botar tablas..." + Environment.NewLine;
+            }
+
+            if (BDenUso.Equals(""))
+            {
+                errores += "Error en línea " + context.start.Line + ": No hay base de datos en uso por lo que no se puede alterar la tabla.";
+                return "Error";
+            }
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que exista la tabla a botar en la base de datos..." + Environment.NewLine;
+            }
+
             Tabla tabla = masterTabla.getTable(context.GetChild(2).GetText());
             if (tabla == null)
             {
@@ -5088,6 +5208,10 @@ namespace BasesDeDatos_Proyecto1
             }
             bool esReferenciada = false;
             String referencia = "";
+            if (hayVerbose)
+            {
+                mensajes += "Verificando si hay referencias hacia la tabla a borrar..." + Environment.NewLine;
+            }
             foreach (Tabla t in masterTabla.tablas)
             {
                 foreach (Restriccion restriccion in t.restricciones)
@@ -5096,12 +5220,15 @@ namespace BasesDeDatos_Proyecto1
                     {
                         esReferenciada = true;
                         referencia = t.nombre;
-                        goto End;
+                        break;
                         
                     }
                 }
+                if (esReferenciada)
+                {
+                    break;
+                }
             }
-            End:
             if (esReferenciada)
             {
                 errores += "Error en línea " + context.start.Line +
@@ -5130,14 +5257,28 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitShow_columns(SqlParser.Show_columnsContext context)
         {
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que haya base de datos en uso para mostrar columnas..." + Environment.NewLine;
+            }
+
             String nTabla = context.GetChild(3).GetText();
             if (BDenUso.Equals(""))
             {
                 errores += "Error en línea " + context.start.Line + ": No hay ninguna base de datos en uso.\r\n";
                 return "Error";
             }
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que la tabla exista en la base de datos..." + Environment.NewLine;
+            }
             if (masterTabla.containsTable(nTabla))
             {
+                if (hayVerbose)
+                {
+                    mensajes += "Colocando los datos de las columnas en una talba..." + Environment.NewLine;
+                }
+
                 Tabla t = masterTabla.getTable(nTabla);
                 resultados.ColumnCount = 3;
                 if (t.columnas.Count == 0)
@@ -6370,9 +6511,17 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitShow_tables(SqlParser.Show_tablesContext context)
         {
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que haya base de datos en uso para mostrar tablas..." + Environment.NewLine;
+            }
             if (BDenUso.Equals("")) {
                 errores += "Error en línea "+context.start.Line+": No se encuentra en uso ninguna base de datos.\r\n";
                 return "Error";
+            }
+            if (hayVerbose)
+            {
+                mensajes += "Colocando los datos a mostrar en una tabla..." + Environment.NewLine;
             }
             resultados.ColumnCount = 2;
             if (masterTabla.tablas.Count == 0)
