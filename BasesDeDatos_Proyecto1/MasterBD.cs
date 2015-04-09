@@ -15,16 +15,19 @@ namespace BasesDeDatos_Proyecto1
 {
     public class MasterBD
     {
-        public List<BaseDatos> basesDeDatos;
+        public List<BaseDatos> basesDeDatos;    //Variable que contiene la lista de bases de datos
 
+        //Constructor
         public MasterBD() { 
             basesDeDatos = new List<BaseDatos>();
         }
 
+        //Agrega una base de datos
         public void agregarBD(BaseDatos bd){
             basesDeDatos.Add(bd);
         }
 
+        //Verifica si contiene una base de datos que tenga el mismo nombre que el parámetro enviado
         public bool containsBD(String nombre)
         {
             foreach (BaseDatos bd in basesDeDatos)
@@ -37,6 +40,7 @@ namespace BasesDeDatos_Proyecto1
             return false;
         }
 
+        //Elimina una base de datos
         public void borrarBD(String nombre)
         {
             foreach (BaseDatos bd in basesDeDatos)
@@ -49,6 +53,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Obtiene la cantidad de registros que contiene una base de datos
         public int getRegistros(String nombre){
             foreach (BaseDatos bd in basesDeDatos)
             {
@@ -60,6 +65,7 @@ namespace BasesDeDatos_Proyecto1
             return 0;
         }
 
+        //Actualiza la cantidad de tablas en la base de datos
         public void actualizarCantidadEnBD(string nombre, int cantidad)
         {
             foreach (BaseDatos bd in basesDeDatos)
@@ -71,6 +77,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Obtiene la base de datos pedida
         public BaseDatos getBD(String nombre){
             foreach (BaseDatos bd in basesDeDatos)
                 if (nombre.Equals(bd.nombre))
