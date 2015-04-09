@@ -7239,6 +7239,8 @@ namespace BasesDeDatos_Proyecto1
                     object[] temp = particion[right];
                     particion[right] = particion[left];
                     particion[left] = temp;
+                    left++;
+                    right--;
                 }
                 else
                 {
