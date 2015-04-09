@@ -6141,6 +6141,7 @@ namespace BasesDeDatos_Proyecto1
             return retornoOtro + "," + retornoPropio;
         }
 
+        //Visita id_completo_orderSolo definido dentro de la gramática.
         override
         public string VisitId_completo_orderSolo(SqlParser.Id_completo_orderSoloContext context)
         {
@@ -6287,7 +6288,8 @@ namespace BasesDeDatos_Proyecto1
                 return orden + tabla.nombre + "." + tabla.columnas[indiceColumna];
             }
         }
-        
+
+        //Visita constrain_check definido dentro de la gramática. Agrega una restricción check.
         override
         public string VisitConstrain_check(SqlParser.Constrain_checkContext context)
         {
@@ -6341,6 +6343,7 @@ namespace BasesDeDatos_Proyecto1
             return "void";
         }
 
+        //Visita full_query definido dentro de la gramática.
         override
         public string VisitFull_query(SqlParser.Full_queryContext context)
         {
@@ -6372,6 +6375,7 @@ namespace BasesDeDatos_Proyecto1
             return retorno;
         }
 
+        //Visita usar_BD definido dentro de la gramática. Permite usar una base de datos.
         override
         public string VisitUsar_BD(SqlParser.Usar_BDContext context)
         {
@@ -6413,6 +6417,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita multi_columnas definido dentro de la gramática.
         override
         public string VisitMulti_columnas(SqlParser.Multi_columnasContext context)
         {
@@ -6426,6 +6431,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita accion_DropConstraint definido dentro de la gramática. Elimina una restricción de una tabla.
         override
         public string VisitAccion_DropConstraint(SqlParser.Accion_DropConstraintContext context)
         {
@@ -6447,12 +6453,14 @@ namespace BasesDeDatos_Proyecto1
             return "Error";
         }
 
+        //Visita constraint_completo definido dentro de la gramática.
         override
         public string VisitConstraint_completo(SqlParser.Constraint_completoContext context)
         {
             return Visit(context.GetChild(1));
         }
 
+        //Visita constrain_fk definido dentro de la gramática. Permite crear una restricción de foreign key.
         override
         public string VisitConstrain_fk(SqlParser.Constrain_fkContext context)
         {
@@ -6610,6 +6618,7 @@ namespace BasesDeDatos_Proyecto1
             return "void";
         }
 
+        //Visita paren_expression definido dentro de la gramática.
         override
         public string VisitParen_expression(SqlParser.Paren_expressionContext context)
         {
@@ -6623,6 +6632,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita multi_constraint_completo definido dentro de la gramática.
         override
         public string VisitMulti_constraint_completo(SqlParser.Multi_constraint_completoContext context)
         {
@@ -6644,6 +6654,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita neg_expression definido dentro de la gramática.
         override
         public string VisitNeg_expression(SqlParser.Neg_expressionContext context)
         {
@@ -6670,6 +6681,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita show_tables definido dentro de la gramática. Muestra las tablas de una base de datos.
         override
         public string VisitShow_tables(SqlParser.Show_tablesContext context)
         {
@@ -6706,6 +6718,7 @@ namespace BasesDeDatos_Proyecto1
             return "void";
         }
 
+        //Visita identificador_completo definido dentro de la gramática.
         override
         public string VisitIdentificador_completo(SqlParser.Identificador_completoContext context)
         {
@@ -6882,6 +6895,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita multi_accion definido dentro de la gramática.
         override
         public string VisitMulti_accion(SqlParser.Multi_accionContext context)
         {
@@ -6906,6 +6920,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita crear_tabla definido dentro de la gramática. Permite crear una tabla en una base de datos.
         override
         public string VisitCrear_tabla(SqlParser.Crear_tablaContext context)
         {
@@ -7039,6 +7054,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita crear_BD definido dentro de la gramática. Permite crear una base de datos
         override
         public string VisitCrear_BD(SqlParser.Crear_BDContext context)
         {
@@ -7070,6 +7086,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita constrain_pk definido dentro de la gramática. Crea una restricción de primary key.
         override
         public string VisitConstrain_pk(SqlParser.Constrain_pkContext context)
         {
@@ -7127,6 +7144,7 @@ namespace BasesDeDatos_Proyecto1
             return "void";
         }
 
+        //Visita accion_addConstraint definido dentro de la gramática. Permite agregar una restricción.
         override
         public string VisitAccion_addConstraint(SqlParser.Accion_addConstraintContext context)
         {
@@ -7144,6 +7162,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Deserializa los datos de la metadata de las bases de datos
         private MasterBD deserializarMasterBD() {
             MasterBD bdatos;
             XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
@@ -7160,6 +7179,7 @@ namespace BasesDeDatos_Proyecto1
             return bdatos;
         }
 
+        //Deserializa los datos de la metadata de las tablas de una base de datos
         private MasterTabla deserializarMasterTabla() {
             //Deserealizar el archivo maestro de tablas
             MasterTabla mTabla;
@@ -7177,6 +7197,7 @@ namespace BasesDeDatos_Proyecto1
             return mTabla;
         }
 
+        //Serializa los datos de la metadata de las bases de datos
         private void serializarMasterBD() {
             XmlSerializer mySerializer = new XmlSerializer(typeof(MasterBD));
             StreamWriter myWriter = new StreamWriter("Databases\\masterBDs.xml");
@@ -7184,6 +7205,7 @@ namespace BasesDeDatos_Proyecto1
             myWriter.Close();
         }
 
+        //Serializa los datos de la metadata de las tablas de una base de datos
         private void serializarMasterTabla() {
             XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
             StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
@@ -7191,6 +7213,7 @@ namespace BasesDeDatos_Proyecto1
             myWriter.Close();
         }
 
+        //Carga los datos de las tablas
         private void cargarDatosTablas()
         {
             datosTablas = new List<FilaTabla>();
@@ -7202,6 +7225,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Guarda los datos de las tablas
         private void guardarDatosTablas()
         {
             foreach (FilaTabla filaTabla in datosTablas)
@@ -7210,6 +7234,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Obtiene la tabla que busca y los datos de ella
         private FilaTabla getFilaTabla(Tabla tabla)
         {
             foreach (FilaTabla filaTabla in datosTablas)
@@ -7222,12 +7247,13 @@ namespace BasesDeDatos_Proyecto1
             return null;
         }
 
-
-        //1 si uno es mayor a dos
-        //0 si son iguales
-        //-1 si dos es mayor a uno
+        //Compara dos listas de elementos
         private int comparar(object[] uno, object[] dos)
         {
+            //Devuelve 1 si uno es mayor a dos
+            //Devuelve 0 si son iguales
+            //Devuelve -1 si dos es mayor a uno
+        
             foreach (String[] ordenActual in ordenDeColumnas)
             {
                 //Obtener ASC o DESC
@@ -7294,6 +7320,7 @@ namespace BasesDeDatos_Proyecto1
             return 0;
         }
 
+        //Parte la lista en dos sublistas y elige el pivote
         private int Partition(List<object[]> particion, int left, int right)
         {
             object[] pivot = particion[left];
@@ -7324,6 +7351,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Realiza el ordenamiento con el algoritmo quicksort
         private void QuickSort_Recursive(List<object[]> arr, int left, int right)
         {
             // For Recusrion
