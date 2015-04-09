@@ -5932,6 +5932,12 @@ namespace BasesDeDatos_Proyecto1
         }
 
         override
+        public string VisitQuery_vacio(SqlParser.Query_vacioContext context)
+        {
+            return "void";
+        }
+
+        override
         public string VisitQuery(SqlParser.QueryContext context)
         {
             return Visit(context.GetChild(0));
