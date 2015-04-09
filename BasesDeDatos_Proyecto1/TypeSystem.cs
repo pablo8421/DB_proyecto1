@@ -36,6 +36,7 @@ namespace BasesDeDatos_Proyecto1
         private List<Object> datosUpdate;
         private List<String> columnasUpdate;
         private List<FilaTabla> datosTablas;
+        private int cantInserts;
 
         public TypeSystem() {
             errores = "";
@@ -46,6 +47,7 @@ namespace BasesDeDatos_Proyecto1
             ListaTablas = new List<Tabla>();
             datosUpdate = null;
             columnasUpdate = null;
+            cantInserts = 0;
         }
 
         public TypeSystem(String BDenUso)
@@ -2155,12 +2157,11 @@ namespace BasesDeDatos_Proyecto1
 
                 //Agregar los elementos
                 datos.agregarFila(row);                
-                //datos.guardar();
                 
                 //Actualizar cantidad de registros
                 masterBD.getBD(BDenUso).registros++;
-
-                mensajes += "Se han insertado los datos(" + row.Count + ") en la tabla '" + tabla.nombre + "' exitosamente."+ Environment.NewLine;
+                cantInserts++;
+                mensajes += "Se han insertado los datos en las columnas (" + row.Count + ") en la tabla '" + tabla.nombre + "' exitosamente."+ Environment.NewLine;
                 return "void";
             }
             //Con id_completo de columnas
@@ -6309,7 +6310,9 @@ namespace BasesDeDatos_Proyecto1
                     break;
                 }
             }
-            
+
+            if (cantInserts > 0)
+                mensajes += "Se han insertando " + cantInserts + " registros con éxito durante la ejecución." + Environment.NewLine;
             //Serealizar masterBD
             serializarMasterBD();
             if (!BDenUso.Equals(""))
