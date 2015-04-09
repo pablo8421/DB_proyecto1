@@ -1,4 +1,10 @@
-﻿namespace BasesDeDatos_Proyecto1
+﻿/*
+Pablo Sánchez, 12148
+César Guerra, 12593
+Sección 10
+Clase que maneja los componentes del GUI
+*/
+namespace BasesDeDatos_Proyecto1
 {
     partial class Form1
     {

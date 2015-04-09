@@ -16,20 +16,15 @@ namespace BasesDeDatos_Proyecto1
 {
     public class Restriccion
     {
-        //ID
-        public String nombre;
-        //PK, FK, CH
-        public String tipo;
-        //Sirve para PK y FK
-        public List<String> columnasPropias;
-        //Sirve para FK
-        public String tabla;
-        //Sirve para FK 
-        public List<String> columnasForaneas;
 
-        //Expresion del Check
-        public String restriccionCheck;
+        public String nombre;                   //Variable que guarda el nombre de la restricción
+        public String tipo;                     //Variable que guarda el tipo de restricción  (PK, FK, CHECK)
+        public List<String> columnasPropias;    //Variable que guarda las columnas a las que hace referencia una restricción dentro de una tabla (PK, FK)
+        public String tabla;                    //Variable que guarda el nombre de la tabla a la que hace referencia una restricción (FK)
+        public List<String> columnasForaneas;   //Variable que guarda los nombres de las columnas que son referenciadas y pertenecen a la tabla mencionada en la variable anterior (FK)
+        public String restriccionCheck;         //Variable que guarda en postfix la restricción que se colocó en el check
 
+        //Constructor
         public Restriccion() {
             nombre = "";
             tipo = "";
@@ -38,6 +33,7 @@ namespace BasesDeDatos_Proyecto1
             columnasForaneas = new List<String>();
         }
 
+        //Constructor con tipo personalizado
         public Restriccion(String tipo)
         {
             nombre = "";
@@ -60,6 +56,7 @@ namespace BasesDeDatos_Proyecto1
 
         }
         
+        //Realiza la descripción de las restricciones
         override
         public string ToString(){
             string descripcion = "\"";

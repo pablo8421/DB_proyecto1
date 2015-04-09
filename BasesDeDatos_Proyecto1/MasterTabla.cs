@@ -14,17 +14,20 @@ namespace BasesDeDatos_Proyecto1
 {
     public class MasterTabla
     {
-        public List<Tabla> tablas;
+        public List<Tabla> tablas;  //Variable que almacena la lista de tablas de una base de datos
 
+        //Constructor
         public MasterTabla() {
             tablas = new List<Tabla>();
         }
 
+        //Agrega una tabla a una base de datos
         public void agregarTabla(Tabla t)
         {
             tablas.Add(t);
         }
 
+        //Verifica si contiene una tabla con el nombre que se envió en el parametro
         public bool containsTable(String nombre)
         {
             foreach (Tabla t in tablas)
@@ -37,6 +40,7 @@ namespace BasesDeDatos_Proyecto1
             return false;
         }
 
+        //Obtiene una tabla de la base de datos
         public Tabla getTable(String nombre)
         {
             foreach (Tabla t in tablas)
@@ -49,6 +53,7 @@ namespace BasesDeDatos_Proyecto1
             return null;
         }
 
+        //Elimina una tabla de la base de datos
         public void borrarTabla(String nombre)
         {
             foreach (Tabla t in tablas)

@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+Pablo Sánchez, 12148
+César Guerra, 12593
+Sección 10
+Clase que genera los errores sintácticos de las queries
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,14 +18,17 @@ namespace BasesDeDatos_Proyecto1
 {
     class ErrorListener : BaseErrorListener 
     {
-        public String erroresTotal { get; set; }
-        public bool noHayError { get; set; }
+        public String erroresTotal { get; set; }    //Variable que almacena errores
+        public bool noHayError { get; set; }        //Variable que dice si hay o no errores
+        
+        //Constructor
         public ErrorListener() : base()
         {
             erroresTotal = "";
             noHayError = true;
         }
 
+        //Método que genera los errores sintácticos
         override
         public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
         {
