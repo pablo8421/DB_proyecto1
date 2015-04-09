@@ -7265,11 +7265,11 @@ namespace BasesDeDatos_Proyecto1
                 {
                     comparacion = ((Single)uno[indice]).CompareTo((Single)dos[indice]);
                 }
-                else if (ordenActual[3].Equals("DATE"))
+                else if (ordenActual[3].StartsWith("CHAR"))
                 {
                     comparacion = ((String)uno[indice]).CompareTo((String)dos[indice]);
                 }
-                else if (ordenActual[3].StartsWith("CHAR"))
+                else if (ordenActual[3].Equals("DATE"))
                 {
                     DateTime fechaUno = DateTime.Parse((String)uno[indice]);
                     DateTime fechaDos = DateTime.Parse((String)dos[indice]);
