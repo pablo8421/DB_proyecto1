@@ -111,7 +111,7 @@ columnas: ID tipo;
 multi_columnas: multi_columnas ',' columnas 
 			  |  columnas;
 
-crear_tabla: CREATE TABLE ID '(' multi_columnas (',' multi_constraint_completo)?')';
+crear_tabla: CREATE TABLE ID '(' (multi_columnas (',' multi_constraint_completo)?)?')';
 
 multi_exp : multi_exp 'OR' and_expression
 				| and_expression;

@@ -644,7 +644,6 @@ namespace BasesDeDatos_Proyecto1
             {
                 mensajes += "Obteniendo las columnas que se desean mostrar..." + Environment.NewLine;
             }
-            //TODO mostrar datos, hacer select
             String columnasAMostrar = context.GetChild(1).GetText();
             if (!columnasAMostrar.Equals("*"))
                 columnasAMostrar = Visit(context.GetChild(1));
@@ -658,7 +657,7 @@ namespace BasesDeDatos_Proyecto1
             //Generar la data a linkear con el DataGridView
             DataTable dt = new DataTable();
 
-            //Lennar las columnas
+            //Llenar las columnas
             for (int i = 0; i < resultado.tabla.columnas.Count; i++)
             {
                 dt.Columns.Add(resultado.tabla.columnas[i].Substring(0, resultado.tabla.columnas[i].IndexOf(".")) + " (" + resultado.tabla.columnas[i].Substring(resultado.tabla.columnas[i].IndexOf(".") + 1) + ")" + " [" + resultado.tabla.tipos_columnas[i] + "]");
@@ -6871,10 +6870,45 @@ namespace BasesDeDatos_Proyecto1
             }
 
             //Generar la nueva tabla
-            List<String> columnas = Visit(context.GetChild(4)).Split(',').ToList();
             Tabla nueva = new Tabla();
             nueva.nombre = context.GetChild(2).GetText();
 
+            //Verificar si la tabla ya existe
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que la tabla no exista..." + Environment.NewLine;
+            }
+            if (masterTabla.containsTable(nueva.nombre))
+            {
+                errores += "Error en linea " + context.start.Line + ": La base de datos " + BDenUso + " ya contiene una tabla " + nueva.nombre + "." + Environment.NewLine;
+                return "Error";
+            }
+            else
+            {
+                masterTabla.agregarTabla(nueva);
+            }
+
+            if (context.ChildCount == 5)
+            {
+                //Crear el archivo vacio de la tabla
+                if (hayVerbose)
+                {
+                    mensajes += "Creando los archivos..." + Environment.NewLine;
+                }
+                string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), BDenUso);
+                string fileName = nueva.nombre + ".dat";
+                path = System.IO.Path.Combine(path, fileName);
+                System.IO.FileStream fs = System.IO.File.Create(path);
+                fs.Close();
+
+
+                mensajes += "Se ha creado la tabla '" + nueva.nombre + "' en '" + BDenUso + "' con éxito.\r\n";
+                return "void";
+            }
+
+            //Generar las columnas
+            List<String> columnas = Visit(context.GetChild(4)).Split(',').ToList();
+            
             //Verificar si los tipos estan correctos
             if (hayVerbose)
             {
@@ -6885,6 +6919,7 @@ namespace BasesDeDatos_Proyecto1
                 String[] tupla = columna.Split(' ');
                 if (tupla[1].Equals("Error"))
                 {
+                    masterTabla.borrarTabla(nueva.nombre);
                     errores += "Error en línea " + context.start.Line +
                             ": El tipo CHAR debe contener al menos 1 caracter." + Environment.NewLine;
                     return "Error";
@@ -6899,24 +6934,10 @@ namespace BasesDeDatos_Proyecto1
             }
             if (!nueva.generarColumnas(columnas))
             {
+                masterTabla.borrarTabla(nueva.nombre);
                 errores += "Error en línea " + context.start.Line +
                            ": Se declararon dos columnas con el mismo nombre '" + nueva.columnas[0] + "'." + Environment.NewLine;
                 return "Error";
-            }
-
-            //Verificar si la tabla ya exite
-            if (hayVerbose)
-            {
-                mensajes += "Verificando que la tabla no exista..." + Environment.NewLine;
-            }
-            if (masterTabla.containsTable(nueva.nombre))
-            {
-                errores += "Error en linea " + context.start.Line + ": La base de datos "+BDenUso+" ya contiene una tabla " + nueva.nombre + "." + Environment.NewLine;
-                return "Error";
-            }
-            else
-            {
-                masterTabla.agregarTabla(nueva);
             }
 
             //En caso que no haya constraints
