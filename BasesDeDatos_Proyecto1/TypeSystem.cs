@@ -783,6 +783,10 @@ namespace BasesDeDatos_Proyecto1
             String nombre = ListaTablas.ElementAt(0).nombre;
             String nuevoNombre = context.GetChild(2).GetText();
 
+            if (hayVerbose)
+            {
+                mensajes += "Verificando si no existe una base da datos con el mismo nombre..." + Environment.NewLine;
+            }
             if (masterTabla.containsTable(nuevoNombre)) {
                 errores += "Error en linea " + context.start.Line + ": Ya existe una tabla con el nombre '" + nuevoNombre + "' por lo que no se le puede cambiar de nombre a la tabla '" + nombre + "'.\r\n";
                 return "Error";
@@ -793,7 +797,10 @@ namespace BasesDeDatos_Proyecto1
                 if (t.nombre.Equals(nombre))
                 {
                     t.nombre = nuevoNombre;
-
+                    if (hayVerbose)
+                    {
+                        mensajes += "Creando los archivos..." + Environment.NewLine;
+                    }
                     String pathViejo = "Databases\\" + BDenUso + "\\" + nombre + ".dat";
                     String pathNuevo = "Databases\\" + BDenUso + "\\" + nuevoNombre + ".dat";
                     System.IO.File.Move(pathViejo, pathNuevo);
@@ -811,8 +818,6 @@ namespace BasesDeDatos_Proyecto1
                 }   
             }
 
-            //Aqui se serializaba masterTabla
-
             mensajes += "Se ha renombrado la tabla '" + nombre + "' a '" + nuevoNombre + "' con éxito.\r\n";
 
             return "void";
@@ -822,7 +827,10 @@ namespace BasesDeDatos_Proyecto1
         public string VisitBotar_BD(SqlParser.Botar_BDContext context)
         {
             String nombre = context.GetChild(2).GetText();
-
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que la base de datos a eliminar exista..." + Environment.NewLine;
+            }
             if (masterBD.containsBD(nombre)) 
             {
                 DialogResult resultado = MessageBox.Show("Seguro que desea botar " + nombre + " con " + masterBD.getRegistros(nombre) + " registros", "Confirmación", MessageBoxButtons.YesNo);
@@ -3802,6 +3810,10 @@ namespace BasesDeDatos_Proyecto1
         public string VisitAlter_table(SqlParser.Alter_tableContext context)
         {
             String nTabla = context.GetChild(2).GetText();
+            if (hayVerbose)
+            {
+                mensajes += "Verificando si hay una base de datos en uso..." + Environment.NewLine;
+            }
             if (BDenUso.Equals(""))
             {
                 errores += "Error en línea " + context.start.Line + ": No hay base de datos en uso por lo que no se puede alterar la tabla.";
@@ -3809,6 +3821,10 @@ namespace BasesDeDatos_Proyecto1
             }
 
             //Verificar si la tabla existe
+            if (hayVerbose)
+            {
+                mensajes += "Verificando si la tabla existe..." + Environment.NewLine;
+            }
             if (!masterTabla.containsTable(nTabla))
             {
                 errores += "Error en linea " + context.start.Line + ": La base de datos " + BDenUso + " no contiene una tabla " + nTabla + "." + Environment.NewLine;
@@ -3827,12 +3843,20 @@ namespace BasesDeDatos_Proyecto1
         {
             Tabla tActual = ListaTablas[0];
             String cBorrar = context.GetChild(2).GetText();
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que la columna exista..." + Environment.NewLine;
+            }
             if (!tActual.columnas.Contains(cBorrar))
             {
                 errores += "Error en la línea " + context.start.Line + ": La tabla '" + tActual.nombre + "' no contiene la columna '" + cBorrar + "'.\r\n";
                 return "Error";
             }
 
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que la columna a borrar no tenga restricciones..." + Environment.NewLine;
+            }
             foreach (Restriccion r in tActual.restricciones)
             {
                 if (r.columnasPropias.Contains(cBorrar))
@@ -5193,11 +5217,20 @@ namespace BasesDeDatos_Proyecto1
             String nombre = context.GetChild(2).GetText();
             String nuevoNombre = context.GetChild(5).GetText();
 
+            if (hayVerbose)
+            {
+                mensajes += "Verificando si la base de datos en uso es la que se le quiere cambiar nombre..." + Environment.NewLine;
+            }
+
             if (nombre.Equals(BDenUso))
             {
                 BDenUso = nuevoNombre;
             }
 
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que la base de datos a la que se le quiere cambiar nombre exista..." + Environment.NewLine;
+            }
             if (masterBD.containsBD(nombre))
             {
                 foreach (BaseDatos bd in masterBD.basesDeDatos)
@@ -5205,7 +5238,10 @@ namespace BasesDeDatos_Proyecto1
                     if (bd.nombre.Equals(nombre))
                     {
                         bd.nombre = nuevoNombre;
-
+                        if (hayVerbose)
+                        {
+                            mensajes += "Renombrando la base de datos..." + Environment.NewLine;
+                        }
                         String pathViejo = "Databases\\" + nombre + "\\" + nombre + ".xml";
                         String pathNuevo = "Databases\\" + nombre + "\\" + nuevoNombre + ".xml";
                         System.IO.File.Move(pathViejo, pathNuevo);
@@ -5484,6 +5520,10 @@ namespace BasesDeDatos_Proyecto1
                 String columna = context.GetChild(2).GetText();
                 String tipo = Visit(context.GetChild(3));
 
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando que los tipos de las columnas sean validos..." + Environment.NewLine;
+                }
                 if (tipo.Equals("Error"))
                 {
                     errores += "Error en línea " + context.start.Line +
@@ -5493,6 +5533,10 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 //Revisar si ya existe la columna
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando que si la tabla no contiene una columna que se llame igual..." + Environment.NewLine;
+                }
                 if (tabla.columnas.Contains(columna))
                 {
                     errores += "Error en línea " + context.start.Line +
@@ -5533,8 +5577,6 @@ namespace BasesDeDatos_Proyecto1
                     
                 }
 
-                //contenido.guardar();
-
                 mensajes += "Se ha agregado la columna '" + columna + "' en la tabla '" + tabla.nombre + "' con éxito." + Environment.NewLine;
                 return "void";
             }
@@ -5545,6 +5587,10 @@ namespace BasesDeDatos_Proyecto1
                 String columna = context.GetChild(2).GetText();
                 String tipo = context.GetChild(3).GetText();
 
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando si la columna ya existe..." + Environment.NewLine;
+                }
                 //Revisar si ya existe la columna
                 if (tabla.columnas.Contains(columna))
                 {
@@ -5560,6 +5606,10 @@ namespace BasesDeDatos_Proyecto1
                 tabla.tipos_columnas.Add(tipo);
 
                 //Verificar las constraints agregadas
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando que las restricciones sean válidas..." + Environment.NewLine;
+                }
                 String resultadoConstraints = Visit(context.GetChild(4));
                 if (resultadoConstraints.Equals("Error"))
                 {
@@ -5598,13 +5648,9 @@ namespace BasesDeDatos_Proyecto1
 
                 }
 
-                //contenido.guardar();
 
-                XmlSerializer mySerializer = new XmlSerializer(typeof(MasterTabla));
-                StreamWriter myWriter = new StreamWriter("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
-                mySerializer.Serialize(myWriter, masterTabla);
-                myWriter.Close();
-
+                mensajes += "Se ha agregado la columna '" + columna + "' en la tabla '" + tabla.nombre + "' con éxito." + Environment.NewLine;
+                
                 return "void";
             }
         }
@@ -5827,6 +5873,10 @@ namespace BasesDeDatos_Proyecto1
             else
             {
                 resultados.RowCount = masterBD.basesDeDatos.Count;
+                if (hayVerbose)
+                {
+                    mensajes += "Recopilando las bases de datos existentes..." + Environment.NewLine;
+                }
                 for (int i = 0; i < resultados.RowCount; i++)
                 {
                     resultados.Rows[i].Cells[0].Value = masterBD.basesDeDatos.ElementAt(i).nombre;
@@ -6276,7 +6326,15 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitUsar_BD(SqlParser.Usar_BDContext context)
         {
+            if (hayVerbose)
+            {
+                mensajes += "Verificando si hay una base de datos en uso..." + Environment.NewLine;
+            }
             if (!BDenUso.Equals("")) {
+                if (hayVerbose)
+                {
+                    mensajes += "Serializando los datos de la base de datos anterior..." + Environment.NewLine;
+                }
                 serializarMasterTabla(); 
                 serializarMasterBD();
                 guardarDatosTablas();
@@ -6287,6 +6345,10 @@ namespace BasesDeDatos_Proyecto1
             MasterBD bdatos;
             bdatos = deserializarMasterBD();
 
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que la base de datos a usar exista..." + Environment.NewLine;
+            }
             if (bdatos.containsBD(nombre))
             {
                 BDenUso = nombre;
@@ -6320,6 +6382,10 @@ namespace BasesDeDatos_Proyecto1
         {
             Tabla tablaA = ListaTablas.ElementAt(0);
             String nRestriccion = context.GetChild(2).GetText();
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que la restricción exista..." + Environment.NewLine;
+            }
             for (int i = 0; i < tablaA.restricciones.Count;i++){
                 Restriccion rAux = tablaA.restricciones.ElementAt(i);
                 if (rAux.nombre.Equals(nRestriccion)) {
@@ -6794,6 +6860,10 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitCrear_tabla(SqlParser.Crear_tablaContext context)
         {
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que haya una base de datos en uso..." + Environment.NewLine;
+            }
             if (BDenUso.Equals(""))
             {
                 errores += "Error en linea " + context.start.Line + ": No hay base de datos en uso para agregar la tabla " + context.GetChild(2).GetText() + "." + BDenUso+ Environment.NewLine;
@@ -6806,6 +6876,10 @@ namespace BasesDeDatos_Proyecto1
             nueva.nombre = context.GetChild(2).GetText();
 
             //Verificar si los tipos estan correctos
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que los tipos son correctos..." + Environment.NewLine;
+            }
             foreach (String columna in columnas)
             {
                 String[] tupla = columna.Split(' ');
@@ -6819,6 +6893,10 @@ namespace BasesDeDatos_Proyecto1
             }
 
             //Generar las columnas
+            if (hayVerbose)
+            {
+                mensajes += "Generando las columnas de la tabla..." + Environment.NewLine;
+            }
             if (!nueva.generarColumnas(columnas))
             {
                 errores += "Error en línea " + context.start.Line +
@@ -6827,6 +6905,10 @@ namespace BasesDeDatos_Proyecto1
             }
 
             //Verificar si la tabla ya exite
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que la tabla no exista..." + Environment.NewLine;
+            }
             if (masterTabla.containsTable(nueva.nombre))
             {
                 errores += "Error en linea " + context.start.Line + ": La base de datos "+BDenUso+" ya contiene una tabla " + nueva.nombre + "." + Environment.NewLine;
@@ -6841,8 +6923,11 @@ namespace BasesDeDatos_Proyecto1
             if (context.ChildCount == 6)
             {
                 //Crear el archivo vacio de la tabla
+                if (hayVerbose)
+                {
+                    mensajes += "Creando los archivos..." + Environment.NewLine;
+                } 
                 string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), BDenUso);
-                //No se si deberia de ser un xml
                 string fileName = nueva.nombre + ".dat";
                 path = System.IO.Path.Combine(path, fileName);
                 System.IO.FileStream fs = System.IO.File.Create(path);
@@ -6856,6 +6941,10 @@ namespace BasesDeDatos_Proyecto1
             else
             {
                 //Manejar las constraint
+                if (hayVerbose)
+                {
+                    mensajes += "Verificando que las restricciones sean válidas..." + Environment.NewLine;
+                }
                 ListaTablas = new List<Tabla>();
                 ListaTablas.Add(nueva);
                 if(Visit(context.GetChild(6)).Equals("Error")){
@@ -6864,8 +6953,11 @@ namespace BasesDeDatos_Proyecto1
                 }
 
                 //Crear el archivo vacio de la tabla
+                if (hayVerbose)
+                {
+                    mensajes += "Creando los archivos..." + Environment.NewLine;
+                } 
                 string path = System.IO.Path.Combine(Path.GetFullPath("Databases"), BDenUso);
-
                 string fileName = nueva.nombre + ".dat";
                 path = System.IO.Path.Combine(path, fileName);
                 System.IO.FileStream fs = System.IO.File.Create(path);
@@ -6881,7 +6973,9 @@ namespace BasesDeDatos_Proyecto1
         {
             String nombre;
             nombre = context.GetChild(2).GetText();
-
+            if (hayVerbose) {
+                mensajes += "Verificando que la base de datos a crear no exista..."+Environment.NewLine;
+            }
             if (!masterBD.containsBD(nombre))
             {
                 BaseDatos nBaseDatos = new BaseDatos(nombre);
@@ -6965,6 +7059,10 @@ namespace BasesDeDatos_Proyecto1
         override
         public string VisitAccion_addConstraint(SqlParser.Accion_addConstraintContext context)
         {
+            if (hayVerbose)
+            {
+                mensajes += "Verificando que las restricciones sean válidas..." + Environment.NewLine;
+            }
             if (Visit(context.GetChild(1)).Equals("void"))
             {
                 return "void";
