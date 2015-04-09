@@ -29,41 +29,6 @@ namespace BasesDeDatos_Proyecto1
         {
             InitializeComponent();
             databaseActual = "";
-
-            this.dataGridView1.SortCompare += new DataGridViewSortCompareEventHandler(this.costum_SortCompare);
-        }
-
-        //Ordenamiento de los datos para el order by
-        private void costum_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            throw new NotImplementedException();
-            try
-            {
-                if (DBNull.Value.Equals(e.CellValue1) || DBNull.Value.Equals(e.CellValue2))
-                {
-                    if (DBNull.Value.Equals(e.CellValue1) || e.CellValue1.Equals(null))
-                    {
-                        e.SortResult = 1;
-                    }
-                    else if (DBNull.Value.Equals(e.CellValue2) || e.CellValue2.Equals(null))
-                    {
-                        e.SortResult = -1;
-                    }
-                }
-                else
-                {
-                    //if (e.CellValue1 is Int32)
-                    //{
-                    //    e.SortResult = ((Int32)e.CellValue1).CompareTo((Int32)e.CellValue1);
-                    //}
-                    e.SortResult = (e.CellValue1 as IComparable).CompareTo(e.CellValue2 as IComparable);
-                }
-                //e.Handled = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
         }
 
         //Botón que carga un archivo .sql en el DBMS
