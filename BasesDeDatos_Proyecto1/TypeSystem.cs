@@ -6363,6 +6363,7 @@ namespace BasesDeDatos_Proyecto1
             if (cantInserts > 0)
                 mensajes += "Se han insertando " + cantInserts + " registros con éxito durante la ejecución." + Environment.NewLine;
             //Serealizar masterBD
+            
             serializarMasterBD();
             if (!BDenUso.Equals(""))
             {
@@ -7165,16 +7166,24 @@ namespace BasesDeDatos_Proyecto1
         //Deserializa los datos de la metadata de las bases de datos
         private MasterBD deserializarMasterBD() {
             MasterBD bdatos;
+            StreamReader reader = null;
             XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
             try
             {
-                StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
+                reader = new StreamReader("Databases\\masterBDs.xml");
                 bdatos = (MasterBD)serializer.Deserialize(reader);
                 reader.Close();
             }
-            catch (Exception e)
+            catch (DirectoryNotFoundException e)
             {
                 bdatos = new MasterBD();
+                System.IO.Directory.CreateDirectory("Databases");
+                System.IO.FileStream fs = System.IO.File.Create("Databases\\masterBDs.xml");
+                fs.Close();
+            }
+            catch (InvalidOperationException e) {
+                bdatos = new MasterBD();
+                reader.Close();
             }
             return bdatos;
         }
@@ -7184,15 +7193,23 @@ namespace BasesDeDatos_Proyecto1
             //Deserealizar el archivo maestro de tablas
             MasterTabla mTabla;
             XmlSerializer serializer = new XmlSerializer(typeof(MasterTabla));
+            StreamReader reader = null;
             try
             {
-                StreamReader reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
                 mTabla = (MasterTabla)serializer.Deserialize(reader);
                 reader.Close();
             }
-            catch (Exception e)
+            catch (DirectoryNotFoundException e)
             {
                 mTabla = new MasterTabla();
+                System.IO.Directory.CreateDirectory("Databases\\" + BDenUso);
+                System.IO.FileStream fs = System.IO.File.Create("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
+                fs.Close();
+            }
+            catch (InvalidOperationException e) {
+                mTabla = new MasterTabla();
+                reader.Close();
             }
             return mTabla;
         }
