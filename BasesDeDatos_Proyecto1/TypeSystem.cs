@@ -23,22 +23,21 @@ namespace BasesDeDatos_Proyecto1
 {
     class TypeSystem : SqlBaseVisitor<String>
     {
-        public String errores;
-        public String mensajes;
-        public DataGridView resultados;
-        public String BDenUso;
-        public Boolean hayVerbose;
+        public String errores;                      //Variable que almacena los mensajes de error
+        public String mensajes;                     //Variable que almacena los mensajes del verbose y éxito
+        public DataGridView resultados;             //Variable que representa la tabla para mostrar los datos
+        public String BDenUso;                      //Variable que almacena la base de datos que está en uso
+        public Boolean hayVerbose;                  //Variable que permite decidir si hacer o no el verbose
+        private MasterTabla masterTabla;            //Variable que guarda la data de las tablas de la base de datos en uso
+        private MasterBD masterBD;                  //Variable que guarda la data de las bases de datos
+        private List<Tabla> ListaTablas;            //Variable que permite el paso de información de datos de tablas entre los visitors
+        private List<Object> datosUpdate;           //Variable que permite el paso de información de datos de las tablas a actualizar entre los visitors
+        private List<String> columnasUpdate;        //Variable que permite el paso de información de las columnas de las tablas entre los visitors
+        private List<FilaTabla> datosTablas;        //Variable que permite el paso de información de los registros de una tabla entre los visitor
+        private int cantInserts;                    //Variable que cuenta la cantidad de inserts que se realizan en una ejecución
+        private List<String[]> ordenDeColumnas;     //Variable que permite saber como realizar el order by en un select y pasa la información entre los visitors
 
-        private MasterTabla masterTabla;
-        private MasterBD masterBD;
-
-        private List<Tabla> ListaTablas;
-        private List<Object> datosUpdate;
-        private List<String> columnasUpdate;
-        private List<FilaTabla> datosTablas;
-        private int cantInserts;
-        private List<String[]> ordenDeColumnas;
-
+        //Constructor
         public TypeSystem() {
             errores = "";
             mensajes = "";
@@ -51,6 +50,7 @@ namespace BasesDeDatos_Proyecto1
             cantInserts = 0;
         }
 
+        //Constructor con una base de datos personalizada
         public TypeSystem(String BDenUso)
         {
             if (BDenUso == null)
@@ -76,6 +76,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita id_completo definido dentro de la gramática
         override
         public string VisitId_completo(SqlParser.Id_completoContext context)
         {
@@ -155,6 +156,7 @@ namespace BasesDeDatos_Proyecto1
             throw new NotImplementedException();
         }
 
+        //Visita asignacion definido dentro de la gramática
         override
         public string VisitAsignacion(SqlParser.AsignacionContext context)
         {
@@ -348,6 +350,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita tipo definido dentro de la gramática
         override
         public string VisitTipo(SqlParser.TipoContext context)
         {
@@ -363,6 +366,7 @@ namespace BasesDeDatos_Proyecto1
             return tipo;
         }
 
+        //Visita multi_exp definido dentro de la gramática
         override
         public string VisitMulti_exp(SqlParser.Multi_expContext context)
         {
@@ -394,6 +398,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita select_where definido dentro de la gramática
         override
         public string VisitSelect_where(SqlParser.Select_whereContext context)
         {
@@ -416,6 +421,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita id_tablas definido dentro de la gramática
         override
         public string VisitId_tablas(SqlParser.Id_tablasContext context)
         {
@@ -464,6 +470,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita select_orderBy definido dentro de la gramática
         override
         public string VisitSelect_orderBy(SqlParser.Select_orderByContext context)
         {
@@ -477,6 +484,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Realiza el producto cartesiano entre tablas
         private FilaTabla juntarTablas(List<Tabla> listaTablas)
         {
             //Cargar los datos a usar
@@ -544,6 +552,7 @@ namespace BasesDeDatos_Proyecto1
             return fResultado;
         }
 
+        //Visita select definido dentro de la gramática. Realiza la instruccion select en base a lo ingresado.
         override
         public string VisitSelect(SqlParser.SelectContext context)
         {
@@ -706,6 +715,7 @@ namespace BasesDeDatos_Proyecto1
             return "void";
         }
 
+        //Visita valor_completo definido dentro de la gramática.
         override
         public string VisitValor_completo(SqlParser.Valor_completoContext context)
         {
@@ -775,6 +785,7 @@ namespace BasesDeDatos_Proyecto1
             
         }
 
+        //Visita accion_rename definido dentro de la gramática. Renombra una tabla.
         override
         public string VisitAccion_rename(SqlParser.Accion_renameContext context)
         {
@@ -821,6 +832,7 @@ namespace BasesDeDatos_Proyecto1
             return "void";
         }
 
+        //Visita botar_bd definido dentro de la gramática. Elimina una base de datos.
         override
         public string VisitBotar_BD(SqlParser.Botar_BDContext context)
         {
@@ -859,6 +871,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Método encargado de verificar ciertas restricciones de una PK
         private bool verificarRestriccionPK(FilaTabla datos, int nLinea)
         {
             foreach (Restriccion restriccion in datos.tabla.restricciones)
@@ -944,6 +957,7 @@ namespace BasesDeDatos_Proyecto1
             return true;
         }
 
+        //Método encargado de verificar restricciones de PK, FK, CHECK
         private bool verificarRestricciones(FilaTabla datos, List<Object> row, int nLinea, int indiceFila)
         {
             //Por cada restriccion
@@ -1977,6 +1991,7 @@ namespace BasesDeDatos_Proyecto1
             return true;
         }
 
+        //Visita insert definido dentro de la gramática. Realiza la funcionalidad del insert según lo ingresado.
         override
         public string VisitInsert(SqlParser.InsertContext context)
         {
@@ -2365,6 +2380,7 @@ namespace BasesDeDatos_Proyecto1
             throw new NotImplementedException();
         }
 
+        //Verifica la restricción de primary key para el caso de un update
         public bool verificarPrimaryKeyUpdate(List<Object> rowUpdate, List<String> columnas, FilaTabla fila, int nLinea) {
             foreach (Restriccion r in fila.tabla.restricciones) {
                 if (r.tipo.Equals("PK")) {
@@ -2397,6 +2413,7 @@ namespace BasesDeDatos_Proyecto1
             return true;
         }
 
+        //Verifica la restricción check para el caso de un update
         public bool verificarCheckUpdate(List<Object> rowUpdate, List<Object> row, List<String> columnas, FilaTabla datos, int nLinea)
         {
             foreach (Restriccion restriccion in datos.tabla.restricciones)
@@ -3540,6 +3557,7 @@ namespace BasesDeDatos_Proyecto1
             return true;
         }
 
+        //Verifica la restricción de foreign key para el caso de un update
         private bool verificarForeignKeyUpdate(FilaTabla datos, List<Object> datosUpdate, List<String> columnasUpdate, int nLinea)
         {
             foreach (Restriccion restriccion in datos.tabla.restricciones)
@@ -3588,6 +3606,7 @@ namespace BasesDeDatos_Proyecto1
             return true;
         }
 
+        //Visita update definido dentro de la gramática. Realiza la funcionalidad del update según lo ingresado.
         override
         public string VisitUpdate(SqlParser.UpdateContext context)
         {
@@ -3803,6 +3822,7 @@ namespace BasesDeDatos_Proyecto1
             return "void";
         }
 
+        //Visita alter_table definido dentro de la gramática. Altera una tabla segun lo ingresado.
         override
         public string VisitAlter_table(SqlParser.Alter_tableContext context)
         {
@@ -3835,6 +3855,7 @@ namespace BasesDeDatos_Proyecto1
             return Visit(context.GetChild(3));
         }
 
+        //Visita accion_DropColumn definido dentro de la gramática. Elimina una columna de una tabla.
         override
         public string VisitAccion_DropColumn(SqlParser.Accion_DropColumnContext context)
         {
@@ -3887,6 +3908,7 @@ namespace BasesDeDatos_Proyecto1
             return "void";
         }
 
+        //Verifica si lo ingresado cumple cierta condición según el WHERE.
         private bool cumpleCondicion(List<Object> row, Tabla tabla, String postfix)
         {
             Stack<String> stack = new Stack<String>();
@@ -4977,6 +4999,7 @@ namespace BasesDeDatos_Proyecto1
             return stack.Pop().Equals("TRUE ");
         }
 
+        //Verifica si una columna es referenciada por otra para permitir ciertas funcionalidades
         private bool esReferenciado(List<Object> row, Tabla tabla, MasterTabla mTablas, out String pk)
         {
             //Para cada tabla
@@ -5068,7 +5091,7 @@ namespace BasesDeDatos_Proyecto1
             return false;
         }
 
-
+        //Visita delete definido dentro de la gramática. Realiza la funcionalidad del delete según lo ingresado.
         override
         public string VisitDelete(SqlParser.DeleteContext context)
         {
@@ -5208,6 +5231,7 @@ namespace BasesDeDatos_Proyecto1
 
         }
 
+        //Visita renombrar_BD definido dentro de la gramática. Realiza la funcionalidad renombrar una base de datos.
         override
         public string VisitRenombrar_BD(SqlParser.Renombrar_BDContext context)
         {
@@ -5260,6 +5284,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita botar_table definido dentro de la gramática. Realiza la funcionalidad eliminar una tabla de una base de datos
         override
         public string VisitBotar_table(SqlParser.Botar_tableContext context)
         {
@@ -5334,6 +5359,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita show_columns definido dentro de la gramática. Muestra las columnas de una tabla.
         override
         public string VisitShow_columns(SqlParser.Show_columnsContext context)
         {
@@ -5411,6 +5437,7 @@ namespace BasesDeDatos_Proyecto1
             }    
         }
 
+        //Visita and_expression definido dentro de la gramática.
         override
         public string VisitAnd_expression(SqlParser.And_expressionContext context)
         {
@@ -5442,6 +5469,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita multi_id definido dentro de la gramática.
         override
         public string VisitMulti_id(SqlParser.Multi_idContext context)
         {
@@ -5470,6 +5498,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita mayMin_expression definido dentro de la gramática.
         override
         public string VisitMayMin_expression(SqlParser.MayMin_expressionContext context)
         {
@@ -5507,6 +5536,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita accion_addColumn definido dentro de la gramática. Agrega una columna a una tabla.
         override
         public string VisitAccion_addColumn(SqlParser.Accion_addColumnContext context)
         {
@@ -5652,6 +5682,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Verifica de que tablas puede venir una columna
         private List<String> getTablasOrigen(String columna)
         {
             List<String> resultado = new List<String>();
@@ -5666,6 +5697,7 @@ namespace BasesDeDatos_Proyecto1
             return resultado;
         }
 
+        //Visita exp_Ident definido dentro de la gramática.
         override
         public string VisitExp_Ident(SqlParser.Exp_IdentContext context)
         {
@@ -5758,18 +5790,21 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita exp_Int definido dentro de la gramática.
         override
         public string VisitExp_Int(SqlParser.Exp_IntContext context)
         {
             return "INT  " + context.GetText();
         }
 
+        //Visita exp_Float definido dentro de la gramática.
         override
         public string VisitExp_Float(SqlParser.Exp_FloatContext context)
         {
             return "FLOAT" + context.GetText();
         }
 
+        //Verifica si un string puede ser una fecha
         private bool isDate(String texto)
         {
             if (texto.StartsWith("'"))
@@ -5843,6 +5878,7 @@ namespace BasesDeDatos_Proyecto1
             return false;
         }
 
+        //Visita exp_String definido dentro de la gramática.
         override
         public string VisitExp_String(SqlParser.Exp_StringContext context)
         {
@@ -5856,11 +5892,14 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita exp_Null definido dentro de la gramática.
         override
         public string VisitExp_Null(SqlParser.Exp_NullContext context)
         {
             return "NULL NULL";
         }
+
+        //Visita mostrar_BD definido dentro de la gramática. Muestra las bases de datos existentes.
         override
         public string VisitMostrar_BD(SqlParser.Mostrar_BDContext context)
         {
@@ -5888,12 +5927,14 @@ namespace BasesDeDatos_Proyecto1
             return "void";
         }
 
+        //Visita Columnas definido dentro de la gramática.
         override
         public string VisitColumnas(SqlParser.ColumnasContext context)
         {
             return context.GetChild(0).GetText() + " " + Visit(context.GetChild(1));
         }
 
+        //Visita difEq_expression definido dentro de la gramática.
         override
         public string VisitDifEq_expression(SqlParser.DifEq_expressionContext context)
         {
@@ -5931,18 +5972,21 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Visita query_vacio definido dentro de la gramática. Permite los comentarios de línea y el uso ilimitado de ';'
         override
         public string VisitQuery_vacio(SqlParser.Query_vacioContext context)
         {
             return "void";
         }
 
+        //Visita query definido dentro de la gramática.
         override
         public string VisitQuery(SqlParser.QueryContext context)
         {
             return Visit(context.GetChild(0));
         }
 
+        //Visita id_completo_orderVarios definido dentro de la gramática.
         override
         public string VisitId_completo_orderVarios(SqlParser.Id_completo_orderVariosContext context)
         {
@@ -7103,16 +7147,16 @@ namespace BasesDeDatos_Proyecto1
         private MasterBD deserializarMasterBD() {
             MasterBD bdatos;
             XmlSerializer serializer = new XmlSerializer(typeof(MasterBD));
-            StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
             try
             {
+                StreamReader reader = new StreamReader("Databases\\masterBDs.xml");
                 bdatos = (MasterBD)serializer.Deserialize(reader);
+                reader.Close();
             }
             catch (Exception e)
             {
                 bdatos = new MasterBD();
             }
-            reader.Close();
             return bdatos;
         }
 
@@ -7120,16 +7164,16 @@ namespace BasesDeDatos_Proyecto1
             //Deserealizar el archivo maestro de tablas
             MasterTabla mTabla;
             XmlSerializer serializer = new XmlSerializer(typeof(MasterTabla));
-            StreamReader reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
             try
             {
+                StreamReader reader = new StreamReader("Databases\\" + BDenUso + "\\" + BDenUso + ".xml");
                 mTabla = (MasterTabla)serializer.Deserialize(reader);
+                reader.Close();
             }
             catch (Exception e)
             {
                 mTabla = new MasterTabla();
             }
-            reader.Close();
             return mTabla;
         }
 
@@ -7221,11 +7265,11 @@ namespace BasesDeDatos_Proyecto1
                 {
                     comparacion = ((Single)uno[indice]).CompareTo((Single)dos[indice]);
                 }
-                else if (ordenActual[3].StartsWith("CHAR"))
+                else if (ordenActual[3].Equals("DATE"))
                 {
                     comparacion = ((String)uno[indice]).CompareTo((String)dos[indice]);
                 }
-                else if (ordenActual[3].Equals("DATE"))
+                else if (ordenActual[3].StartsWith("CHAR"))
                 {
                     DateTime fechaUno = DateTime.Parse((String)uno[indice]);
                     DateTime fechaDos = DateTime.Parse((String)dos[indice]);
