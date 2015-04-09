@@ -7200,7 +7200,10 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else if (ordenActual[3].StartsWith("CHAR"))
                 {
-                    comparacion = ((String)uno[indice]).CompareTo((String)dos[indice]);
+                    DateTime fechaUno = DateTime.Parse((String)uno[indice]);
+                    DateTime fechaDos = DateTime.Parse((String)dos[indice]);
+
+                    comparacion = fechaUno.CompareTo(fechaDos);
                 }
                 else
                 {

@@ -226,7 +226,6 @@ namespace BasesDeDatos_Proyecto1
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.Size = new System.Drawing.Size(469, 482);
             this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.costum_SortCompare);
             // 
             // Form1
             // 
