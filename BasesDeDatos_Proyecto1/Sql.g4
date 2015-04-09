@@ -55,29 +55,33 @@ fragment NUMBER: [0-9];
 
 FLOAT : '-'? NUMBER+ '.' NUMBER+;
 INT : '-'? NUMBER+;
+SL_COMMENT:  '//' ~('\r' | '\n')*;
 STRING: '\'' .*? '\'';
-
 ID : LETTER (LETTER|NUMBER|'!'|'#'|'$'|'%'|'&'|'+'|'-'|'@'|'['|']'|'^'|'_'|'`'|'{'|'}'|'~')*; 
 IDENTIFICADOR: ID '.' ID; 
 
 //--------------------------------------
 
-full_query: (queries+= query ';')*;
+full_query: (queries+= query)*;
 
-query: crear_BD			
-	 | renombrar_BD		
-	 | botar_BD			
-	 | mostrar_BD		
-	 | usar_BD			
-	 | crear_tabla		
-	 | alter_table		
-	 | botar_table		
-	 | show_tables		
-	 | show_columns		
-	 | insert			
-	 | update			
-	 | delete			
-	 | select;			
+query_vacio: SL_COMMENT
+	 | ';';
+
+query: crear_BD ';'			
+	 | renombrar_BD ';'		
+	 | botar_BD	';'		
+	 | mostrar_BD ';'		
+	 | usar_BD ';'			
+	 | crear_tabla ';'		
+	 | alter_table ';'		
+	 | botar_table ';'		
+	 | show_tables ';'		
+	 | show_columns	';'	
+	 | insert ';'			
+	 | update ';'			
+	 | delete ';'			
+	 | select ';'
+	 | query_vacio;			
 
 crear_BD: CREATE DATABASE ID;
 
