@@ -7150,5 +7150,53 @@ namespace BasesDeDatos_Proyecto1
             }
             return null;
         }
+
+
+        //1 si uno es mayor a dos
+        //0 si son iguales
+        //-1 si dos es mayor a uno
+        private int comparar(List<Object> uno, List<Object> dos, List<String> orden)
+        {
+            return 0;
+        }
+
+        private int Partition(List<List<Object>> particion, int left, int right)
+        {
+            List<Object> pivot = particion[left];
+            while (true)
+            {
+                while (comparar(particion[right], pivot, new List<string>()) == -1)
+                    left++;
+
+                while (comparar(particion[right], pivot, new List<string>()) == 1)
+                    right--;
+
+                if (left < right)
+                {
+                    List<Object> temp = particion[right];
+                    particion[right] = particion[left];
+                    particion[left] = temp;
+                }
+                else
+                {
+                    return right;
+                }
+            }
+        }
+
+        private void QuickSort_Recursive(List<List<Object>> arr, int left, int right)
+        {
+            // For Recusrion
+            if (left < right)
+            {
+                int pivot = Partition(arr, left, right);
+
+                if (pivot > 1)
+                    QuickSort_Recursive(arr, left, pivot - 1);
+
+                if (pivot + 1 < right)
+                    QuickSort_Recursive(arr, pivot + 1, right);
+            }
+        }
     }
 }
