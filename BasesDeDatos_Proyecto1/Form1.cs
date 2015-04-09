@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+Pablo Sánchez, 12148
+César Guerra, 12593
+Sección 10
+Clase que maneja las funcionalidades del GUI
+*/
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,8 +22,9 @@ namespace BasesDeDatos_Proyecto1
 {
     public partial class Form1 : Form
     {
-        String databaseActual;
+        String databaseActual;  //Variable que almacena la base de datos que se está usando actualmente
 
+        //Constructor
         public Form1()
         {
             InitializeComponent();
@@ -26,6 +33,7 @@ namespace BasesDeDatos_Proyecto1
             this.dataGridView1.SortCompare += new DataGridViewSortCompareEventHandler(this.costum_SortCompare);
         }
 
+        //Ordenamiento de los datos para el order by
         private void costum_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             throw new NotImplementedException();
@@ -58,6 +66,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Botón que carga un archivo .sql en el DBMS
         private void boton_cargar_Click(object sender, EventArgs e)
         {
             OpenFileDialog choofdlog = new OpenFileDialog();
@@ -81,6 +90,7 @@ namespace BasesDeDatos_Proyecto1
 
         }
 
+        //Botón que permite guardar un archivo .sql
         private void boton_guardar_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -93,6 +103,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Método encargado de manejar el case sensitive del DBMS
         private String arreglarCaseSensitive(String input)
         {
             //Lista de palabras reservadas para cambiarlas a mayusculas
@@ -112,6 +123,7 @@ namespace BasesDeDatos_Proyecto1
             return input;
         }
 
+        //Botón que ejecuta el conjunto de queries ingresado
         private void boton_ejecutar_Click(object sender, EventArgs e)
         {
             AntlrInputStream inputStream = new AntlrInputStream(arreglarCaseSensitive(queryText.Text));
