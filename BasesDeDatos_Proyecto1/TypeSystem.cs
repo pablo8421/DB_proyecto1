@@ -7383,5 +7383,27 @@ namespace BasesDeDatos_Proyecto1
                     QuickSort_Recursive(arr, pivot + 1, right);
             }
         }
+
+        private int compareSingle(Single uno, Single dos)
+        {
+            if (Math.Abs(uno - dos) <= Single.Epsilon)
+            {
+                return 0;
+            }
+            else
+            {
+                return uno.CompareTo(dos);
+            }
+        }
+
+        private int compareSingle(Single uno, Int32 dos)
+        {
+            return compareSingle(uno, Convert.ToSingle(dos));
+        }
+
+        private int compareSingle(Int32 uno, Single dos)
+        {
+            return compareSingle(Convert.ToSingle(uno), dos);
+        }
     }
 }
