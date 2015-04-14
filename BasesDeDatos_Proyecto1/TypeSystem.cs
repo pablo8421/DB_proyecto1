@@ -7385,6 +7385,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Método para comparar dos valores float 
         private int compareSingle(Single uno, Single dos)
         {
             if (Math.Abs(uno - dos) <= Single.Epsilon)
@@ -7397,11 +7398,13 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
+        //Metodo para comparar un float y un int
         private int compareSingle(Single uno, Int32 dos)
         {
             return compareSingle(uno, Convert.ToSingle(dos));
         }
 
+        //Metodo para comparar un int y un float
         private int compareSingle(Int32 uno, Single dos)
         {
             return compareSingle(Convert.ToSingle(uno), dos);
