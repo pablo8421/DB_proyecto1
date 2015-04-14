@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-
+//COMENTARIO TONTO
 namespace BasesDeDatos_Proyecto1
 {
     class TypeSystem : SqlBaseVisitor<String>
