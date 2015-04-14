@@ -35,7 +35,7 @@ namespace BasesDeDatos_Proyecto1
         private List<String> columnasUpdate;        //Variable que permite el paso de información de las columnas de las tablas entre los visitors
         private List<FilaTabla> datosTablas;        //Variable que permite el paso de información de los registros de una tabla entre los visitor
         private int cantInserts;                    //Variable que cuenta la cantidad de inserts que se realizan en una ejecución
-        private List<String[]> ordenDeColumnas;     //Variable que permite saber como realizar el order by en un select y pasa la información entre los visitors
+        private List<String[]> ordenDeColumnas;     //Variable que permite saber como realizar el order by en un select y pasa la información entre los visitors 
 
         //Constructor
         public TypeSystem() {
