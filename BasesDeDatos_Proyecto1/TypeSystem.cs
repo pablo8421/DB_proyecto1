@@ -7385,7 +7385,7 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
-        //Compara dos elementos float, tomando en cuenta posibles diferencias insignificantes
+        //Método para comparar dos valores float 
         private int compareSingle(Single uno, Single dos)
         {
             if (Math.Abs(uno - dos) <= Single.Epsilon)
@@ -7398,13 +7398,13 @@ namespace BasesDeDatos_Proyecto1
             }
         }
 
-        //Combierte un int a float para compararlo con otro float
+        //Metodo para comparar un float y un int
         private int compareSingle(Single uno, Int32 dos)
         {
             return compareSingle(uno, Convert.ToSingle(dos));
         }
 
-        //Combierte un int a float para compararlo con otro float
+        //Metodo para comparar un int y un float
         private int compareSingle(Int32 uno, Single dos)
         {
             return compareSingle(Convert.ToSingle(uno), dos);
