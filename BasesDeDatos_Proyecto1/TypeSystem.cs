@@ -919,8 +919,8 @@ namespace BasesDeDatos_Proyecto1
                                 }
                                 else if (datos.tabla.tipos_columnas[indices[i]].Equals("FLOAT"))
                                 {
-                                    if (!(((Single)enTabla)
-                                 .Equals(((Single)porAgregar))))
+                                    if (!(compareSingle(((Single)enTabla),
+                                 ((Single)porAgregar))==0))
                                     {
                                         yaExistePK = false;
                                     }
@@ -1005,8 +1005,8 @@ namespace BasesDeDatos_Proyecto1
                                 }
                                 else if (datos.tabla.tipos_columnas[indices[i]].Equals("FLOAT"))
                                 {
-                                    if (!(((Single)enTabla)
-                                 .Equals(((Single)porAgregar))))
+                                    if (!(compareSingle(((Single)enTabla),
+                                 ((Single)porAgregar)) == 0))
                                     {
                                         yaExistePK = false;
                                     }
@@ -1192,7 +1192,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (((Single)datoUno).Equals(((Single)datoDos)))
+                                if (compareSingle(((Single)datoUno),(((Single)datoDos)))==0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -1204,7 +1204,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (((Single)datoUno).Equals(((Int32)datoDos)))
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) == 0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -1216,7 +1216,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (((Int32)datoUno).Equals(((Single)datoDos)))
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) == 0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -1323,7 +1323,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (!((Single)datoUno).Equals(((Single)datoDos)))
+                                if (compareSingle(((Single)datoUno), (((Single)datoDos))) != 0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -1335,7 +1335,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (!((Single)datoUno).Equals(((Int32)datoDos)))
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) != 0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -1347,7 +1347,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (!((Int32)datoUno).Equals(((Single)datoDos)))
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) != 0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -1455,7 +1455,8 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (((Single)datoUno).CompareTo(((Single)datoDos)) >= 0)
+
+                                if (compareSingle(((Single)datoUno),(((Single)datoDos))) >= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1467,7 +1468,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (((Single)datoUno).CompareTo(((Int32)datoDos)) >= 0)
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) >= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1479,7 +1480,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (((Int32)datoUno).CompareTo(((Single)datoDos)) >= 0)
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) >= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1601,7 +1602,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (((Single)datoUno).CompareTo(((Single)datoDos)) <= 0)
+                                if (compareSingle(((Single)datoUno),(((Single)datoDos))) <= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1613,7 +1614,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (((Single)datoUno).CompareTo(((Int32)datoDos)) <= 0)
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) <= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1625,7 +1626,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (((Int32)datoUno).CompareTo(((Single)datoDos)) <= 0)
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) <= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1747,7 +1748,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (((Single)datoUno).CompareTo(((Single)datoDos)) > 0)
+                                if (compareSingle(((Single)datoUno),(((Single)datoDos))) > 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1759,7 +1760,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (((Single)datoUno).CompareTo(((Int32)datoDos)) > 0)
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) > 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1771,7 +1772,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (((Int32)datoUno).CompareTo(((Single)datoDos)) > 0)
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) > 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1893,7 +1894,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (((Single)datoUno).CompareTo(((Single)datoDos)) < 0)
+                                if (compareSingle(((Single)datoUno),(((Single)datoDos))) < 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1905,7 +1906,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (((Single)datoUno).CompareTo(((Int32)datoDos)) < 0)
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) < 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -1917,7 +1918,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (((Int32)datoUno).CompareTo(((Single)datoDos)) < 0)
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) < 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -2576,7 +2577,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (((Single)datoUno).Equals(((Single)datoDos)))
+                                if (compareSingle(((Single)datoUno),(((Single)datoDos)))==0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -2588,7 +2589,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (((Single)datoUno).Equals(((Int32)datoDos)))
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) == 0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -2600,7 +2601,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (((Int32)datoUno).Equals(((Single)datoDos)))
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) == 0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -2746,7 +2747,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (!((Single)datoUno).Equals(((Single)datoDos)))
+                                if (compareSingle(((Single)datoUno), (((Single)datoDos))) != 0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -2758,7 +2759,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (!((Single)datoUno).Equals(((Int32)datoDos)))
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) != 0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -2770,7 +2771,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (!((Int32)datoUno).Equals(((Single)datoDos)))
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) != 0)
                                 {
                                     stack.Push("FALSE ");
                                 }
@@ -2916,7 +2917,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (((Single)datoUno).CompareTo(((Single)datoDos)) >= 0)
+                                if (compareSingle(((Single)datoUno),(((Single)datoDos))) >= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -2928,7 +2929,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (((Single)datoUno).CompareTo(((Int32)datoDos)) >= 0)
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) >= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -2940,7 +2941,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (((Int32)datoUno).CompareTo(((Single)datoDos)) >= 0)
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) >= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -3100,7 +3101,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (((Single)datoUno).CompareTo(((Single)datoDos)) <= 0)
+                                if (compareSingle(((Single)datoUno),(((Single)datoDos))) <= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -3112,7 +3113,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (((Single)datoUno).CompareTo(((Int32)datoDos)) <= 0)
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) <= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -3124,7 +3125,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (((Int32)datoUno).CompareTo(((Single)datoDos)) <= 0)
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) <= 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -3284,7 +3285,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (((Single)datoUno).CompareTo(((Single)datoDos)) > 0)
+                                if (compareSingle(((Single)datoUno),(((Single)datoDos))) > 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -3296,7 +3297,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (((Single)datoUno).CompareTo(((Int32)datoDos)) > 0)
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) > 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -3308,7 +3309,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (((Int32)datoUno).CompareTo(((Single)datoDos)) > 0)
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) > 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -3468,7 +3469,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Single)
                             {
-                                if (((Single)datoUno).CompareTo(((Single)datoDos)) < 0)
+                                if (compareSingle(((Single)datoUno),(((Single)datoDos))) < 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -3480,7 +3481,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Single
                              && datoDos is Int32)
                             {
-                                if (((Single)datoUno).CompareTo(((Int32)datoDos)) < 0)
+                                if (compareSingle(((Single)datoUno), (((Int32)datoDos))) < 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -3492,7 +3493,7 @@ namespace BasesDeDatos_Proyecto1
                             else if (datoUno is Int32
                                   && datoDos is Single)
                             {
-                                if (((Int32)datoUno).CompareTo(((Single)datoDos)) < 0)
+                                if (compareSingle(((Int32)datoUno), (((Single)datoDos))) < 0)
                                 {
                                     stack.Push("TRUE ");
                                 }
@@ -4059,7 +4060,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Single)
                     {
-                        if (((Single)datoUno).Equals(((Single)datoDos)))
+                        if (compareSingle(((Single)datoUno), (((Single)datoDos))) == 0)
                         {
                             stack.Push("FALSE ");
                         }
@@ -4071,7 +4072,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Int32)
                     {
-                        if (((Single)datoUno).Equals(((Int32)datoDos)))
+                        if (compareSingle(((Single)datoUno), (((Int32)datoDos))) == 0)
                         {
                             stack.Push("FALSE ");
                         }
@@ -4083,7 +4084,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Int32
                           && datoDos is Single)
                     {
-                        if (((Int32)datoUno).Equals(((Single)datoDos)))
+                        if (compareSingle(((Int32)datoUno), (((Single)datoDos))) == 0)
                         {
                             stack.Push("FALSE ");
                         }
@@ -4221,7 +4222,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Single)
                     {
-                        if (!((Single)datoUno).Equals(((Single)datoDos)))
+                        if (compareSingle(((Single)datoUno), (((Single)datoDos))) != 0)
                         {
                             stack.Push("FALSE ");
                         }
@@ -4233,7 +4234,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Int32)
                     {
-                        if (!((Single)datoUno).Equals(((Int32)datoDos)))
+                        if (compareSingle(((Single)datoUno), (((Int32)datoDos))) != 0)
                         {
                             stack.Push("FALSE ");
                         }
@@ -4245,7 +4246,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Int32
                           && datoDos is Single)
                     {
-                        if (!((Int32)datoUno).Equals(((Single)datoDos)))
+                        if (compareSingle(((Int32)datoUno), (((Single)datoDos))) != 0)
                         {
                             stack.Push("FALSE ");
                         }
@@ -4383,7 +4384,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Single)
                     {
-                        if (((Single)datoUno).CompareTo(((Single)datoDos)) >= 0)
+                        if (compareSingle(((Single)datoUno),(((Single)datoDos))) >= 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4395,7 +4396,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Int32)
                     {
-                        if (((Single)datoUno).CompareTo(((Int32)datoDos)) >= 0)
+                        if (compareSingle(((Single)datoUno), (((Int32)datoDos))) >= 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4407,7 +4408,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Int32
                           && datoDos is Single)
                     {
-                        if (((Int32)datoUno).CompareTo(((Single)datoDos)) >= 0)
+                        if (compareSingle(((Int32)datoUno), (((Single)datoDos))) >= 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4559,7 +4560,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Single)
                     {
-                        if (((Single)datoUno).CompareTo(((Single)datoDos)) <= 0)
+                        if (compareSingle(((Single)datoUno), (((Single)datoDos))) <= 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4571,7 +4572,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Int32)
                     {
-                        if (((Single)datoUno).CompareTo(((Int32)datoDos)) <= 0)
+                        if (compareSingle(((Single)datoUno), (((Int32)datoDos))) <= 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4583,7 +4584,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Int32
                           && datoDos is Single)
                     {
-                        if (((Int32)datoUno).CompareTo(((Single)datoDos)) <= 0)
+                        if (compareSingle(((Int32)datoUno), (((Single)datoDos))) <= 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4735,7 +4736,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Single)
                     {
-                        if (((Single)datoUno).CompareTo(((Single)datoDos)) > 0)
+                        if (compareSingle(((Single)datoUno), (((Single)datoDos))) > 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4747,7 +4748,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Int32)
                     {
-                        if (((Single)datoUno).CompareTo(((Int32)datoDos)) > 0)
+                        if (compareSingle(((Single)datoUno), (((Int32)datoDos))) > 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4759,7 +4760,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Int32
                           && datoDos is Single)
                     {
-                        if (((Int32)datoUno).CompareTo(((Single)datoDos)) > 0)
+                        if (compareSingle(((Int32)datoUno), (((Single)datoDos))) > 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4911,7 +4912,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Single)
                     {
-                        if (((Single)datoUno).CompareTo(((Single)datoDos)) < 0)
+                        if (compareSingle(((Single)datoUno), (((Single)datoDos))) < 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4923,7 +4924,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Single
                      && datoDos is Int32)
                     {
-                        if (((Single)datoUno).CompareTo(((Int32)datoDos)) < 0)
+                        if (compareSingle(((Single)datoUno), (((Int32)datoDos))) < 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -4935,7 +4936,7 @@ namespace BasesDeDatos_Proyecto1
                     else if (datoUno is Int32
                           && datoDos is Single)
                     {
-                        if (((Int32)datoUno).CompareTo(((Single)datoDos)) < 0)
+                        if (compareSingle(((Int32)datoUno), (((Single)datoDos))) < 0)
                         {
                             stack.Push("TRUE ");
                         }
@@ -5058,7 +5059,7 @@ namespace BasesDeDatos_Proyecto1
                                     Single valorOtro = ((MsgPack.MessagePackObject)rowOtra[indiceOtro]).AsSingle();
 
                                     //Si es distinto, no es referenciada
-                                    if (!valorPropio.Equals(valorOtro))
+                                    if (compareSingle(((Single)valorPropio), (((Single)valorOtro))) != 0)
                                     {
                                         esReferenciada = false;
                                         break;
@@ -7306,7 +7307,7 @@ namespace BasesDeDatos_Proyecto1
                 }
                 else if (ordenActual[3].Equals("FLOAT"))
                 {
-                    comparacion = ((Single)uno[indice]).CompareTo((Single)dos[indice]);
+                    comparacion = compareSingle(((Single)uno[indice]), (((Single)dos[indice])));
                 }
                 else if (ordenActual[3].StartsWith("CHAR"))
                 {
